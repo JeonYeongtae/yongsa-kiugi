@@ -1,0 +1,2675 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Age of the Hero — Wireframe v3.0 (피드백 반영)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      .device {
+        width: 280px;
+        height: 600px;
+        border: 6px solid #1f2937;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .device.modal-frame {
+        border-color: #7c3aed;
+        border-style: dashed;
+        border-width: 4px;
+      }
+      .region {
+        border: 1px dashed rgba(0, 0, 0, 0.22);
+        position: relative;
+        overflow: hidden;
+      }
+      .region::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 3px;
+        left: 5px;
+        font-size: 8px;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.6);
+        letter-spacing: 0.04em;
+        z-index: 5;
+      }
+      .region::after {
+        content: attr(data-ratio);
+        position: absolute;
+        top: 3px;
+        right: 5px;
+        font-size: 8px;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.55);
+        padding: 0 4px;
+        border-radius: 2px;
+        z-index: 5;
+      }
+      .screen-card {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        position: relative;
+      }
+      .screen-card.modal-card {
+        background: #f5f3ff;
+        border: 2px dashed #a78bfa;
+      }
+      .screen-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 4px;
+      }
+      .screen-num {
+        display: inline-block;
+        background: #1e293b;
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-right: 6px;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 8px;
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+      .b-new {
+        background: #166534;
+        color: #bbf7d0;
+      }
+      .b-mod {
+        background: #92400e;
+        color: #fde68a;
+      }
+      .b-modal {
+        background: #5b21b6;
+        color: #ddd6fe;
+      }
+      .b-merged {
+        background: #1e40af;
+        color: #bfdbfe;
+      }
+      .b-fix {
+        background: #0e7490;
+        color: #cffafe;
+      }
+      .screen-desc {
+        font-size: 11px;
+        color: #64748b;
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+      .feedback {
+        font-size: 10px;
+        color: #166534;
+        background: #f0fdf4;
+        border-left: 3px solid #22c55e;
+        padding: 4px 6px;
+        margin-top: 8px;
+        line-height: 1.4;
+      }
+      .gem {
+        width: 11px;
+        height: 11px;
+        background: rgba(0, 0, 0, 0.32);
+        transform: rotate(45deg);
+        display: inline-block;
+      }
+      .ico {
+        width: 18px;
+        height: 18px;
+        background: rgba(0, 0, 0, 0.22);
+        border-radius: 3px;
+        display: inline-block;
+      }
+      .btn {
+        background: rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        padding: 4px 6px;
+        font-size: 9px;
+        color: rgba(0, 0, 0, 0.75);
+        text-align: center;
+      }
+      .label-tiny {
+        font-size: 8px;
+        color: rgba(0, 0, 0, 0.55);
+        letter-spacing: 0.04em;
+      }
+
+      /* === UNIFIED HEADER (모든 메인 화면 동일) === */
+      .header-unified {
+        height: 11%;
+        background: #475569;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 8px;
+        border-bottom: 2px solid #334155;
+        color: #f1f5f9;
+        position: relative;
+      }
+      .header-unified::before {
+        content: 'HEADER (공통)';
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        font-size: 7px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.55);
+        letter-spacing: 0.05em;
+      }
+      .header-unified::after {
+        content: '11%';
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        font-size: 7px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0 3px;
+        border-radius: 2px;
+      }
+      .h-left {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding-top: 8px;
+      }
+      .h-portrait {
+        width: 24px;
+        height: 24px;
+        background: #94a3b8;
+        border-radius: 3px;
+      }
+      .h-info {
+        font-size: 7px;
+        line-height: 1.15;
+      }
+      .h-info b {
+        font-size: 8px;
+      }
+      .h-resources {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding-top: 8px;
+        font-size: 7px;
+      }
+      .h-resources .gem {
+        background: #fbbf24;
+      }
+      .h-res-item {
+        display: flex;
+        align-items: center;
+        gap: 1px;
+      }
+
+      /* === UNIFIED NAV (모든 메인 화면 동일) === */
+      .nav-unified {
+        height: 14%;
+        background: #475569;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 4px;
+        border-top: 2px solid #334155;
+        position: relative;
+      }
+      .nav-unified::before {
+        content: 'NAV (공통)';
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        font-size: 7px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.55);
+        letter-spacing: 0.05em;
+      }
+      .nav-unified::after {
+        content: '14%';
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        font-size: 7px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.45);
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0 3px;
+        border-radius: 2px;
+      }
+      .nav-unified > div {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 7px;
+        padding-top: 8px;
+        flex: 1;
+        position: relative;
+      }
+      .nav-unified .ico-nav {
+        width: 18px;
+        height: 18px;
+        background: #94a3b8;
+        border-radius: 3px;
+        margin: 0 auto 2px;
+      }
+      .nav-unified .active {
+        color: #fbbf24;
+        font-weight: 700;
+      }
+      .nav-unified .active .ico-nav {
+        background: #fbbf24;
+      }
+      .nav-unified .active::before {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 2px;
+        background: #fbbf24;
+      }
+      .nav-unified.dimmed > div {
+        opacity: 0.35;
+      }
+      .nav-unified.dimmed .active {
+        opacity: 0.85;
+      }
+
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 40px 0 6px;
+        border-left: 5px solid #1e293b;
+        padding-left: 12px;
+      }
+      .section-sub {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 18px;
+        padding-left: 17px;
+      }
+
+      .template-banner {
+        background: linear-gradient(90deg, #1e293b, #334155);
+        color: #f1f5f9;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+      }
+      .template-banner h3 {
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .template-banner p {
+        font-size: 12px;
+        color: #cbd5e1;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 p-6 lg:p-10">
+    <header class="max-w-7xl mx-auto mb-6">
+      <h1 class="text-3xl font-bold text-slate-800">🎮 Age of the Hero — Wireframe v3.0</h1>
+      <p class="text-slate-600 mt-2">피드백 반영 버전 — 달력 스케줄 · 헤더 골드만 · MBTI · 스와이프 스탯 · 탐험 행동력 분리</p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="px-3 py-1 bg-cyan-700 text-white rounded font-bold">FIX 일관성 수정</span>
+        <span class="px-3 py-1 bg-green-700 text-white rounded font-bold">NEW</span>
+        <span class="px-3 py-1 bg-amber-700 text-white rounded font-bold">MOD</span>
+        <span class="px-3 py-1 bg-purple-700 text-white rounded font-bold">MODAL</span>
+        <span class="px-3 py-1 bg-blue-700 text-white rounded font-bold">MERGED</span>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto">
+      <div class="template-banner">
+        <h3>📐 v3.0 피드백 반영 핵심 변경사항</h3>
+        <p>
+          <b>[헤더]</b> 우측 골드만 표시 (HP·주차 제거) · 탐험 화면에서만 ⚡행동력 추가 노출 · 전투 화면은 골드+턴카드(T3).
+          <b>[스케줄]</b> 달력(Calendar) 형식으로 전환 · 주 3개 활동 제한 · + 버튼 → 모달 호출 · 일요일 자동 휴식.
+          <b>[활동 모달]</b> 제목-리스트 사이 필터 버튼(전체/교육/알바/특수) 추가.
+          <b>[캐릭터 생성]</b> MBTI 선택 필드 + 능력치 변화 미리보기.
+          <b>[스탯 화면]</b> 스와이프 도트 UI — 12개 스탯/특성을 2페이지로 분리.
+          <b>[전투]</b> 실제 데미지 수치(228) 화면 표시.
+          <b>[신규]</b> MBTI 선택 모달 · 장비 상세 모달(종속 스킬 포함) · 스킬 상세 모달 · 월간 이벤트 화면(스케줄과 병렬).
+        </p>
+      </div>
+      <h2 class="section-title">🚪 SECTION A — 온보딩 (헤더/Nav 의도적 미노출)</h2>
+      <p class="section-sub">#00~#06은 게임 진입 단계 — 글로벌 헤더/Nav를 의도적으로 숨겨 몰입 강화</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#00</span>Splash 화면<span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">최초 진입 풀스크린 로고</div>
+          <div class="device">
+            <div class="content-area">
+              <div
+                class="region bg-slate-800"
+                data-label="LOGO_FULLSCREEN"
+                data-ratio="100%"
+                style="height: 100%; flex: 1"
+              >
+                <div class="h-full flex flex-col items-center justify-center text-slate-300">
+                  <div
+                    class="w-44 h-24 bg-slate-600 rounded-sm flex items-center justify-center text-[11px] font-bold tracking-widest text-white"
+                  >
+                    AGE OF<br />THE HERO
+                  </div>
+                  <div class="mt-12 text-[11px] opacity-50 animate-pulse">Tap to Start</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더/Nav 없음 (온보딩)</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#01</span>메인 메뉴<span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">헤더/Nav 미노출 (온보딩)</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-700" data-label="LOGO_AREA" data-ratio="50%" style="height: 50%">
+                <div class="h-full flex items-center justify-center relative">
+                  <div
+                    class="w-40 h-20 bg-slate-500 rounded-sm flex items-center justify-center text-white text-[11px] font-bold tracking-widest"
+                  >
+                    AGE OF<br />THE HERO
+                  </div>
+                  <div class="absolute top-2 right-2 ico" title="설정"></div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="MENU_LEFT_FIXED" data-ratio="40%" style="height: 40%">
+                <div class="h-full flex flex-col justify-center gap-2 px-6 pt-4">
+                  <div class="btn">▸ NEW GAME</div>
+                  <div class="btn">▸ CONTINUE</div>
+                </div>
+              </div>
+              <div class="region bg-slate-400" data-label="VERSION" data-ratio="10%" style="height: 10%">
+                <div class="h-full flex items-end justify-between px-4 pb-2 text-[8px] text-slate-700">
+                  <span>v0.1.0</span><span>© Studio</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 온보딩 — 헤더/Nav 노출 안 함</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#02</span>Save / Load 슬롯<span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">온보딩 단계 — 헤더/Nav 없음</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-400" data-label="HEADER_LOCAL" data-ratio="10%" style="height: 10%">
+                <div class="h-full flex items-end justify-center pb-1 text-[10px] font-bold text-slate-800">
+                  ━━ SAVE / LOAD ━━
+                </div>
+              </div>
+              <div class="region bg-slate-200" data-label="SLOT_LIST" data-ratio="78%" style="height: 78%">
+                <div class="h-full flex flex-col gap-2 px-3 pt-7">
+                  <div class="bg-slate-300 rounded-sm p-2 flex gap-2">
+                    <div class="w-12 h-12 bg-slate-500 flex items-end justify-center text-[7px] text-white pb-0.5">
+                      14세
+                    </div>
+                    <div class="text-[9px] text-slate-700">
+                      <div class="font-bold">SLOT 1 · HERO</div>
+                      <div>4년 16일</div>
+                      <div>플레이 12시간</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-2 flex gap-2">
+                    <div class="w-12 h-12 bg-slate-500 flex items-end justify-center text-[7px] text-white pb-0.5">
+                      17세
+                    </div>
+                    <div class="text-[9px] text-slate-700">
+                      <div class="font-bold">SLOT 2 · LIANA</div>
+                      <div>7년 24일</div>
+                      <div>플레이 28시간</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-2 flex gap-2 opacity-50">
+                    <div class="w-12 h-12 bg-slate-400"></div>
+                    <div class="text-[9px] text-slate-600">
+                      <div class="font-bold">SLOT 3</div>
+                      <div>EMPTY</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-400" data-label="ACTION" data-ratio="12%" style="height: 12%">
+                <div class="h-full flex items-center justify-around px-4 pt-3">
+                  <div class="btn">LOAD</div>
+                  <div class="btn">DELETE</div>
+                  <div class="btn">BACK</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 'N년 NN일' 표기 / 나이대별 썸네일</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#03</span>캐릭터 생성 (통합)<span class="badge b-merged">MERGED</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">온보딩 — 헤더/Nav 없음</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-400" data-label="HEADER_LOCAL" data-ratio="9%" style="height: 9%">
+                <div class="h-full flex items-end justify-center pb-1 text-[10px] font-bold text-slate-800">
+                  CREATE YOUR HERO
+                </div>
+              </div>
+              <div class="region bg-slate-200" data-label="PORTRAIT_FIXED" data-ratio="32%" style="height: 32%">
+                <div class="h-full flex items-center justify-center pt-3 gap-2">
+                  <div class="text-slate-500 text-[10px]">◂</div>
+                  <div
+                    class="w-20 h-24 bg-slate-500 rounded-sm flex items-end justify-center pb-1 text-[8px] text-white"
+                  >
+                    남주<br />고정초상화
+                  </div>
+                  <div class="text-slate-500 text-[10px]">▸</div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="GENDER_RACE_INPUT" data-ratio="45%" style="height: 45%">
+                <div class="h-full px-3 pt-3 text-[9px] text-slate-700 space-y-1">
+                  <div>
+                    <div class="label-tiny mb-0.5">성별 (이미지 자동 변경)</div>
+                    <div class="flex gap-1">
+                      <div class="btn flex-1 bg-slate-500 text-white">♂ 남</div>
+                      <div class="btn flex-1">♀ 여</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="label-tiny mb-0.5">종족</div>
+                    <div class="flex gap-1 text-[7px]">
+                      <div class="btn flex-1 bg-slate-500 text-white">인간</div>
+                      <div class="btn flex-1">엘프</div>
+                      <div class="btn flex-1">수인</div>
+                      <div class="btn flex-1">드워프</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="label-tiny mb-0.5">생일 (4주 28일 자체 달력)</div>
+                    <div class="bg-white border border-slate-400 rounded-sm h-6 flex items-center justify-between px-2 text-[8px]">
+                      <span>1주차 7일</span><span class="ico" style="width: 14px; height: 14px"></span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="label-tiny mb-0.5">MBTI (능력치·특성 변화)</div>
+                    <div class="bg-white border border-slate-400 rounded-sm h-6 flex items-center justify-between px-2 text-[8px]">
+                      <span class="font-bold text-slate-700">INTJ</span>
+                      <span class="text-[7px] text-green-700">지능+10 매력-3 ▸</span>
+                    </div>
+                  </div>
+                  <div class="text-[7px] text-slate-500 italic">※ 이름은 메인 스토리에서 NPC가 부여</div>
+                </div>
+              </div>
+              <div class="region bg-slate-400" data-label="NAV_LOCAL" data-ratio="14%" style="height: 14%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">◂ BACK</div>
+                  <div class="btn">시작하기 ▸</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 온보딩 — 글로벌 Nav 미노출 / 페이지 내 BACK·시작하기 버튼</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#03-M</span>28일 달력 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">온보딩 단계 모달 (배경 화면 위 오버레이)</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM_OVERLAY" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-4">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-center text-[11px] font-bold text-slate-800 mb-2">━ 생일 선택 ━</div>
+                  <div class="grid grid-cols-7 gap-1 text-[8px] text-center text-slate-700">
+                    <div class="font-bold">1일</div>
+                    <div class="font-bold">2일</div>
+                    <div class="font-bold">3일</div>
+                    <div class="font-bold">4일</div>
+                    <div class="font-bold">5일</div>
+                    <div class="font-bold">6일</div>
+                    <div class="font-bold">7일</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                    <div class="bg-slate-300 py-1 rounded-sm">1주</div>
+                  </div>
+                  <div class="text-[8px] text-slate-600 mt-2 text-center">※ 1년 = 4주 × 7일 = 28일</div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">확정</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 모달은 화면 위 오버레이 — 헤더/Nav는 뒷화면에 그대로 유지</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#06</span>프롤로그<span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">온보딩 — 글로벌 헤더/Nav 미노출</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-700" data-label="CG_ILLUST" data-ratio="28%" style="height: 28%">
+                <div class="h-full flex items-center justify-center text-slate-300 text-[10px]">CG (28% 비율)</div>
+              </div>
+              <div class="region bg-slate-200" data-label="DIALOG_BOX" data-ratio="50%" style="height: 50%">
+                <div class="h-full px-3 pt-5 text-[9px] text-slate-700 leading-relaxed">
+                  <div class="font-bold mb-1">▸ Narrator</div>
+                  <div>먼 옛날, 별이 떨어진 그 날부터...</div>
+                  <div class="mt-1">왕국에는 영웅이 필요했다.</div>
+                  <div class="mt-2 text-[7px] text-slate-500 italic">
+                    [프롤로그 인터랙션 5종]<br />① 전대 용사 관계 / ② 선택 스탯<br />③ 성격 / ④ 랜덤 특성 / ⑤ 이름 부여
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="CONTROL_BAR_LOCAL" data-ratio="10%" style="height: 10%">
+                <div class="h-full flex items-center justify-around pt-2 text-[8px] text-slate-700">
+                  <div class="btn">Log</div>
+                  <div class="btn">×2</div>
+                  <div class="btn">Skip</div>
+                  <div class="btn">Auto</div>
+                  <div class="btn">메뉴</div>
+                </div>
+              </div>
+              <div class="region bg-slate-400" data-label="NEXT" data-ratio="12%" style="height: 12%">
+                <div class="h-full flex items-end justify-center pb-3 text-slate-700 text-[14px]">▼</div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 글로벌 헤더 X / 프롤로그 전용 컨트롤바만 사용</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#06-M</span>Skip 모달 (스토리 요약)<span class="badge b-modal">MODAL</span
+            ><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">온보딩 단계 모달</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-4">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 메인 스토리 요약 ━</div>
+                  <div class="text-[9px] text-slate-700 leading-relaxed space-y-1">
+                    <div>· 별이 떨어진 날, 마성의 봉인이 약해졌다.</div>
+                    <div>· 왕국은 새 용사를 키우기로 결정한다.</div>
+                    <div>· 당신은 전대 용사의 (관계)로서...</div>
+                    <div>· 8년간의 수련을 거쳐 마성으로 향한다.</div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">계속 보기</div>
+                    <div class="btn">건너뛰기 ▸</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="section-title">🌱 SECTION B — 메인 루프 (헤더 11% + Nav 14% 100% 동일)</h2>
+      <p class="section-sub">Hub부터 스킬까지 — 헤더 구조 완전 일치 / Nav 5탭 고정 / 활성 탭만 변경</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#07</span>Main Hub (이벤트)<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">공통 헤더 11% + Nav 14% 적용</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="EVENT_ILLUST" data-ratio="32%" style="height: 32%">
+                <div class="h-full flex items-center justify-center">
+                  <div
+                    class="w-3/4 h-3/4 bg-slate-400 rounded-sm flex items-center justify-center text-slate-700 text-[9px]"
+                  >
+                    EVENT CG (28%)
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="DIALOG+CHOICE" data-ratio="68%" style="height: 68%">
+                <div class="h-full px-3 pt-5 text-[9px] text-slate-700">
+                  <div class="font-bold">▸ Mentor</div>
+                  <div>"이번 주는 어떻게 보낼 텐가?"</div>
+                  <div class="mt-2 grid grid-cols-2 gap-1">
+                    <div class="btn">▸ 대화</div>
+                    <div class="btn">▸ 일정 보기</div>
+                    <div class="btn">▸ 산책</div>
+                    <div class="btn">▸ 휴식</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더 11% / 콘텐츠 75% / Nav 14% — 모든 화면 동일 비율</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#08</span>주간 스케줄<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">달력(Calendar) 형식 · 주 3개 활동 배치 · + 버튼으로 모달 호출</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 1주차</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="CALENDAR" data-ratio="82%" style="height: 82%">
+                <div class="h-full p-1.5 pt-4">
+                  <div class="flex items-center justify-between mb-1.5 px-0.5">
+                    <div class="text-[8px] font-bold text-slate-700">1주차 스케줄</div>
+                    <div class="text-[7px] text-slate-500">활동 2/3 배치됨</div>
+                  </div>
+                  <div class="grid grid-cols-7 gap-0.5 mb-0.5">
+                    <div class="text-center text-[7px] font-bold text-slate-500">월</div>
+                    <div class="text-center text-[7px] font-bold text-slate-500">화</div>
+                    <div class="text-center text-[7px] font-bold text-slate-500">수</div>
+                    <div class="text-center text-[7px] font-bold text-slate-500">목</div>
+                    <div class="text-center text-[7px] font-bold text-slate-500">금</div>
+                    <div class="text-center text-[7px] font-bold text-slate-500">토</div>
+                    <div class="text-center text-[7px] font-bold text-red-400">일</div>
+                  </div>
+                  <div class="grid grid-cols-7 gap-0.5">
+                    <div class="bg-white rounded-sm p-0.5 border border-amber-400" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">1</div>
+                      <div class="bg-amber-100 rounded-sm px-0.5 py-0.5 text-[6px] text-amber-800 font-bold leading-tight mb-0.5">검술</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-1" style="height:12px"><span class="text-slate-300 text-[8px]">+</span></div>
+                    </div>
+                    <div class="bg-white rounded-sm p-0.5 border border-blue-400" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">2</div>
+                      <div class="bg-blue-100 rounded-sm px-0.5 py-0.5 text-[6px] text-blue-800 font-bold leading-tight mb-0.5">농장</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-1" style="height:12px"><span class="text-slate-300 text-[8px]">+</span></div>
+                    </div>
+                    <div class="bg-white rounded-sm p-0.5 border border-slate-200" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">3</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-3" style="height:14px"><span class="text-slate-400 text-[10px]">+</span></div>
+                    </div>
+                    <div class="bg-white rounded-sm p-0.5 border border-slate-200" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">4</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-3" style="height:14px"><span class="text-slate-400 text-[10px]">+</span></div>
+                    </div>
+                    <div class="bg-white rounded-sm p-0.5 border border-slate-200" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">5</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-3" style="height:14px"><span class="text-slate-400 text-[10px]">+</span></div>
+                    </div>
+                    <div class="bg-white rounded-sm p-0.5 border border-slate-200" style="min-height:62px">
+                      <div class="text-[6px] text-slate-400 text-center mb-0.5">6</div>
+                      <div class="bg-slate-100 rounded-sm flex items-center justify-center mt-3" style="height:14px"><span class="text-slate-400 text-[10px]">+</span></div>
+                    </div>
+                    <div class="bg-red-50 rounded-sm p-0.5 border border-red-100" style="min-height:62px">
+                      <div class="text-[6px] text-red-300 text-center mb-0.5">7</div>
+                      <div class="text-[6px] text-red-300 text-center mt-2">휴식</div>
+                    </div>
+                  </div>
+                  <div class="mt-2 text-[7px] text-slate-400 text-center italic">※ 주 3개 활동 제한 / 일요일 자동 휴식</div>
+                </div>
+              </div>
+
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="18%" style="height: 18%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">◂ 이전 주</div>
+                  <div class="btn bg-slate-600 text-white border-slate-700">한 주 시작 ▸</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 달력 형식 · 주 3개 활동 제한 · + 버튼 탭 → 모달 호출 · 일요일 자동 휴식</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#09M</span>활동 선택 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-merged">MERGED</span>
+          </div>
+          <div class="screen-desc">메인루프 모달 — 뒷화면(#08)의 헤더/Nav 그대로 유지</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 화요일 · 낮 활동 ━</div>
+                  <!-- 필터 버튼 (제목과 리스트 사이) -->
+                  <div class="flex gap-1 mb-2">
+                    <div class="px-2 py-0.5 rounded-full text-[7px] font-bold bg-slate-600 text-white">전체</div>
+                    <div class="px-2 py-0.5 rounded-full text-[7px] font-bold border border-slate-400 text-slate-600">교육</div>
+                    <div class="px-2 py-0.5 rounded-full text-[7px] font-bold border border-slate-400 text-slate-600">알바</div>
+                    <div class="px-2 py-0.5 rounded-full text-[7px] font-bold border border-slate-400 text-slate-600">특수</div>
+                  </div>
+                  <div class="space-y-1 text-[9px] text-slate-700">
+                    <div class="bg-slate-300 rounded-sm p-1.5 flex justify-between">
+                      <span><b>검술 도장</b> <span class="text-[7px] text-blue-600">[교육]</span><br /><span class="text-[7px]">근력+3 체력-2</span></span
+                      ><span class="text-[8px]">50G</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1.5 flex justify-between">
+                      <span><b>마법 학원</b> <span class="text-[7px] text-blue-600">[교육]</span><br /><span class="text-[7px]">지능+3 MP+2</span></span
+                      ><span class="text-[8px]">80G</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1.5 flex justify-between">
+                      <span><b>농장 알바</b> <span class="text-[7px] text-green-600">[알바]</span><br /><span class="text-[7px]">근력 10 / +30G</span></span
+                      ><span class="ico" style="width: 12px; height: 12px"></span>
+                    </div>
+                    <div class="bg-slate-400 rounded-sm p-1.5 opacity-50">🔒 왕립 아카데미 [교육]</div>
+                  </div>
+                  <div class="mt-2 flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">배치 ▸</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#ex-1</span>스케줄 실행<span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">공통 헤더/Nav 적용</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="RESULT_CG" data-ratio="32%" style="height: 32%">
+                <div class="h-full flex items-center justify-center">
+                  <div
+                    class="w-3/4 h-3/4 bg-slate-400 rounded-sm flex items-end justify-center pb-1 text-[8px] text-white"
+                  >
+                    활동 일러스트 (28%)
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="RESULT_TEXT" data-ratio="40%" style="height: 40%">
+                <div class="h-full px-3 pt-4 text-[9px] text-slate-700">
+                  <div class="font-bold text-[11px] text-slate-800">★ PERFECT!</div>
+                  <div class="mt-1">"HERO은(는) 농장 일을 진행했습니다.</div>
+                  <div>완벽하게 해결했습니다!"</div>
+                  <div class="mt-2 text-[8px]">
+                    <span style="color: #166534">+ 근력 2</span> · <span style="color: #166534">+ 35G</span>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="RATING" data-ratio="28%" style="height: 28%">
+                <div class="h-full flex items-center justify-around pt-3 text-[8px] text-slate-700">
+                  <div class="btn bg-slate-500 text-white">PERFECT</div>
+                  <div class="btn">GOOD</div>
+                  <div class="btn">BAD</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 적용 / 활성 탭=스케줄</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#ex-2</span>주간 리포트<span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">공통 헤더/Nav 적용</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="STAT_DELTA" data-ratio="48%" style="height: 48%">
+                <div class="h-full px-3 pt-5 text-[9px] text-slate-700">
+                  <div class="font-bold mb-1">스탯 변화</div>
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <span class="w-10 text-[8px]">근력</span>
+                    <div class="flex-1 h-1.5 bg-slate-300">
+                      <div class="h-full bg-slate-600" style="width: 60%"></div>
+                    </div>
+                    <span class="text-[8px] w-8 text-right" style="color: #166534">+5</span>
+                  </div>
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <span class="w-10 text-[8px]">지능</span>
+                    <div class="flex-1 h-1.5 bg-slate-300">
+                      <div class="h-full bg-slate-600" style="width: 75%"></div>
+                    </div>
+                    <span class="text-[8px] w-8 text-right" style="color: #166534">+3</span>
+                  </div>
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <span class="w-10 text-[8px]">민첩</span>
+                    <div class="flex-1 h-1.5 bg-slate-300">
+                      <div class="h-full bg-slate-600" style="width: 45%"></div>
+                    </div>
+                    <span class="text-[8px] w-8 text-right" style="color: #166534">+2</span>
+                  </div>
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <span class="w-10 text-[8px]">체력</span>
+                    <div class="flex-1 h-1.5 bg-slate-300">
+                      <div class="h-full bg-slate-600" style="width: 55%"></div>
+                    </div>
+                    <span class="text-[8px] w-8 text-right" style="color: #166534">+1</span>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="EVENT_LOG" data-ratio="35%" style="height: 35%">
+                <div class="h-full px-3 pt-4 text-[8px] text-slate-700">
+                  <div class="font-bold mb-1">이번 주 이벤트</div>
+                  <div>· 농장 알바 4회 (Perfect 3 / Good 1)</div>
+                  <div>· Liana와 함께 시간 (호감 +5)</div>
+                  <div>· 새 스킬 "강타" 습득!</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="17%" style="height: 17%">
+                <div class="h-full flex items-center justify-center pt-3"><div class="btn">다음 주 시작 ▸</div></div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 일관 적용</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#05M</span>수호신 선택 모달 (13세)<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">메인루프 모달</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 수호신을 선택하라 ━</div>
+                  <div class="grid grid-cols-4 gap-1.5 mb-2">
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♈
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♉
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♊
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♋
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-600 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♌
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♍
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♎
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♏
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♐
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♑
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♒
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-500 rounded-sm flex items-center justify-center text-[10px] text-white"
+                    >
+                      ♓
+                    </div>
+                  </div>
+                  <div class="text-[8px] text-slate-700 italic">"황도 12궁의 가호 — 1회 영구 적용"</div>
+                  <div class="text-[8px] text-slate-600">사자자리: 근력 +15%, 크리티컬 +5%</div>
+                  <div class="mt-2 flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">선택 ▸</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#11</span>스탯 상세<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">공통 헤더/Nav 적용 / 활성 탭=설정</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="PORTRAIT_INFO" data-ratio="28%" style="height: 28%">
+                <div class="h-full flex items-center gap-3 px-4 pt-4">
+                  <div class="w-14 h-18 bg-slate-500 rounded-sm"></div>
+                  <div class="text-[9px] text-slate-700">
+                    <div class="font-bold">HERO</div>
+                    <div>인간 · 14세</div>
+                    <div>수호신: 사자자리</div>
+                    <div class="text-[7px] italic">성격: 신중함</div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="STATS_SWIPE" data-ratio="44%" style="height: 44%">
+                <!-- 스와이프 페이지 1: 기본 능력치 (총 12개를 2페이지로 분리) -->
+                <div class="h-full px-3 pt-3 flex flex-col">
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="text-[8px] font-bold text-slate-600">능력치 (1/2)</div>
+                    <div class="flex gap-1">
+                      <div style="width:6px;height:6px;border-radius:50%;background:#475569"></div>
+                      <div style="width:6px;height:6px;border-radius:50%;background:#cbd5e1"></div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[9px] text-slate-700 flex-1">
+                    <div class="flex justify-between"><span>근력</span><span class="font-bold">42</span></div>
+                    <div class="flex justify-between"><span>지능</span><span class="font-bold">67</span></div>
+                    <div class="flex justify-between"><span>민첩</span><span class="font-bold">38</span></div>
+                    <div class="flex justify-between"><span>체력</span><span class="font-bold">45</span></div>
+                    <div class="flex justify-between"><span>매력</span><span class="font-bold">29</span></div>
+                    <div class="flex justify-between"><span>신앙</span><span class="font-bold">31</span></div>
+                  </div>
+                  <div class="text-[7px] text-slate-400 text-center pb-1">◂ 스와이프 ▸</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="TRAITS" data-ratio="28%" style="height: 28%">
+                <div class="h-full px-3 pt-3 text-[8px] text-slate-700">
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="font-bold">특성 (MBTI: INTJ)</div>
+                    <div class="flex gap-1">
+                      <div style="width:6px;height:6px;border-radius:50%;background:#cbd5e1"></div>
+                      <div style="width:6px;height:6px;border-radius:50%;background:#475569"></div>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap gap-1">
+                    <span class="btn">독서광</span><span class="btn">아침형</span><span class="btn">친화적</span
+                    ><span class="btn">신중함</span><span class="btn">분석가</span>
+                  </div>
+                  <div class="text-[7px] text-slate-400 text-center mt-1">◂ 스와이프 ▸</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="active">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더 동일 / Nav 동일 / 칭호 영역 삭제</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#12+13</span>인벤토리 + 장비<span class="badge b-merged">MERGED</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">Nav 활성 탭 = 인벤</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-300" data-label="TABS+FILTER" data-ratio="11%" style="height: 11%">
+                <div class="h-full flex items-center justify-around pt-2 text-[8px] text-slate-700">
+                  <span class="font-bold underline">전체</span><span class="font-bold">무기🔍</span><span>소모</span
+                  ><span>재료</span><span>퀘스트</span>
+                </div>
+              </div>
+              <div class="region bg-slate-200" data-label="EQUIPPED_WEAPON" data-ratio="24%" style="height: 24%">
+                <div class="h-full flex items-center gap-3 px-4 pt-4 bg-amber-50">
+                  <div class="w-12 h-12 bg-slate-500 rounded-sm flex items-center justify-center text-white text-[7px]">
+                    장착중
+                  </div>
+                  <div class="text-[9px] text-slate-700">
+                    <div class="font-bold">⚔ 강철 검</div>
+                    <div class="text-[8px]">공격 +12 · 근접</div>
+                    <div class="text-[7px] italic">"무기는 1개만 장착 가능"</div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="ITEM_GRID" data-ratio="42%" style="height: 42%">
+                <div class="h-full px-3 pt-4 grid grid-cols-5 gap-1.5">
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                  <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="23%" style="height: 23%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">장착</div>
+                  <div class="btn">사용</div>
+                  <div class="btn">버리기</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="active">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 100% 동일 / 활성 탭만 변경</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#14</span>동료 목록<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">Nav 활성 탭 = 동료</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="COMPANION_GRID" data-ratio="100%" style="height: 100%">
+                <div class="h-full px-3 pt-5 grid grid-cols-2 gap-2 overflow-hidden">
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="absolute -top-1 -right-1 bg-amber-600 text-white text-[6px] px-1 rounded font-bold">
+                      🏠
+                    </div>
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Liana</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 72%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 72/100</div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Marcus</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 45%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 45/100</div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="absolute -top-1 -right-1 bg-amber-600 text-white text-[6px] px-1 rounded font-bold">
+                      🏠
+                    </div>
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Selene</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 88%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 88/100</div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Ravi</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 30%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 30/100</div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Eira</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 60%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 60/100</div>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 text-[8px] text-slate-700 relative">
+                    <div class="w-full aspect-square bg-slate-500 rounded-sm mb-1"></div>
+                    <div class="font-bold text-[9px]">Goran</div>
+                    <div class="h-1 bg-slate-400 mt-0.5">
+                      <div class="h-full bg-slate-700" style="width: 15%"></div>
+                    </div>
+                    <div class="text-[7px] mt-0.5">호감 15/100</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="active">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 / 활성 탭=동료 / 여관 🏠 배지</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#15M</span>동료 상세 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">메인루프 모달 (뒷화면=#14)</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="flex gap-2 mb-2">
+                    <div class="w-14 h-16 bg-slate-500 rounded-sm"></div>
+                    <div class="text-[8px] text-slate-700">
+                      <div class="font-bold">Liana · 마법사</div>
+                      <div>호감 72/100 ❤❤❤</div>
+                      <div class="text-amber-700">🏠 여관 체류</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1.5 text-[7px] mb-2">
+                    <div class="font-bold mb-0.5">함께한 추억</div>
+                    <div>· 도서관 만남 (1년 23일)</div>
+                    <div>· 첫 동행 (2년 14일)</div>
+                  </div>
+                  <div class="grid grid-cols-4 gap-1">
+                    <div class="btn">대화</div>
+                    <div class="btn">선물</div>
+                    <div class="btn">스킬</div>
+                    <div class="btn">닫기</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#17</span>스킬 책 인덱스<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">Nav 활성 탭 = 스킬</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-300" data-label="WEAPON_TABS" data-ratio="14%" style="height: 14%">
+                <div class="h-full flex items-end justify-around pb-1 text-[8px] pt-2">
+                  <div class="px-2 py-1 bg-slate-500 text-white rounded-t font-bold">⚔근접</div>
+                  <div class="px-2 py-1 bg-slate-200 text-slate-500 rounded-t opacity-60">🏹원딜</div>
+                  <div class="px-2 py-1 bg-slate-200 text-slate-500 rounded-t opacity-60">✦마법</div>
+                  <div class="px-2 py-1 bg-slate-200 text-slate-500 rounded-t opacity-60">✚회복</div>
+                  <div class="px-2 py-1 bg-slate-200 text-slate-500 rounded-t opacity-60">⚙공용</div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="SKILL_LIST" data-ratio="64%" style="height: 64%">
+                <div class="h-full px-3 pt-4 space-y-1 text-[9px] text-slate-700 overflow-hidden">
+                  <div class="bg-amber-100 border border-amber-500 rounded-sm p-1.5 flex justify-between">
+                    <span><b>강타</b> ✦장착<br /><span class="text-[7px]">근접 · MP 5</span></span
+                    ><span class="text-[7px]">Lv.3</span>
+                  </div>
+                  <div class="bg-amber-100 border border-amber-500 rounded-sm p-1.5 flex justify-between">
+                    <span><b>회전 베기</b> ✦장착<br /><span class="text-[7px]">근접 · MP 10</span></span
+                    ><span class="text-[7px]">Lv.2</span>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1.5 flex justify-between">
+                    <span><b>방어 자세</b><br /><span class="text-[7px]">근접 · MP 3</span></span
+                    ><span class="text-[7px]">Lv.1</span>
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-1.5 opacity-60">
+                    <b>🔒 광폭화</b> <span class="text-[7px]">근력 60 필요</span>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="22%" style="height: 22%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">편성 변경</div>
+                  <div class="btn">정보</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="active">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 / 활성 탭=스킬</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#SK-Set</span>스킬 편성 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">메인루프 모달 (뒷화면=#17)</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 스킬 편성 (3/3) ━</div>
+                  <div class="grid grid-cols-3 gap-2 mb-3">
+                    <div
+                      class="aspect-square bg-amber-200 border-2 border-amber-500 rounded-sm flex items-center justify-center text-[7px]"
+                    >
+                      강타
+                    </div>
+                    <div
+                      class="aspect-square bg-amber-200 border-2 border-amber-500 rounded-sm flex items-center justify-center text-[7px]"
+                    >
+                      회전
+                    </div>
+                    <div
+                      class="aspect-square bg-amber-200 border-2 border-amber-500 rounded-sm flex items-center justify-center text-[7px]"
+                    >
+                      방어
+                    </div>
+                  </div>
+                  <div class="text-[7px] text-slate-600 italic mb-1">활성 스킬 풀에서 드래그·탭으로 배치</div>
+                  <div class="grid grid-cols-4 gap-1">
+                    <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-400 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-300 rounded-sm"></div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">저장</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#18M</span>설정 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">어떤 화면에서든 우측상단 ⚙ 클릭 시 호출</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ SETTINGS ━</div>
+                  <div class="space-y-2 text-[8px] text-slate-700">
+                    <div>
+                      <div class="mb-0.5 font-bold">BGM</div>
+                      <div class="h-2 bg-slate-300"><div class="h-full bg-slate-600" style="width: 70%"></div></div>
+                    </div>
+                    <div>
+                      <div class="mb-0.5 font-bold">SFX</div>
+                      <div class="h-2 bg-slate-300"><div class="h-full bg-slate-600" style="width: 80%"></div></div>
+                    </div>
+                    <div>
+                      <div class="mb-0.5 font-bold">텍스트 속도</div>
+                      <div class="flex gap-1">
+                        <div class="btn flex-1">느림</div>
+                        <div class="btn flex-1 bg-slate-500 text-white">보통</div>
+                        <div class="btn flex-1">빠름</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="mb-0.5 font-bold">언어</div>
+                      <div class="flex gap-1">
+                        <div class="btn flex-1 bg-slate-500 text-white">한국어</div>
+                        <div class="btn flex-1">EN</div>
+                      </div>
+                    </div>
+                    <div class="text-center mt-1"><span class="btn">📜 Credits</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW: MBTI 선택 모달 -->
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#03-MBTI</span>MBTI 선택 모달<span class="badge b-modal">MODAL</span><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">캐릭터 생성(#03)에서 MBTI 탭 선택 시 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-1 text-center">━ 성격 유형 선택 ━</div>
+                  <div class="grid grid-cols-4 gap-1 mb-2 text-[7px] text-center">
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">INTJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">INTP</div>
+                    <div class="bg-amber-200 rounded-sm py-1 font-bold text-amber-800 border border-amber-500">ENTJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ENTP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">INFJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">INFP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ENFJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ENFP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ISTJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ISFJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ESTJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ESFJ</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ISTP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ISFP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ESTP</div>
+                    <div class="bg-slate-200 rounded-sm py-1 font-bold text-slate-600">ESFP</div>
+                  </div>
+                  <div class="bg-amber-50 border border-amber-300 rounded-sm p-1.5 text-[8px] text-slate-700 mb-2">
+                    <div class="font-bold text-amber-800 mb-0.5">ENTJ — 지도자형</div>
+                    <div class="flex gap-2">
+                      <span class="text-green-700">↑ 지능+8</span>
+                      <span class="text-green-700">↑ 매력+5</span>
+                      <span class="text-red-600">↓ 신앙-3</span>
+                    </div>
+                    <div class="text-[7px] text-slate-500 mt-0.5">특성: [분석가] [카리스마]</div>
+                  </div>
+                  <div class="flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">선택 ▸</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ MBTI 16종 · 선택 시 능력치/특성 변화 미리보기</div>
+        </div>
+
+        <!-- NEW: 장비 상세 모달 -->
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#EQ-M</span>장비 상세 모달<span class="badge b-modal">MODAL</span><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">인벤토리(#12)에서 장비 선택 시 모바일 형태 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 장비 상세 ━</div>
+                  <div class="flex gap-2 mb-2">
+                    <div class="w-14 h-14 bg-slate-400 rounded-sm flex items-center justify-center text-[16px]">⚔</div>
+                    <div class="text-[9px] text-slate-700">
+                      <div class="font-bold text-[10px]">강철 검</div>
+                      <div class="text-[8px] text-slate-500">근접 무기 · 1등급</div>
+                      <div class="text-green-700 text-[8px] mt-1">공격력 +12</div>
+                      <div class="text-green-700 text-[8px]">근력 보정 +5%</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1.5 mb-2 text-[8px] text-slate-700">
+                    <div class="font-bold mb-0.5">종속 스킬</div>
+                    <div class="flex gap-1">
+                      <span class="btn">강타 Lv.3</span>
+                      <span class="btn">회전베기 Lv.2</span>
+                    </div>
+                    <div class="text-[7px] text-slate-500 mt-0.5 italic">※ 이 무기 장착 시에만 사용 가능</div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1 text-[8px]">
+                    <div class="btn text-center">장착</div>
+                    <div class="btn text-center">비교</div>
+                  </div>
+                  <div class="mt-2 text-center"><div class="btn">닫기</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 장비 세부 스탯 · 무기 종속 스킬 목록 표시</div>
+        </div>
+
+        <!-- NEW: 스킬 상세 모달 -->
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#SK-Detail</span>스킬 상세 모달<span class="badge b-modal">MODAL</span><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">스킬북(#17)에서 스킬 선택 시 모바일 형태 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 스킬 상세 ━</div>
+                  <div class="flex gap-2 mb-2">
+                    <div class="w-12 h-12 bg-amber-200 border-2 border-amber-500 rounded-sm flex items-center justify-center text-[14px]">✦</div>
+                    <div class="text-[9px] text-slate-700">
+                      <div class="font-bold text-[10px]">강타 Lv.3</div>
+                      <div class="text-[8px] text-slate-500">근접 계열 · 단일 대상</div>
+                      <div class="text-[8px] text-slate-500 mt-0.5">종속 무기: ⚔ 근접 무기</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1.5 mb-2 text-[8px] text-slate-700 space-y-0.5">
+                    <div class="flex justify-between"><span>소비 MP</span><span class="font-bold">5</span></div>
+                    <div class="flex justify-between"><span>기본 데미지</span><span class="font-bold">근력 × 1.8</span></div>
+                    <div class="flex justify-between"><span>효과</span><span class="font-bold">스턴 15%</span></div>
+                    <div class="text-[7px] text-slate-500 italic mt-1">"강한 일격으로 적을 타격한다."</div>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1 mb-2 text-[7px] text-slate-600">
+                    Lv.4 업그레이드: 데미지+10% · 필요 근력 50
+                  </div>
+                  <div class="text-center"><div class="btn">닫기</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 스킬 설명 · 종속 무기 표시 · 업그레이드 정보</div>
+        </div>
+
+        <!-- NEW: 월간 이벤트 화면 -->
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#MON-EV</span>월간 이벤트 (병렬)<span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">주간 스케줄과 별개로 진행되는 랜덤 이벤트 (예: 5월)</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 5월</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-amber-50" data-label="MONTHLY_BANNER" data-ratio="20%" style="height: 20%">
+                <div class="h-full flex items-center px-3 pt-4 gap-2">
+                  <div class="text-[18px]">🌸</div>
+                  <div>
+                    <div class="text-[9px] font-bold text-amber-800">5월 특별 이벤트 진행 중</div>
+                    <div class="text-[7px] text-amber-600">주간 스케줄과 독립적으로 진행</div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="EVENT_LIST" data-ratio="62%" style="height: 62%">
+                <div class="h-full px-3 pt-4 space-y-1.5 text-[9px] text-slate-700">
+                  <div class="bg-amber-100 border border-amber-400 rounded-sm p-1.5">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-bold">🌸 봄 축제</div>
+                        <div class="text-[7px] text-slate-500">마을 이벤트 · 5/1~5/7</div>
+                      </div>
+                      <div class="btn text-[7px]">참여</div>
+                    </div>
+                  </div>
+                  <div class="bg-blue-50 border border-blue-300 rounded-sm p-1.5">
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <div class="font-bold">⚡ 랜덤 퀘스트</div>
+                        <div class="text-[7px] text-slate-500">탐험 이벤트 · 행동력 소모</div>
+                      </div>
+                      <div class="btn text-[7px]">탐험</div>
+                    </div>
+                  </div>
+                  <div class="bg-slate-200 rounded-sm p-1.5 opacity-60">
+                    <div class="font-bold">🔒 왕도 토너먼트</div>
+                    <div class="text-[7px] text-slate-500">5/15 해금 예정</div>
+                  </div>
+                  <div class="text-[7px] text-slate-400 italic text-center pt-1">※ 스케줄 시간대는 소모되지 않음</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="18%" style="height: 18%">
+                <div class="h-full flex items-center justify-center pt-3">
+                  <div class="btn">주간 스케줄로 ▸</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active"><div class="ico-nav"></div>스케줄</div>
+              <div class=""><div class="ico-nav"></div>인벤</div>
+              <div class=""><div class="ico-nav"></div>스킬</div>
+              <div class=""><div class="ico-nav"></div>동료</div>
+              <div class=""><div class="ico-nav"></div>설정</div>
+            </div>
+          </div>
+          <div class="feedback">✓ 주간 스케줄과 병렬 진행 · 탐험 이벤트는 별도 행동력 소모 · 시간대 불변</div>
+        </div>
+
+      </div>
+      <h2 class="section-title">🗺 SECTION C — 탐험 / 월드맵 (헤더+Nav 동일 적용)</h2>
+      <p class="section-sub">월드맵·마을·이벤트 모두 메인 루프와 동일 구조 / 시설은 모달</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#19</span>월드맵<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">탐험 모드 — 헤더 우측: 골드 + 행동력 표시</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item"><span class="text-[8px] font-bold text-yellow-300">⚡8/10</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-300" data-label="MAP_CANVAS" data-ratio="68%" style="height: 68%">
+                <div class="h-full relative pt-4">
+                  <div
+                    class="absolute top-6 left-6 w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-[7px] text-white"
+                  >
+                    왕도
+                  </div>
+                  <div
+                    class="absolute top-12 left-1/2 -translate-x-1/2 w-8 h-8 bg-slate-500 rounded-full flex items-center justify-center text-[7px] text-white"
+                  >
+                    숲
+                  </div>
+                  <div
+                    class="absolute top-24 right-8 w-8 h-8 bg-slate-500 rounded-full flex items-center justify-center text-[7px] text-white"
+                  >
+                    동굴
+                  </div>
+                  <div
+                    class="absolute bottom-12 left-12 w-8 h-8 bg-slate-500 rounded-full flex items-center justify-center text-[7px] text-white"
+                  >
+                    항구
+                  </div>
+                  <div
+                    class="absolute bottom-3 right-6 w-9 h-9 bg-slate-400 rounded-full flex items-center justify-center text-[6px] text-white opacity-50"
+                  >
+                    🔒18+
+                  </div>
+                  <div class="absolute top-2 right-2 text-[7px] text-slate-600">CH 1/5</div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="LOCATION_INFO" data-ratio="32%" style="height: 32%">
+                <div class="h-full px-3 pt-3 text-[9px] text-slate-700">
+                  <div class="font-bold">왕도 라이덴</div>
+                  <div class="text-[8px]">상점, 여관, 길드 이용 가능</div>
+                  <div class="text-[7px] italic mt-1">※ 일상에서도 진입 가능</div>
+                  <div class="mt-2 flex gap-1">
+                    <div class="btn flex-1">진입</div>
+                    <div class="btn flex-1">이동</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 적용</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#21</span>마을 (페이지)<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">탐험 모드 — 헤더 우측: 골드 + 행동력 / 시설은 모달</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item"><span class="text-[8px] font-bold text-yellow-300">⚡8/10</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="TOWN_VIEW" data-ratio="50%" style="height: 50%">
+                <div class="h-full flex items-center justify-center pt-3">
+                  <div class="text-slate-600 text-[10px]">PIXEL TOWN ART</div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="FACILITY_BUTTONS" data-ratio="38%" style="height: 38%">
+                <div class="h-full px-3 pt-5 grid grid-cols-2 gap-2 text-[9px] text-slate-700">
+                  <div class="bg-slate-300 rounded-sm p-2 text-center">
+                    <div class="ico mx-auto mb-1"></div>
+                    무기 상점
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-2 text-center">
+                    <div class="ico mx-auto mb-1"></div>
+                    여관
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-2 text-center">
+                    <div class="ico mx-auto mb-1"></div>
+                    모험가 길드
+                  </div>
+                  <div class="bg-slate-300 rounded-sm p-2 text-center">
+                    <div class="ico mx-auto mb-1"></div>
+                    신전
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="BACK" data-ratio="12%" style="height: 12%">
+                <div class="h-full flex items-center justify-center pt-2"><div class="btn">◂ 월드맵</div></div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 / 시설 4종은 모달</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#22M</span>상점 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">마을(#21) 위 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-1 text-center">━ 무기 상점 ━ 1240G</div>
+                  <div class="flex gap-1 mb-2 text-[8px]">
+                    <div class="btn flex-1 bg-slate-500 text-white">구매</div>
+                    <div class="btn flex-1">판매</div>
+                  </div>
+                  <div class="space-y-1 text-[8px] text-slate-700">
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>강철 검</b> · 공격 +12</span><span>300G</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>롱소드</b> · 공격 +18</span><span>520G</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>미스릴 단검</b> · 공격 +9</span><span>750G</span>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">구매</div>
+                    <div class="btn">취소</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">INN-M</span>여관 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">마을(#21) 위 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 여관 ━</div>
+                  <div class="text-[8px] text-slate-700 mb-2 italic">"동료들이 머물며 함께할 시기를 기다립니다"</div>
+                  <div class="space-y-1 text-[8px]">
+                    <div class="bg-slate-300 rounded-sm p-1.5 flex justify-between">
+                      <span>🏠 Liana (체류중)</span>
+                      <div class="btn text-[7px]">대화</div>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1.5 flex justify-between">
+                      <span>🏠 Selene (체류중)</span>
+                      <div class="btn text-[7px]">대화</div>
+                    </div>
+                    <div class="bg-slate-200 rounded-sm p-1.5 flex justify-between">
+                      <span>+ 새 동료 영입</span>
+                      <div class="btn text-[7px]">100G</div>
+                    </div>
+                    <div class="bg-slate-200 rounded-sm p-1.5 flex justify-between">
+                      <span>🛏 휴식 (HP+MP)</span>
+                      <div class="btn text-[7px]">50G</div>
+                    </div>
+                  </div>
+                  <div class="mt-3 text-center"><div class="btn">닫기</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">GUILD-M</span>길드 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-new">NEW</span>
+          </div>
+          <div class="screen-desc">마을(#21) 위 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold text-slate-800 mb-2 text-center">━ 모험가 길드 ━</div>
+                  <div class="space-y-1 text-[8px] text-slate-700">
+                    <div class="bg-slate-300 rounded-sm p-1.5">
+                      <div class="font-bold">고블린 토벌</div>
+                      <div class="text-[7px]">난이도 ★ · 보상 80G</div>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1.5">
+                      <div class="font-bold">실종자 수색</div>
+                      <div class="text-[7px]">난이도 ★★ · 보상 200G</div>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1.5 opacity-60">
+                      <div class="font-bold">🔒 도적단 진압</div>
+                      <div class="text-[7px]">길드 랭크 C 필요</div>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">수락</div>
+                    <div class="btn">닫기</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#ex-3</span>탐험 이벤트 선택<span class="badge b-new">NEW</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">탐험 모드 — 헤더 우측: 골드 + 행동력</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item"><span class="text-[8px] font-bold text-yellow-300">⚡8/10</span></div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="EVENT_CG" data-ratio="32%" style="height: 32%">
+                <div class="h-full flex items-center justify-center">
+                  <div class="w-3/4 h-3/4 bg-slate-400 rounded-sm flex items-center justify-center text-[9px]">
+                    SCENE (28%)
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="DIALOG" data-ratio="30%" style="height: 30%">
+                <div class="h-full px-3 pt-4 text-[9px] text-slate-700">
+                  <div>"숲에서 이상한 소리가 들린다."</div>
+                  <div>"발자국은 두 갈래로 나뉘어 있다."</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="EVENT_CHOICES" data-ratio="38%" style="height: 38%">
+                <div class="h-full px-3 pt-4 space-y-1 text-[8px]">
+                  <div class="btn w-full">▸ 소리를 따라간다 (전투 가능)</div>
+                  <div class="btn w-full">▸ 발자국을 조사한다</div>
+                  <div class="btn w-full">▸ 돌아간다</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일 적용</div>
+        </div>
+      </div>
+      <h2 class="section-title">⚔️ SECTION D — 전투 (헤더 동일 + 턴카드 / Nav dimmed)</h2>
+      <p class="section-sub">전투 시 헤더는 동일 구조 유지하며 우측에 턴 카드 통합 / Nav는 잠금 표시</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#23</span>Battle Main<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">공통 헤더에 턴 카드(T3) 통합 / Nav 잠금(dimmed)</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item" style="background:#fbbf24; color:#78350f; padding: 1px 4px; border-radius: 3px; font-weight: 700">T3</div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-400" data-label="UNIT_STATUS_BAR" data-ratio="14%" style="height: 14%">
+                <div class="h-full flex items-end justify-around px-2 pb-1">
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 bg-slate-600 rounded-sm border-2 border-yellow-400"></div>
+                    <div class="w-7 h-1 bg-red-700 mt-0.5"></div>
+                    <div class="w-7 h-1 bg-blue-700"></div>
+                  </div>
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 bg-slate-600 rounded-sm"></div>
+                    <div class="w-7 h-1 bg-red-700 mt-0.5"></div>
+                    <div class="w-7 h-1 bg-blue-700"></div>
+                  </div>
+                  <div class="text-slate-700 text-[8px] font-bold">VS</div>
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 bg-slate-700 rounded-sm"></div>
+                    <div class="w-7 h-1 bg-red-700 mt-0.5"></div>
+                  </div>
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 bg-slate-700 rounded-sm"></div>
+                    <div class="w-7 h-1 bg-red-700 mt-0.5"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-200" data-label="BATTLE_FIELD" data-ratio="38%" style="height: 38%">
+                <div class="h-full flex items-center justify-between px-3 pt-5 relative">
+                  <div class="flex flex-col gap-1.5">
+                    <div class="w-10 h-12 bg-slate-500 rounded-sm"></div>
+                    <div class="w-10 h-12 bg-slate-500 rounded-sm"></div>
+                  </div>
+                  <div class="text-slate-400 text-xl">⚔</div>
+                  <div class="flex flex-col gap-1.5 relative">
+                    <div class="w-12 h-14 bg-slate-600 rounded-sm border-2 border-red-400"></div>
+                    <div class="w-12 h-14 bg-slate-600 rounded-sm"></div>
+                    <!-- 데미지 수치 (실제 적용 데미지 표시) -->
+                    <div style="position:absolute;top:-14px;right:-4px;font-size:13px;font-weight:900;color:#ef4444;text-shadow:1px 1px 0 #fff;letter-spacing:-0.5px;">228</div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="BATTLE_LOG" data-ratio="20%" style="height: 20%">
+                <div class="h-full px-3 pt-4 text-[8px] text-slate-600 font-mono">
+                  <div>▸ Hero attacks Goblin</div>
+                  <div>▸ Damage: 24</div>
+                  <div>▸ Goblin's turn...</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION_GROUP" data-ratio="28%" style="height: 28%">
+                <div class="h-full px-3 pt-4 pb-2 grid grid-cols-2 gap-1.5">
+                  <div class="btn">⚔ 공격</div>
+                  <div class="btn">✦ 스킬</div>
+                  <div class="btn">🜖 아이템</div>
+                  <div class="btn">🛡 방어</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified dimmed">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 공통 헤더 우측에 턴 카드(T3) 통합 / Nav는 dimmed로 잠금 표시</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#24</span>스킬 서브메뉴<span class="badge b-mod">MOD</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">헤더 동일 (T3) / Nav dimmed</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item" style="background:#fbbf24; color:#78350f; padding: 1px 4px; border-radius: 3px; font-weight: 700">T3</div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="BATTLE_FIELD" data-ratio="36%" style="height: 36%"></div>
+              <div class="region bg-slate-100" data-label="EQUIPPED_SKILL_LIST" data-ratio="48%" style="height: 48%">
+                <div class="h-full px-3 pt-4 space-y-1 text-[9px] text-slate-700">
+                  <div class="bg-amber-100 border border-amber-500 rounded-sm p-1.5 flex justify-between">
+                    <span><b>강타</b> 단일</span><span class="text-[8px]">MP 5</span>
+                  </div>
+                  <div class="bg-amber-100 border border-amber-500 rounded-sm p-1.5 flex justify-between">
+                    <span><b>회전 베기</b> 광역</span><span class="text-[8px]">MP 10</span>
+                  </div>
+                  <div class="bg-amber-100 border border-amber-500 rounded-sm p-1.5 flex justify-between opacity-50">
+                    <span><b>방어 자세</b> 버프</span><span class="text-[8px] text-red-700">MP 3</span>
+                  </div>
+                  <div class="text-[7px] text-slate-500 italic">※ #17에서 편성한 스킬만 표시</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="16%" style="height: 16%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">◂ 뒤로</div>
+                  <div class="btn">선택 ▸</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified dimmed">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더 동일 / Nav dimmed (전투 중 잠금)</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#25</span>타겟 선택<span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">헤더+Nav 일관성 유지</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item" style="background:#fbbf24; color:#78350f; padding: 1px 4px; border-radius: 3px; font-weight: 700">T3</div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-200" data-label="TARGET_SELECTION" data-ratio="55%" style="height: 55%">
+                <div class="h-full flex items-center justify-between px-3 pt-5">
+                  <div><div class="w-10 h-12 bg-slate-500 rounded-sm"></div></div>
+                  <div class="text-slate-400 text-xl">→</div>
+                  <div class="flex flex-col gap-1.5">
+                    <div class="w-12 h-14 bg-slate-600 rounded-sm border-2 border-red-500"></div>
+                    <div class="w-12 h-14 bg-slate-600 rounded-sm opacity-60"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-100" data-label="DAMAGE_PREVIEW" data-ratio="28%" style="height: 28%">
+                <div class="h-full px-3 pt-5 text-[9px] text-slate-700">
+                  <div class="font-bold">고블린 (HP 32/40)</div>
+                  <div>예상 데미지: 18~24</div>
+                  <div>크리티컬 8%</div>
+                </div>
+              </div>
+              <div class="region bg-slate-300" data-label="ACTION" data-ratio="17%" style="height: 17%">
+                <div class="h-full flex items-center justify-around pt-3">
+                  <div class="btn">◂ 취소</div>
+                  <div class="btn">공격 ▸</div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified dimmed">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 동일</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#26M</span>아이템 사용 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">전투(#23) 위 오버레이</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold mb-2 text-center">━ 아이템 사용 ━</div>
+                  <div class="space-y-1 text-[8px]">
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>포션 (HP+30)</b></span
+                      ><span>×5</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>마나포션</b></span
+                      ><span>×3</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>해독제</b></span
+                      ><span>×2</span>
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 flex justify-between">
+                      <span><b>부활석</b></span
+                      ><span>×1</span>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">사용</div>
+                    <div class="btn">취소</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#27</span>승리 모달<span class="badge b-modal">MODAL</span>
+          </div>
+          <div class="screen-desc">전투 종료 시 두루마리 모달</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-4">
+                <div class="bg-slate-200 rounded-sm w-full p-4 border-2 border-slate-500">
+                  <div class="text-center text-[12px] font-bold mb-2">★ VICTORY ★</div>
+                  <div class="text-[9px] space-y-1">
+                    <div class="flex justify-between"><span>경험치</span><span class="font-bold">+ 240</span></div>
+                    <div class="flex justify-between"><span>골드</span><span class="font-bold">+ 75G</span></div>
+                    <div class="flex justify-between">
+                      <span>드롭</span><span class="font-bold">고블린 가죽 ×2</span>
+                    </div>
+                    <div class="flex justify-between"><span>호감도</span><span class="font-bold">Liana +3</span></div>
+                    <div class="border-t border-slate-400 my-2"></div>
+                    <div class="text-center font-bold">LEVEL UP! Lv.5 → Lv.6</div>
+                  </div>
+                  <div class="mt-3 text-center"><span class="btn">▸ 확인</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#28</span>게임 오버<span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">(전체 그레이스케일이지만 헤더/Nav는 동일 구조 유지)</div>
+          <div class="device">
+            <div class="header-unified">
+              <div class="h-left">
+                <div class="h-portrait"></div>
+                <div class="h-info"><b>HERO</b><br />14세 · 4년 16일</div>
+              </div>
+              <div class="h-resources">
+                <div class="h-res-item"><span class="gem" style="background:#fbbf24"></span><span>1,240G</span></div>
+                <div class="h-res-item" style="background:#fbbf24; color:#78350f; padding: 1px 4px; border-radius: 3px; font-weight: 700">T3</div>
+              </div>
+            </div>
+            <div class="content-area">
+              <div class="region bg-slate-800" data-label="GAMEOVER" data-ratio="100%" style="height: 100%">
+                <div class="h-full flex flex-col items-center justify-center px-6 gap-3">
+                  <div class="text-slate-300 text-[14px] font-bold tracking-widest">DEFEAT</div>
+                  <div class="text-slate-500 text-[8px] text-center">"용사의 여정은 끝났다..."</div>
+                  <div class="w-20 h-20 bg-slate-700 rounded-sm opacity-50"></div>
+                  <div class="space-y-1.5 w-full">
+                    <div class="btn w-full">▸ 직전 세이브</div>
+                    <div class="btn w-full">▸ 타이틀</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-unified dimmed">
+              <div class="active">
+                <div class="ico-nav"></div>
+                스케줄
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                인벤
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                스킬
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                동료
+              </div>
+              <div class="">
+                <div class="ico-nav"></div>
+                설정
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 헤더+Nav 구조 유지 (Nav dimmed)</div>
+        </div>
+
+        <div class="screen-card modal-card">
+          <div class="screen-title">
+            <span class="screen-num">#20M</span>파티 편성 모달<span class="badge b-modal">MODAL</span
+            ><span class="badge b-mod">MOD</span>
+          </div>
+          <div class="screen-desc">주간 스케줄(#08)에서 호출</div>
+          <div class="device modal-frame">
+            <div class="region bg-slate-700" data-label="DIM" data-ratio="100%" style="height: 100%">
+              <div class="h-full flex items-center justify-center px-3">
+                <div class="bg-slate-100 rounded p-3 w-full">
+                  <div class="text-[11px] font-bold mb-2 text-center">━ 이번 주 파티 ━</div>
+                  <div class="grid grid-cols-4 gap-1 mb-2">
+                    <div
+                      class="aspect-[3/4] bg-slate-500 rounded-sm flex items-end justify-center pb-0.5 text-[7px] text-white"
+                    >
+                      HERO
+                    </div>
+                    <div
+                      class="aspect-[3/4] bg-slate-500 rounded-sm flex items-end justify-center pb-0.5 text-[7px] text-white"
+                    >
+                      Liana
+                    </div>
+                    <div
+                      class="aspect-[3/4] bg-slate-500 rounded-sm flex items-end justify-center pb-0.5 text-[7px] text-white"
+                    >
+                      Selene
+                    </div>
+                    <div class="aspect-[3/4] bg-slate-300 rounded-sm flex items-center justify-center text-[10px]">
+                      +
+                    </div>
+                  </div>
+                  <div class="text-[7px] italic mb-1">여관 체류 동료에서 선택</div>
+                  <div class="grid grid-cols-3 gap-1 text-[7px]">
+                    <div class="bg-slate-300 rounded-sm p-1 text-center">
+                      <div class="aspect-square bg-slate-500 rounded-sm mb-0.5"></div>
+                      Marcus
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 text-center">
+                      <div class="aspect-square bg-slate-500 rounded-sm mb-0.5"></div>
+                      Eira
+                    </div>
+                    <div class="bg-slate-300 rounded-sm p-1 text-center">
+                      <div class="aspect-square bg-slate-500 rounded-sm mb-0.5"></div>
+                      Goran
+                    </div>
+                  </div>
+                  <div class="mt-3 flex justify-around">
+                    <div class="btn">취소</div>
+                    <div class="btn">저장</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="section-title">🏆 SECTION E — 엔딩 (시네마틱 모드)</h2>
+      <p class="section-sub">최종 보스·분기·엔딩 — 시네마틱 몰입을 위해 헤더/Nav 숨김 (의도적 일관성 예외)</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#29</span>최종 보스 인트로<span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">헤더/Nav 미노출 (시네마틱 컷씬)</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-900" data-label="BOSS_INTRO" data-ratio="80%" style="height: 80%">
+                <div class="h-full flex items-center justify-center text-slate-400 text-[10px]">
+                  ★ FINAL BOSS ★<br /><br />BOSS_SPRITE
+                </div>
+              </div>
+              <div
+                class="region bg-slate-800 text-slate-200"
+                data-label="BOSS_NAME"
+                data-ratio="20%"
+                style="height: 20%"
+              >
+                <div class="h-full flex flex-col items-center justify-center text-[10px]">
+                  <div class="font-bold tracking-widest">MALEFICUS</div>
+                  <div class="text-[8px] mt-1 text-slate-400">"세계를 삼킨 검은 군주"</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 시네마틱 — 헤더/Nav 의도적으로 숨김 (몰입)</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#30</span>엔딩 분기 선택<span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">헤더/Nav 미노출 (클라이맥스)</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-700" data-label="EPIC_BG" data-ratio="50%" style="height: 50%">
+                <div class="h-full flex items-center justify-center text-slate-300 text-[10px]">CLIMAX_CG (28%)</div>
+              </div>
+              <div class="region bg-slate-900 text-slate-200" data-label="DIALOG" data-ratio="22%" style="height: 22%">
+                <div class="h-full px-3 pt-5 text-[9px]">
+                  <div class="font-bold">▸ ???</div>
+                  <div>"용사여, 이제 선택할 시간이다..."</div>
+                </div>
+              </div>
+              <div class="region bg-slate-800" data-label="FINAL_CHOICES" data-ratio="28%" style="height: 28%">
+                <div class="h-full px-3 pt-3 space-y-1.5 text-[9px]">
+                  <div class="btn w-full bg-slate-600 text-slate-100">▸ 검을 들어 맞선다</div>
+                  <div class="btn w-full bg-slate-600 text-slate-100">▸ 손을 내밀어 화해한다</div>
+                  <div class="btn w-full bg-slate-600 text-slate-100">▸ 모든 것을 버리고 떠난다</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 엔딩 분기 — 시네마틱 모드 (헤더/Nav 숨김)</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-title">
+            <span class="screen-num">#31+32+33</span>엔딩 + 도감 + 크레딧<span class="badge b-merged">MERGED</span
+            ><span class="badge b-fix">FIX</span>
+          </div>
+          <div class="screen-desc">엔딩 컷씬 — 헤더/Nav 미노출</div>
+          <div class="device">
+            <div class="content-area">
+              <div class="region bg-slate-700" data-label="ENDING_CG" data-ratio="35%" style="height: 35%">
+                <div class="h-full flex items-center justify-center text-slate-300 text-[10px]">ENDING CG (28%)</div>
+              </div>
+              <div
+                class="region bg-slate-900 text-slate-200"
+                data-label="EPILOGUE_TEXT"
+                data-ratio="28%"
+                style="height: 28%"
+              >
+                <div class="h-full px-4 pt-5 text-[9px] italic">
+                  <div class="font-bold mb-1 text-center text-[11px]">~ The Wise Pacifist ~</div>
+                  <div>"용사는 검을 내려놓았고, 왕국은 평화를 맞이했다."</div>
+                </div>
+              </div>
+              <div
+                class="region bg-slate-800 text-slate-200"
+                data-label="ENDING_DEX"
+                data-ratio="22%"
+                style="height: 22%"
+              >
+                <div class="h-full px-3 pt-4 text-[8px]">
+                  <div class="font-bold mb-1">엔딩 도감 (4/8)</div>
+                  <div class="grid grid-cols-4 gap-1">
+                    <div class="aspect-square bg-slate-600 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-600 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-600 rounded-sm"></div>
+                    <div class="aspect-square bg-slate-600 rounded-sm"></div>
+                    <div
+                      class="aspect-square bg-slate-700 rounded-sm opacity-30 flex items-center justify-center text-[6px]"
+                    >
+                      🔒
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-700 rounded-sm opacity-30 flex items-center justify-center text-[6px]"
+                    >
+                      🔒
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-700 rounded-sm opacity-30 flex items-center justify-center text-[6px]"
+                    >
+                      🔒
+                    </div>
+                    <div
+                      class="aspect-square bg-slate-700 rounded-sm opacity-30 flex items-center justify-center text-[6px]"
+                    >
+                      🔒
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="region bg-slate-900 text-slate-300" data-label="CREDITS" data-ratio="15%" style="height: 15%">
+                <div class="h-full flex items-center justify-around pt-3 text-[8px]">
+                  <div class="btn">▸ 크레딧</div>
+                  <div class="btn">▸ 타이틀</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback">✓ 엔딩은 시네마틱 — 헤더/Nav 미노출</div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="max-w-7xl mx-auto mt-16 text-center text-xs text-slate-500 pb-8">
+      Wireframe v3.0 · 피드백 반영 · 달력 스케줄 · 헤더 골드 전용 · 성격유형 시스템 · 스와이프 스탯 · 탐험 행동력 분리
+    </footer>
+  </body>
+</html>
