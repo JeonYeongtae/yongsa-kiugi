@@ -14,11 +14,16 @@ const GRADE_COLORS = {
 };
 
 export default function WeeklyScheduleScreen() {
-  const { navigate, openModal, startScheduleExec } = useGame();
+  const { navigate, openModal, startScheduleExec, startWeekSchedule, scheduleMode, scheduleExec } = useGame();
+  const isWeekly = scheduleMode === 'weekly';
+  const currentWeek = scheduleExec?.currentWeek ?? 1;
+
+  // 월간 모드: 4주 전체 / 주간 모드: 현재 주 1주만
+  const weekCount = isWeekly ? 1 : 4;
 
   // slots[week][slot] = null | { name, grade, tab, mainStat, ... }
   const [slots, setSlots] = useState(
-    Array.from({ length: 4 }, () => Array(SLOT_COUNT).fill(null))
+    Array.from({ length: weekCount }, () => Array(SLOT_COUNT).fill(null))
   );
   const [picking, setPicking] = useState(null); // { week, slot }
 
@@ -45,6 +50,7 @@ export default function WeeklyScheduleScreen() {
   }
 
   const totalPlaced = slots.flat().filter(Boolean).length;
+  const maxSlots = weekCount * SLOT_COUNT;
 
   return (
     <>
@@ -55,14 +61,18 @@ export default function WeeklyScheduleScreen() {
         <div className="relative flex items-center px-2 py-1 bg-slate-200 border-b border-slate-300">
           <button onClick={() => navigate('main-hub')} className="text-[10px] text-slate-500 w-5 h-5 flex items-center justify-center">‹</button>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span className="text-[8px] font-bold text-slate-700">월간 스케줄 배분</span>
+            <span className="text-[8px] font-bold text-slate-700">
+              {isWeekly ? `${currentWeek}주차 스케줄 배분` : '월간 스케줄 배분'}
+            </span>
           </div>
-          <div className="ml-auto text-[7px] text-slate-500">{totalPlaced}/12 배치됨</div>
+          <div className="ml-auto text-[7px] text-slate-500">{totalPlaced}/{maxSlots} 배치됨</div>
         </div>
 
         {/* 주차 카드 그리드 */}
-        <div className="flex-1 overflow-y-auto bg-slate-200 p-1.5 grid grid-cols-2 gap-1.5 content-start">
-          {WEEKS.map((weekLabel, wi) => (
+        <div className={`flex-1 overflow-y-auto bg-slate-200 p-1.5 content-start ${isWeekly ? 'flex flex-col gap-1.5' : 'grid grid-cols-2 gap-1.5'}`}>
+          {Array.from({ length: weekCount }, (_, wi) => {
+            const weekLabel = isWeekly ? `${currentWeek}주차` : WEEKS[wi];
+            return (
             <div key={wi} className="bg-slate-300 rounded p-1.5 flex flex-col gap-1">
               <div className="text-[7px] font-bold text-slate-600 mb-0.5">{weekLabel}</div>
               {Array.from({ length: SLOT_COUNT }, (_, si) => {
@@ -102,18 +112,29 @@ export default function WeeklyScheduleScreen() {
                 );
               })}
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* CTA */}
         <div className="px-3 py-2 bg-slate-200 border-t border-slate-300">
-          <button
-            onClick={() => {
-              startScheduleExec({ year: 1, month: 1, allSlots: slots.map(w => w.map(s => s ?? null)) });
-              navigate('schedule-exec');
-            }}
-            className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold"
-          >한 달 시작 ▸</button>
+          {isWeekly ? (
+            <button
+              onClick={() => {
+                startWeekSchedule({ weekSlots: slots[0].map(s => s ?? null) });
+                navigate('schedule-exec');
+              }}
+              className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold"
+            >{currentWeek}주차 시작 ▸</button>
+          ) : (
+            <button
+              onClick={() => {
+                startScheduleExec({ year: 1, month: 1, allSlots: slots.map(w => w.map(s => s ?? null)) });
+                navigate('schedule-exec');
+              }}
+              className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold"
+            >한 달 시작 ▸</button>
+          )}
         </div>
       </div>
 

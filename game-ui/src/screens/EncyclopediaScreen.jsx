@@ -198,6 +198,8 @@ const ROLE_COLORS = {
   '도적':   'bg-purple-500',
 };
 
+const WEAPON_ICON = { '근접': '⚔', '방어': '🛡', '마법': '✦', '원거': '◈', '서포': '♪' };
+
 const COMPANIONS = [
   {
     id: 'liana',
@@ -443,7 +445,7 @@ function GiftModal({ char, onGift, onClose }) {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
       <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ maxHeight: '80%' }}>
-        <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
         <div className="text-[9px] font-bold text-center text-slate-700 mb-2">── {char.name}에게 선물 ──</div>
 
         {given ? (
@@ -514,8 +516,20 @@ function AffinityBar({ value, className = '' }) {
   );
 }
 
+function AffinityHearts({ value }) {
+  const filled = value >= 90 ? 3 : value >= 60 ? 2 : value >= 30 ? 1 : 0;
+  return (
+    <div className="text-[9px] leading-none">
+      {[0, 1, 2].map(i => (
+        <span key={i} className={i < filled ? 'text-rose-400' : 'text-slate-400'}>
+          {i < filled ? '♥' : '♡'}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function CompanionCard({ char, onSelect }) {
-  const roleBg = ROLE_COLORS[char.role] ?? 'bg-slate-400';
   return (
     <button
       onClick={() => onSelect(char)}
@@ -525,14 +539,11 @@ function CompanionCard({ char, onSelect }) {
       <div className="w-full aspect-square bg-slate-500 rounded relative flex items-center justify-center">
         {!char.met && <span className="text-slate-300 font-bold" style={{ fontSize: 22 }}>?</span>}
         <div className="absolute top-1 left-1 right-1 flex items-center justify-between">
-          <span className={`text-[5px] font-bold px-1 py-0.5 rounded ${char.met ? roleBg : 'bg-slate-400'} text-white`}>
-            {char.met ? char.role : '???'}
+          <span className="text-[10px] leading-none">
+            {char.met ? (WEAPON_ICON[char.weapon] ?? char.role?.[0] ?? '?') : '?'}
           </span>
-          {char.met && (
-            <img
-              src={char.staying ? '/inn-active.svg' : '/inn-inactive.svg'}
-              style={{ width: 14, height: 14 }}
-            />
+          {char.met && char.staying && (
+            <span className="text-[5px] font-bold px-1 py-0.5 rounded bg-green-500 text-white">여관</span>
           )}
         </div>
       </div>
@@ -544,7 +555,7 @@ function CompanionCard({ char, onSelect }) {
       {char.met ? (
         <>
           <AffinityBar value={char.affinity} />
-          <div className="text-[7px] text-slate-500">호감 {char.affinity}/100</div>
+          <AffinityHearts value={char.affinity} />
         </>
       ) : (
         <div className="text-[7px] text-slate-400">미조우</div>
@@ -577,9 +588,12 @@ function ListView({ companions, onSelect }) {
 }
 
 function DetailView({ char, onBack, onGift }) {
-  const [tab, setTab] = useState('affinity');
   const [giftOpen, setGiftOpen] = useState(false);
-  const roleBg = ROLE_COLORS[char.role] ?? 'bg-slate-400';
+
+  // 호감도 기록: 선물 또는 조우가 포함된 로그만 표시
+  const filteredAffinityLog = char.affinityLog.filter(
+    log => log.reason.includes('선물') || log.reason.includes('조우')
+  );
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
@@ -603,24 +617,25 @@ function DetailView({ char, onBack, onGift }) {
                 <span className="font-bold text-[10px] text-slate-700">{char.met ? char.name : '???'}</span>
                 {char.met && (
                   <>
-                    <span className={`text-[5px] font-bold px-1 py-0.5 rounded ${roleBg} text-white`}>{char.role}</span>
-                    <span className={`text-[5px] font-bold px-1 py-0.5 rounded ${char.staying ? 'bg-green-500 text-white' : 'bg-slate-400 text-slate-200'}`}>
-                      {char.staying ? '여관 체류' : '비체류'}
-                    </span>
+                    <span className="text-[11px] leading-none">{WEAPON_ICON[char.weapon] ?? '?'}</span>
+                    {char.staying && (
+                      <span className="text-[5px] font-bold px-1 py-0.5 rounded bg-green-500 text-white">여관 체류</span>
+                    )}
                   </>
                 )}
               </div>
-              {char.met
-                ? <div className="text-[7px] text-slate-500">호감도 {char.affinity}/100</div>
-                : <div className="text-[7px] text-slate-400">아직 만나지 못한 동료</div>
-              }
+              {char.met ? (
+                <AffinityHearts value={char.affinity} />
+              ) : (
+                <div className="text-[7px] text-slate-400">아직 만나지 못한 동료</div>
+              )}
             </div>
             {char.met && <AffinityBar value={char.affinity} className="mt-1" />}
           </div>
         </div>
       </div>
 
-      {/* 미조우: 만남 조건 힌트 / 조우: 탭 */}
+      {/* 미조우: 만남 조건 힌트 / 조우: 로그 */}
       {!char.met ? (
         <>
           <div className="bg-slate-200 border-b border-slate-300 px-3 py-1.5 flex-shrink-0">
@@ -644,51 +659,26 @@ function DetailView({ char, onBack, onGift }) {
             </button>
           </div>
 
-          <div className="flex bg-slate-200 border-b border-slate-300 flex-shrink-0">
-            {[['affinity', '호감도 기록'], ['dialog', '대화 기록']].map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => setTab(key)}
-                className={`flex-1 py-1.5 text-[8px] font-bold transition-colors ${
-                  tab === key ? 'bg-amber-400 text-slate-800' : 'bg-slate-300 text-slate-500'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="bg-slate-200 border-b border-slate-300 px-3 py-1.5 flex-shrink-0">
+            <span className="text-[8px] font-bold text-slate-600">호감도 기록</span>
           </div>
 
-          {/* 로그 영역 */}
+          {/* 호감도 로그 영역 (선물·조우 필터링) */}
           <div className="flex-1 overflow-y-auto bg-slate-100 px-3 py-2">
-            {tab === 'affinity' ? (
-              char.affinityLog.length === 0 ? (
-                <div className="text-[8px] text-slate-400 text-center mt-4">기록 없음</div>
-              ) : (
-                <div className="flex flex-col gap-1">
-                  {char.affinityLog.map((log, i) => (
-                    <div key={i} className="bg-slate-200 rounded px-2 py-1.5 flex items-center gap-2">
-                      <span className="text-[6px] text-slate-400 flex-shrink-0">{log.date}</span>
-                      <span className="flex-1 text-[7px] text-slate-600">{log.reason}</span>
-                      <span className="text-[8px] font-bold text-amber-600 flex-shrink-0">
-                        {log.delta > 0 ? `+${log.delta}` : log.delta}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )
+            {filteredAffinityLog.length === 0 ? (
+              <div className="text-[8px] text-slate-400 text-center mt-4">선물 또는 조우 기록 없음</div>
             ) : (
-              char.dialogLog.length === 0 ? (
-                <div className="text-[8px] text-slate-400 text-center mt-4">기록 없음</div>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  {char.dialogLog.map((log, i) => (
-                    <div key={i} className="bg-slate-200 rounded px-2 py-1.5">
-                      <div className="text-[6px] text-slate-400 mb-0.5">{log.date}</div>
-                      <div className="text-[7px] text-slate-600 leading-relaxed">{log.text}</div>
-                    </div>
-                  ))}
-                </div>
-              )
+              <div className="flex flex-col gap-1">
+                {filteredAffinityLog.map((log, i) => (
+                  <div key={i} className="bg-slate-200 rounded px-2 py-1.5 flex items-center gap-2">
+                    <span className="text-[6px] text-slate-400 flex-shrink-0">{log.date}</span>
+                    <span className="flex-1 text-[7px] text-slate-600">{log.reason}</span>
+                    <span className="text-[8px] font-bold text-amber-600 flex-shrink-0">
+                      {log.delta > 0 ? `+${log.delta}` : log.delta}
+                    </span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </>

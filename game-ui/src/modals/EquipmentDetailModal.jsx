@@ -27,7 +27,7 @@ export default function EquipmentDetailModal({ onClose }) {
       <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative">
         <button
           onClick={onClose}
-          className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]"
+          className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]"
         >✕</button>
 
         <div className="text-[11px] font-bold text-center mb-2">── 장비 교체 확인 ──</div>
@@ -75,7 +75,7 @@ export default function EquipmentDetailModal({ onClose }) {
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative">
       <button
         onClick={onClose}
-        className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]"
+        className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]"
       >✕</button>
       <div className="text-[11px] font-bold text-center mb-2">── 장비 상세 ──</div>
 

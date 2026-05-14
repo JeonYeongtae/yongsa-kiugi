@@ -4,30 +4,46 @@ const SCHEDULES = {
   교육: [
     { id: 'edu_knight',   name: '입립 기사단 훈련', mainStat: '물공', bonusStat: '스태미나', cost: [30, 60, 100] },
     { id: 'edu_mage',     name: '마법사 길드 강의',  mainStat: '마공', bonusStat: '마나',     cost: [30, 60, 100] },
-    { id: 'edu_bard',     name: '도성비 찬사/성가',  mainStat: '화마', bonusStat: '마나',     cost: [30, 60, 100] },
+    { id: 'edu_bard',     name: '도성비 찬사/성가',  mainStat: '마공', bonusStat: '마나',     cost: [30, 60, 100] },
     { id: 'edu_rogue',    name: '암습 사격/회피',    mainStat: '명중', bonusStat: '스태미나', cost: [30, 60, 100] },
     { id: 'edu_guard',    name: '기사단 방어/연수',  mainStat: '물방', bonusStat: '스태미나', cost: [30, 60, 100] },
-    { id: 'edu_fire',     name: '화마법 전문 연구',  mainStat: '더버화', bonusStat: '마공',   cost: [30, 60, 100] },
+    { id: 'edu_fire',     name: '화마법 전문 연구',  mainStat: '마공', bonusStat: '마공',     cost: [30, 60, 100] },
   ],
   아르바이트: [
     { id: 'arb_mine',    name: '광산 채굴',       mainStat: '물공', penalty: '마공',     income: [40, 80, 135],  risk: [5, 10, 15] },
     { id: 'arb_guard',   name: '성벽 야간 경비',  mainStat: '물방', penalty: '명중',     income: [30, 65, 115],  risk: [3, 7, 12] },
-    { id: 'arb_library', name: '마법 서적 정리',  mainStat: '마나', penalty: '물공',     income: [25, 55, 95],   risk: [1, 3, 5] },
+    { id: 'arb_library', name: '마법 서적 정리',  mainStat: '마공', penalty: '물공',     income: [25, 55, 95],   risk: [1, 3, 5] },
     { id: 'arb_hunter',  name: '사냥터 가이드',   mainStat: '명중', penalty: '화마',     income: [35, 75, 125],  risk: [4, 8, 14] },
-    { id: 'arb_golem',   name: '공돌머지 관리',   mainStat: '더버화', penalty: '번화',   income: [45, 90, 145],  risk: [6, 12, 18] },
-    { id: 'arb_market',  name: '중소 시장 업무',  mainStat: '이(주)', penalty: '스태미나', income: [35, 75, 130], risk: [3, 7, 12] },
+    { id: 'arb_golem',   name: '공돌머지 관리',   mainStat: '물공', penalty: '번화',     income: [45, 90, 145],  risk: [6, 12, 18] },
+    { id: 'arb_market',  name: '중소 시장 업무',  mainStat: '스태미나', penalty: '스태미나', income: [35, 75, 130], risk: [3, 7, 12] },
   ],
 };
 
+const EDU_STAT_FILTERS  = ['전체', '물공', '마공', '물방', '마방', '명중', '회피'];
+const ARB_STAT_FILTERS  = ['전체', '물공', '마공', '물방', '명중', '스태미나'];
 const GRADE_LABELS = ['초급', '중급', '상급'];
 
 export default function SchedulePickModal({ onClose, onSelect }) {
-  const [tab, setTab] = useState('교육');
+  const [tab, setTab]           = useState('교육');
   const [selectedId, setSelectedId] = useState(null);
-  const [grade, setGrade] = useState(0);
+  const [grade, setGrade]       = useState(0);
+  const [statFilter, setStatFilter] = useState('전체');
 
+  const statFilters = tab === '교육' ? EDU_STAT_FILTERS : ARB_STAT_FILTERS;
   const items = SCHEDULES[tab];
-  const selected = items.find(i => i.id === selectedId);
+
+  // 스탯 필터 적용
+  const filtered = statFilter === '전체'
+    ? items
+    : items.filter(item => item.mainStat === statFilter || item.bonusStat === statFilter);
+
+  const selected = filtered.find(i => i.id === selectedId) ?? items.find(i => i.id === selectedId);
+
+  function handleTabChange(newTab) {
+    setTab(newTab);
+    setSelectedId(null);
+    setStatFilter('전체');
+  }
 
   function handleConfirm() {
     if (!selected) return;
@@ -37,42 +53,62 @@ export default function SchedulePickModal({ onClose, onSelect }) {
 
   return (
     <div className="bg-slate-100 rounded p-2.5 w-full max-w-[260px]">
-      <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+      <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
 
       <div className="text-[9px] font-bold text-center text-slate-800 mb-2 mt-1">── 일정 선택 ──</div>
 
-      {/* 탭 */}
+      {/* 교육/아르바이트 탭 */}
       <div className="flex gap-1 mb-2">
         {['교육', '아르바이트'].map(t => (
           <button
             key={t}
-            onClick={() => { setTab(t); setSelectedId(null); }}
+            onClick={() => handleTabChange(t)}
             className={`flex-1 py-0.5 rounded text-[7px] font-bold ${tab === t ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-600'}`}
           >{t}</button>
         ))}
       </div>
 
-      {/* 일정 목록 */}
-      <div className="space-y-0.5 mb-2 max-h-[120px] overflow-y-auto">
-        {items.map(item => (
+      {/* 스탯 필터 */}
+      <div className="flex flex-wrap gap-0.5 mb-2">
+        {statFilters.map(f => (
           <button
-            key={item.id}
-            onClick={() => setSelectedId(item.id)}
-            className={`w-full text-left rounded p-1.5 flex justify-between items-center ${selectedId === item.id ? 'bg-amber-200 border border-amber-400' : 'bg-slate-300'}`}
+            key={f}
+            onClick={() => { setStatFilter(f); setSelectedId(null); }}
+            className={`px-1.5 py-0.5 rounded-full text-[6px] transition-colors ${
+              statFilter === f ? 'bg-amber-400 text-white font-bold' : 'bg-slate-200 text-slate-500'
+            }`}
           >
-            <div>
-              <div className="text-[8px] font-bold text-slate-800">{item.name}</div>
-              <div className="text-[6px] text-slate-500">
-                {tab === '교육'
-                  ? `${item.mainStat}↑ / ${item.bonusStat}↑`
-                  : `${item.mainStat}↑ / ${item.penalty}↓ · 사고${item.risk[grade]}%`}
-              </div>
-            </div>
-            <div className="text-[7px] font-bold text-slate-600 shrink-0 ml-1">
-              {tab === '교육' ? `${item.cost[grade]}G` : `+${item.income[grade]}G`}
-            </div>
+            {f}
           </button>
         ))}
+      </div>
+
+      {/* 일정 목록 — 초→중→상 순서, 종류 그룹 구분선 */}
+      <div className="space-y-0.5 mb-2 max-h-[110px] overflow-y-auto">
+        {filtered.map((item, idx) => (
+          <div key={item.id}>
+            {idx > 0 && <div className="border-t border-slate-300 my-0.5" />}
+            <button
+              onClick={() => setSelectedId(item.id)}
+              className={`w-full text-left rounded p-1.5 flex justify-between items-center ${selectedId === item.id ? 'bg-amber-200 border border-amber-400' : 'bg-slate-300'}`}
+            >
+              <div>
+                <div className="text-[8px] font-bold text-slate-800">{item.name}</div>
+                <div className="text-[6px] text-slate-500">
+                  {tab === '교육'
+                    ? `${item.mainStat}↑ / ${item.bonusStat}↑`
+                    : `${item.mainStat}↑ / ${item.penalty}↓ · 사고${item.risk[grade]}%`}
+                </div>
+              </div>
+              <div className="text-[7px] font-bold text-slate-600 shrink-0 ml-1">
+                {tab === '교육' ? `${item.cost[grade]}G` : `+${item.income[grade]}G`}
+              </div>
+            </button>
+          </div>
+        ))}
+        {filtered.length === 0 && (
+          <div className="text-[7px] text-slate-400 text-center py-2">해당 스탯 일정 없음</div>
+        )}
       </div>
 
       {/* 등급 선택 */}

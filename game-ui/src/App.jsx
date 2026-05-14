@@ -28,6 +28,8 @@ import EndingBranchScreen from './screens/EndingBranchScreen';
 import EndingScreen from './screens/EndingScreen';
 import EncyclopediaScreen from './screens/EncyclopediaScreen';
 import FormationScreen from './screens/FormationScreen';
+import ExplorationActionScreen from './screens/ExplorationActionScreen';
+import CollectionScreen from './screens/CollectionScreen';
 
 const SCREEN_MAP = {
   splash: SplashScreen, 'main-menu': MainMenuScreen, 'save-load': SaveLoadScreen,
@@ -44,6 +46,8 @@ const SCREEN_MAP = {
   ending: EndingScreen,
   encyclopedia: EncyclopediaScreen,
   formation: FormationScreen,
+  'exploration-action': ExplorationActionScreen,
+  collection: CollectionScreen,
 };
 
 export default function App() {

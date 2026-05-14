@@ -3,7 +3,7 @@ export default function SkipModal({ onClose }) {
   const { navigate } = useGame();
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative">
-      <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
+      <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
       <div className="text-[11px] font-bold text-center text-slate-800 mb-2">── 메인 스토리 요약 ──</div>
       <div className="text-[9px] text-slate-700 leading-relaxed space-y-1">
         <div>· 별이 떨어진 날, 마성의 내음이 짙어졌다.</div>

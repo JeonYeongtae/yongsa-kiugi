@@ -12,7 +12,7 @@ export default function MainMenuScreen() {
       <div className="h-2/5 bg-slate-300 flex flex-col justify-center gap-2 px-6">
         <button onClick={() => navigate('prologue')} className="w-full py-2 bg-slate-500 text-white text-[10px] font-bold rounded">▸ NEW GAME</button>
         <button onClick={() => navigate('save-load')} className="w-full py-2 bg-slate-400 text-white text-[10px] font-bold rounded">▸ CONTINUE</button>
-        <button onClick={() => openModal('encyclopedia')} className="w-full py-2 bg-slate-400 text-white text-[10px] font-bold rounded">▸ 도감</button>
+        <button onClick={() => navigate('collection')} className="w-full py-2 bg-slate-400 text-white text-[10px] font-bold rounded">▸ 컬렉션</button>
       </div>
       <div className="bg-slate-400 flex-1 flex items-end justify-between px-4 pb-2 text-[8px] text-slate-700">
         <span>v0.1.0</span><span>© Studio</span>

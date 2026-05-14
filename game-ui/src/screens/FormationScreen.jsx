@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Header from '../components/Header';
 import Nav from '../components/Nav';
 
 /* ═══════════════════════════════════ WEAPONS ═══════════════════════════════════ */
@@ -109,18 +108,18 @@ const TYPE_STYLE = {
 };
 
 const COMPANIONS = [
-  { id: 1,  name: 'Adin',     race: '엘프',   weapon: '근접', weaponName: '대검',        role: '딜러',   guardian: '우르굴라',  concept: '대검을 사랑해 활을 버린 엘프',           color: '#7CFC00' },
-  { id: 2,  name: 'Gabian',   race: '드워프',  weapon: '방어', weaponName: '방패',        role: '탱커',   guardian: '두브',      concept: '굳건한 방패가 되는 자칭 모두의 음유시인', color: '#861a22' },
-  { id: 3,  name: 'Cronel',   race: '마족',   weapon: '서포', weaponName: '서포터(버프)', role: '버프',   guardian: '지바안나',  concept: '타인을 수호하는 신앙심의 수호자',         color: '#DCDCDC' },
-  { id: 4,  name: 'Dephinel', race: '마족',   weapon: '서포', weaponName: '서포터(디버프)',role: '디버프', guardian: '수후르마시', concept: '타인을 저주하는 신앙심의 수호자',        color: '#D3D3D3' },
-  { id: 5,  name: 'Escital',  race: '인간',   weapon: '마법', weaponName: '책',           role: '마법사', guardian: '마시타브바', concept: '평범해서 더욱 평범하지 않은 마법사',     color: '#555555' },
-  { id: 6,  name: 'Felisika', race: '수인족',  weapon: '서포', weaponName: '서포터(힐)',   role: '힐러',   guardian: '아브신',    concept: '생명을 구원하고자하는 방랑자',           color: '#8FBC8F' },
-  { id: 7,  name: 'Ossian',   race: '엘프',   weapon: '원거', weaponName: '활',           role: '원거딜', guardian: '구안나',    concept: '온오프가 확실한 햇살+냉정 엘프',         color: '#FAF3D7' },
-  { id: 8,  name: 'Neon',     race: '인간',   weapon: '마법', weaponName: '책',           role: '마법사', guardian: '심마흐',    concept: '균형형 마딜러',                          color: '#191970' },
-  { id: 9,  name: 'Isolde',   race: '엘프',   weapon: '마법', weaponName: '지팡이',       role: '마법사', guardian: '기르타브',  concept: '모든 것을 태우는 오만의 잿불',           color: '#8A2BE2' },
-  { id: 10, name: 'Joanna',   race: '인간',   weapon: '방어', weaponName: '팬던트',       role: '탱커',   guardian: '구',        concept: '마법 탱커',                              color: '#FFF8ED' },
-  { id: 11, name: 'Knox',     race: '마족',   weapon: '근접', weaponName: '단검',         role: '딜러',   guardian: '쿠말',      concept: '집착 안데레 어쎄신',                    color: '#A61B3C' },
-  { id: 12, name: 'Larc',     race: '수인족',  weapon: '원거', weaponName: '석궁',         role: '원거딜', guardian: '파빌',      concept: '명중형 원딜',                           color: '#4DA8DA' },
+  { id: 1,  name: 'Adin',     race: '엘프',   weapon: '근접', weaponName: '대검',        role: '딜러',   guardian: '우르굴라',  concept: '대검을 사랑해 활을 버린 엘프',           color: '#7CFC00', staying: true  },
+  { id: 2,  name: 'Gabian',   race: '드워프',  weapon: '방어', weaponName: '방패',        role: '탱커',   guardian: '두브',      concept: '굳건한 방패가 되는 자칭 모두의 음유시인', color: '#861a22', staying: false },
+  { id: 3,  name: 'Cronel',   race: '마족',   weapon: '서포', weaponName: '서포터(버프)', role: '버프',   guardian: '지바안나',  concept: '타인을 수호하는 신앙심의 수호자',         color: '#DCDCDC', staying: true  },
+  { id: 4,  name: 'Dephinel', race: '마족',   weapon: '서포', weaponName: '서포터(디버프)',role: '디버프', guardian: '수후르마시', concept: '타인을 저주하는 신앙심의 수호자',        color: '#D3D3D3', staying: false },
+  { id: 5,  name: 'Escital',  race: '인간',   weapon: '마법', weaponName: '책',           role: '마법사', guardian: '마시타브바', concept: '평범해서 더욱 평범하지 않은 마법사',     color: '#555555', staying: false },
+  { id: 6,  name: 'Felisika', race: '수인족',  weapon: '서포', weaponName: '서포터(힐)',   role: '힐러',   guardian: '아브신',    concept: '생명을 구원하고자하는 방랑자',           color: '#8FBC8F', staying: false },
+  { id: 7,  name: 'Ossian',   race: '엘프',   weapon: '원거', weaponName: '활',           role: '원거딜', guardian: '구안나',    concept: '온오프가 확실한 햇살+냉정 엘프',         color: '#FAF3D7', staying: false },
+  { id: 8,  name: 'Neon',     race: '인간',   weapon: '마법', weaponName: '책',           role: '마법사', guardian: '심마흐',    concept: '균형형 마딜러',                          color: '#191970', staying: false },
+  { id: 9,  name: 'Isolde',   race: '엘프',   weapon: '마법', weaponName: '지팡이',       role: '마법사', guardian: '기르타브',  concept: '모든 것을 태우는 오만의 잿불',           color: '#8A2BE2', staying: false },
+  { id: 10, name: 'Joanna',   race: '인간',   weapon: '방어', weaponName: '팬던트',       role: '탱커',   guardian: '구',        concept: '마법 탱커',                              color: '#FFF8ED', staying: false },
+  { id: 11, name: 'Knox',     race: '마족',   weapon: '근접', weaponName: '단검',         role: '딜러',   guardian: '쿠말',      concept: '집착 안데레 어쎄신',                    color: '#A61B3C', staying: false },
+  { id: 12, name: 'Larc',     race: '수인족',  weapon: '원거', weaponName: '석궁',         role: '원거딜', guardian: '파빌',      concept: '명중형 원딜',                           color: '#4DA8DA', staying: false },
 ];
 
 function statLabel(w) {
@@ -163,7 +162,7 @@ function WeaponEquipWarning({ pendingWeapon, conflictSkills, equippedWeaponCat, 
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
       <div className="bg-slate-100 rounded p-3 w-4/5 relative">
-        <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
         <div className="text-[10px] font-bold text-center mb-3">── 장비 교체 확인 ──</div>
         <div className="flex gap-2 mb-3">
           <div className="w-10 h-10 bg-slate-400 rounded flex items-center justify-center text-[16px] flex-shrink-0">
@@ -357,7 +356,6 @@ function SkillView({ equippedWeaponCat, equippedSkillIds, onEquip, onBack }) {
       <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">스킬 목록</span>
-        <span className="ml-auto text-[7px] text-slate-500">장착 {equippedSkillIds.length}/2</span>
       </div>
       <div className="flex items-center px-2 h-7 bg-slate-50 border-b border-slate-200 gap-1.5 flex-shrink-0">
         {FILTERS.map(f => (
@@ -574,11 +572,11 @@ function CompanionDetail({ companion, isInParty, canAdd, onToggle, onBack }) {
   );
 }
 
-const ROLE_FILTERS = ['전체', '딜러', '원거딜', '마법사', '탱커', '힐러', '버프', '디버프'];
+const WEAPON_FILTERS = ['전체', '근접', '방어', '마법', '원거', '서포'];
 
 function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, heroWeapon, onHeroWeaponTap, onBack }) {
-  const [selected,   setSelected]   = useState(null);
-  const [roleFilter, setRoleFilter] = useState('전체');
+  const [selected,      setSelected]      = useState(null);
+  const [weaponFilter,  setWeaponFilter]  = useState('전체');
 
   const remove = (id) => setParty(p => p.filter(m => m !== id));
   const add    = (id) => { if (party.length < 3) setParty(p => [...p, id]); };
@@ -593,7 +591,6 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
       <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">파티 편성</span>
-        <span className="ml-auto text-[7px] text-slate-500">파티 {party.length}/3</span>
       </div>
       <div className="flex-1 flex flex-col overflow-hidden p-3">
       <div className="grid grid-cols-4 gap-1.5 mb-2 flex-shrink-0">
@@ -654,17 +651,17 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
         <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">동료 목록</span>
       </div>
       <div className="flex flex-wrap gap-1 mb-2 flex-shrink-0">
-        {ROLE_FILTERS.map(r => (
-          <button key={r} onClick={() => setRoleFilter(r)}
+        {WEAPON_FILTERS.map(w => (
+          <button key={w} onClick={() => setWeaponFilter(w)}
             className={`px-1.5 py-0.5 rounded-full text-[7px] transition-colors ${
-              roleFilter === r ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-400'
+              weaponFilter === w ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-400'
             }`}>
-            {r}
+            {w === '전체' ? w : `${CAT_ICON[w]} ${w}`}
           </button>
         ))}
       </div>
       <div className="flex-1 flex flex-col gap-1 overflow-y-auto">
-        {COMPANIONS.filter(c => roleFilter === '전체' || c.role === roleFilter).map(c => {
+        {COMPANIONS.filter(c => (c.staying || party.includes(c.id)) && (weaponFilter === '전체' || c.weapon === weaponFilter)).map(c => {
           const inParty   = party.includes(c.id);
           const cWeaponId = partyEquipment[c.id];
           const cWeapon   = cWeaponId ? WEAPONS.find(w => w.id === cWeaponId) : null;
@@ -797,147 +794,101 @@ const CONFIRM_MSG = {
   saveNew:{ label: '저장',     desc: '현재 편성을 이 슬롯에 저장합니다.',                           btnClass: 'bg-slate-600 text-white' },
 };
 
-function PresetModal({ slotIndex, preset, onLoad, onSave, onDelete, onClose }) {
+
+
+function PresetBottomSheet({ presets, onLoad, onSave, onDelete, onClose }) {
+  const [expandedSlot, setExpandedSlot] = useState(null);
   const [confirmAction, setConfirmAction] = useState(null);
 
-  const p = preset;
-  const weapon  = p ? WEAPONS.find(w => w.id === p.weaponId) : null;
-  const skills  = p ? p.skillIds.map(id => SKILLS.find(s => s.id === id)).filter(Boolean) : [];
-  const members = p ? p.party.map(id => COMPANIONS.find(c => c.id === id)).filter(Boolean) : [];
-
-  const handleConfirm = () => {
-    if (confirmAction === 'load')    onLoad();
-    if (confirmAction === 'save')    onSave();
-    if (confirmAction === 'delete')  onDelete();
-    if (confirmAction === 'saveNew') onSave();
+  const handleAction = (action, idx) => {
+    if (action === 'load')    { onLoad(idx);   onClose(); }
+    if (action === 'save')    { onSave(idx);   onClose(); }
+    if (action === 'delete')  { onDelete(idx); setExpandedSlot(null); setConfirmAction(null); }
   };
 
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.55)' }}>
-      <div className="bg-slate-100 rounded w-4/5 overflow-hidden relative">
-        <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
-          <button onClick={onClose} className="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
-          <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">
-            세팅 {slotIndex + 1}
-          </span>
+    <div className="absolute inset-0 z-30 flex flex-col justify-end" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose}>
+      <div className="bg-slate-100 rounded-t-xl flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="relative flex items-center justify-center h-8 border-b border-slate-200">
+          <span className="text-[9px] font-bold text-slate-600">프리셋</span>
+          <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[12px]">✕</button>
         </div>
+        <div className="flex flex-col divide-y divide-slate-200 px-3 py-1">
+          {[0, 1, 2].map(i => {
+            const p = presets[i];
+            const weapon  = p ? WEAPONS.find(w => w.id === p.weaponId) : null;
+            const skills  = p ? p.skillIds.map(id => SKILLS.find(s => s.id === id)).filter(Boolean) : [];
+            const members = p ? p.party.map(id => COMPANIONS.find(c => c.id === id)).filter(Boolean) : [];
+            const isOpen  = expandedSlot === i;
 
-        <div className="p-3 flex flex-col gap-2.5">
-          {p ? (
-            <>
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-2 bg-slate-200 rounded px-2 py-1.5">
-                  <span className="text-[14px] w-5 text-center flex-shrink-0">{CAT_ICON[weapon?.cat]}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[8px] text-slate-400 leading-none mb-0.5">장비</div>
-                    <div className="text-[9px] font-bold text-slate-700 truncate">{weapon?.name ?? '—'}</div>
-                  </div>
-                  <span className="text-[8px] text-amber-500">{'★'.repeat(weapon?.tier ?? 0)}</span>
-                </div>
+            return (
+              <div key={i} className="py-2">
+                <button className="w-full flex items-center gap-2" onClick={() => setExpandedSlot(isOpen ? null : i)}>
+                  <span className={`w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold flex-shrink-0 ${p ? 'bg-amber-400 text-white' : 'bg-slate-300 text-slate-500'}`}>{i + 1}</span>
+                  {p ? (
+                    <div className="flex-1 flex items-center gap-1.5 min-w-0">
+                      <span className="text-[13px]">{CAT_ICON[weapon?.cat]}</span>
+                      <div className="flex gap-0.5">
+                        {[0,1].map(si => (
+                          <span key={si} className={`w-4 h-4 rounded text-[5px] flex items-center justify-center font-bold ${skills[si] ? 'bg-slate-400 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                            {skills[si] ? '✦' : '—'}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex gap-0.5">
+                        {[0,1,2].map(mi => (
+                          <span key={mi} className={`w-4 h-4 rounded text-[5px] flex items-center justify-center ${members[mi] ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                            {members[mi] ? members[mi].name[0] : '—'}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="ml-auto text-[7px] text-slate-400">{isOpen ? '▲' : '▼'}</span>
+                    </div>
+                  ) : (
+                    <span className="flex-1 text-left text-[8px] text-slate-400">비어있는 슬롯</span>
+                  )}
+                </button>
 
-                <div className="flex gap-1">
-                  {[0, 1].map(i => {
-                    const s = skills[i];
-                    return s ? (
-                      <div key={s.id} className="flex-1 bg-slate-200 rounded px-1.5 py-1">
-                        <div className="text-[7px] text-slate-400 leading-none mb-0.5">스킬 {i + 1}</div>
-                        <div className="text-[8px] font-bold text-slate-700 truncate">{s.name}</div>
-                        <span className={`text-[6px] px-1 rounded ${TYPE_STYLE[s.type]}`}>{s.type}</span>
-                      </div>
-                    ) : (
-                      <div key={`empty-${i}`} className="flex-1 bg-slate-200 rounded px-1.5 py-1">
-                        <div className="text-[7px] text-slate-400 leading-none mb-0.5">스킬 {i + 1}</div>
-                        <div className="text-[8px] font-bold text-slate-400">—</div>
-                        <span className="block text-[6px] invisible">·</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="flex gap-1">
-                  <div className="flex-1 bg-slate-500 rounded aspect-[3/4] flex flex-col overflow-hidden">
-                    <div className="flex-1 bg-slate-400" />
-                    <span className="text-[5px] text-white text-center py-0.5 truncate px-0.5">HERO</span>
-                  </div>
-                  {Array(3).fill(0).map((_, i) => {
-                    const c = members[i];
-                    return c ? (
-                      <div key={c.id} className="flex-1 bg-slate-500 rounded aspect-[3/4] flex flex-col overflow-hidden">
-                        <div className="flex-1 bg-slate-400" />
-                        <span className="text-[5px] text-white text-center py-0.5 truncate px-0.5">{c.name}</span>
-                      </div>
-                    ) : (
-                      <div key={`empty-party-${i}`} className="flex-1 bg-slate-200 rounded aspect-[3/4] flex flex-col overflow-hidden">
-                        <div className="flex-1 flex items-center justify-center">
-                          <span className="text-[8px] text-slate-400">—</span>
+                {isOpen && (
+                  <div className="mt-2 flex flex-col gap-1.5">
+                    {p ? (
+                      <>
+                        <button onClick={() => { setConfirmAction({ action: 'load', idx: i }); }}
+                          className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold">불러오기 ▸</button>
+                        <div className="flex gap-1">
+                          <button onClick={() => setConfirmAction({ action: 'save', idx: i })}
+                            className="flex-1 py-1 bg-amber-400 text-white text-[8px] rounded font-bold">덮어쓰기</button>
+                          <button onClick={() => setConfirmAction({ action: 'delete', idx: i })}
+                            className="flex-1 py-1 bg-slate-200 text-slate-500 text-[8px] rounded">삭제</button>
                         </div>
-                        <span className="text-[5px] text-slate-400 text-center py-0.5 invisible px-0.5">·</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                      </>
+                    ) : (
+                      <button onClick={() => setConfirmAction({ action: 'save', idx: i })}
+                        className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold">현재 편성 저장 ▸</button>
+                    )}
+                  </div>
+                )}
               </div>
-
-              <div className="flex flex-col gap-1">
-                <button onClick={() => setConfirmAction('load')}   className="w-full py-1 bg-slate-600 text-white text-[9px] rounded font-bold">불러오기 ▸</button>
-                <div className="flex gap-1.5">
-                  <button onClick={() => setConfirmAction('save')}   className="flex-1 py-1 bg-amber-400 text-white text-[8px] rounded font-bold">덮어쓰기</button>
-                  <button onClick={() => setConfirmAction('delete')} className="flex-1 py-1 bg-slate-200 text-slate-500 text-[8px] rounded font-bold">삭제</button>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="py-4 flex flex-col items-center gap-1 text-slate-400">
-                <span className="text-[20px]">+</span>
-                <span className="text-[8px]">비어있는 슬롯</span>
-              </div>
-              <button onClick={() => setConfirmAction('saveNew')} className="w-full py-1.5 bg-slate-600 text-white text-[9px] rounded font-bold">현재 설정 저장 ▸</button>
-            </>
-          )}
+            );
+          })}
         </div>
-
-        {confirmAction && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.45)' }}>
-            <div className="w-4/5 bg-slate-100 rounded p-3 flex flex-col gap-2">
-              <div className="text-[8px] text-slate-600 text-center whitespace-pre-line leading-relaxed">
-                {CONFIRM_MSG[confirmAction].desc}
-              </div>
-              <button onClick={handleConfirm} className={`w-full py-1.5 text-[9px] rounded font-bold ${CONFIRM_MSG[confirmAction].btnClass}`}>
-                {CONFIRM_MSG[confirmAction].label} ▸
-              </button>
-              <button onClick={() => setConfirmAction(null)} className="w-full py-1 bg-slate-200 text-slate-500 text-[8px] rounded font-bold">
-                취소
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="h-2" />
       </div>
-    </div>
-  );
-}
 
-function PresetBar({ presets, onTap }) {
-  return (
-    <div className="flex items-center px-2 h-7 bg-slate-50 border-b border-slate-200 gap-1.5 flex-shrink-0">
-      <span className="text-[7px] text-slate-400 font-bold flex-shrink-0">세팅</span>
-      {[0, 1, 2].map(i => {
-        const p = presets[i];
-        const weaponCat = p ? WEAPONS.find(w => w.id === p.weaponId)?.cat : null;
-        return (
-          <button key={i} onClick={() => onTap(i)}
-            className={`flex-1 h-5 rounded flex items-center justify-center gap-0.5 text-[7px] font-bold transition-colors ${
-              p
-                ? 'bg-amber-100 border border-amber-300 text-amber-700'
-                : 'bg-slate-200 border border-dashed border-slate-300 text-slate-400'
-            }`}>
-            <span>{i + 1}</span>
-            {p && weaponCat && <span>{CAT_ICON[weaponCat]}</span>}
-            {p && <span className="text-[5px] text-amber-500">{'·'.repeat(p.party.length)}</span>}
-            {!p && <span>+</span>}
-          </button>
-        );
-      })}
+      {confirmAction && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-4/5 bg-slate-100 rounded p-3 flex flex-col gap-2">
+            <div className="text-[8px] text-slate-600 text-center whitespace-pre-line leading-relaxed">
+              {CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.desc}
+            </div>
+            <button onClick={() => { handleAction(confirmAction.action, confirmAction.idx); setConfirmAction(null); }}
+              className={`w-full py-1.5 text-[9px] rounded font-bold ${CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.btnClass}`}>
+              {CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.label} ▸
+            </button>
+            <button onClick={() => setConfirmAction(null)} className="w-full py-1 bg-slate-200 text-slate-500 text-[8px] rounded">취소</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -953,7 +904,7 @@ export default function FormationScreen() {
   const [companionForWeapon, setCompanionForWeapon] = useState(null);
   const [pendingWeapon,      setPendingWeapon]      = useState(null);
   const [presets,            setPresets]            = useState([null, null, null]);
-  const [presetModal,        setPresetModal]        = useState(null);
+  const [presetSheet,        setPresetSheet]        = useState(false);
 
   const equippedWeapon = WEAPONS.find(w => w.id === equippedWeaponId);
   const equippedSkills = equippedSkillIds.map(id => SKILLS.find(s => s.id === id)).filter(Boolean);
@@ -980,15 +931,12 @@ export default function FormationScreen() {
     setView('main');
   };
 
-  const handleSlotTap = (i) => setPresetModal(i);
-
   const saveToSlot = (i) => {
     setPresets(prev => {
       const next = [...prev];
       next[i] = { weaponId: equippedWeaponId, skillIds: [...equippedSkillIds], party: [...party], partyEquipment: { ...partyEquipment } };
       return next;
     });
-    setPresetModal(null);
   };
 
   const loadPreset = (i) => {
@@ -998,12 +946,10 @@ export default function FormationScreen() {
     setEquippedSkillIds([...p.skillIds]);
     setParty([...p.party]);
     setPartyEquipment({ ...(p.partyEquipment ?? {}) });
-    setPresetModal(null);
   };
 
   const deletePreset = (i) => {
     setPresets(prev => { const next = [...prev]; next[i] = null; return next; });
-    setPresetModal(null);
   };
 
   const renderContent = () => {
@@ -1070,15 +1016,13 @@ export default function FormationScreen() {
 
   return (
     <>
-      <Header />
       <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
         {view === 'main' && (
-          <>
-            <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
-              <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">편성</span>
-            </div>
-            <PresetBar presets={presets} onTap={handleSlotTap} />
-          </>
+          <div className="relative flex items-center px-3 h-8 bg-slate-600 border-b border-slate-700 flex-shrink-0">
+            <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-100">편성</span>
+            <button onClick={() => setPresetSheet(true)}
+              className="ml-auto text-[8px] text-slate-300 font-bold">프리셋 ≡</button>
+          </div>
         )}
         {renderContent()}
         {pendingWeapon && (
@@ -1090,14 +1034,13 @@ export default function FormationScreen() {
             onClose={() => setPendingWeapon(null)}
           />
         )}
-        {presetModal !== null && (
-          <PresetModal
-            slotIndex={presetModal}
-            preset={presets[presetModal]}
-            onLoad={() => loadPreset(presetModal)}
-            onSave={() => saveToSlot(presetModal)}
-            onDelete={() => deletePreset(presetModal)}
-            onClose={() => setPresetModal(null)}
+        {presetSheet && (
+          <PresetBottomSheet
+            presets={presets}
+            onLoad={loadPreset}
+            onSave={saveToSlot}
+            onDelete={deletePreset}
+            onClose={() => setPresetSheet(false)}
           />
         )}
       </div>

@@ -1,10 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 
-// ── 스토리 비트 (순서대로 하나씩 출력) ────────────────────────
-// type: 'chapter-header' | 'image' | 'text' | 'choice' | 'end'
-// chapter-header / image 는 자동 연속 출력, text 는 탭에서 멈춤
-
+// ── 스토리 비트 ────────────────────────────────────────────────
 const BEATS = [
   // ── 1장
   { type: 'chapter-header', title: '1. 절망과 은둔' },
@@ -46,10 +43,33 @@ const BEATS = [
   { type: 'end' },
 ];
 
-const TOTAL_TEXT = BEATS.filter(b => b.type === 'text').length;
+// 챕터 요약
+const CHAPTER_SUMMARIES = [
+  { title: '1장', summary: '빛과 어둠의 세계, 그리고 마왕의 저주에 묶인 전대 용사' },
+  { title: '2장', summary: '세계수의 기적, 태초의 숲에서 발견한 갓난아기' },
+  { title: '3장', summary: '10년의 육아, 아이의 기질과 생일을 각인하다' },
+  { title: '4장', summary: '잿빛 잎새, 다시 깨어나는 마왕의 징조' },
+];
+
+// BEATS를 챕터별로 분리
+function splitByChapter(beats) {
+  const chapters = [];
+  let current = [];
+  beats.forEach(b => {
+    if (b.type === 'chapter-header') {
+      if (current.length > 0) chapters.push(current);
+      current = [b];
+    } else {
+      current.push(b);
+    }
+  });
+  if (current.length > 0) chapters.push(current);
+  return chapters;
+}
+
+const CHAPTERS = splitByChapter(BEATS);
 
 // ── MBTI 데이터 ──────────────────────────────────────────────
-
 const MBTI_DATA = [
   { code: 'INTJ', name: '전략가',    subtype: '교육 효율형 마법 보조',     desc: '교육 성장 효율이 좋고 마법 명중이 안정적이지만, 회복 의존도가 낮아야 함' },
   { code: 'INTP', name: '논리술사',  subtype: '마공 집중 마법형',           desc: '완벽 결과로 마공을 키우고, 마법계 MP 소모를 줄여 지속적인 마법 운용에 유리' },
@@ -83,17 +103,13 @@ function NameModal({ onConfirm }) {
         <div className="text-[9px] font-bold text-slate-800 mb-0.5">세계수의 기적</div>
         <div className="text-[8px] text-slate-600 mb-3">아기의 이름을 지어주세요.</div>
         <input
-          type="text"
-          value={name}
+          type="text" value={name}
           onChange={e => setName(e.target.value)}
-          placeholder="이름을 입력하세요"
-          maxLength={10}
+          placeholder="이름을 입력하세요" maxLength={10}
           className="w-full mb-3 px-2 py-1.5 border border-slate-400 rounded text-[9px] bg-white text-slate-700"
         />
-        <button
-          onClick={() => canConfirm && onConfirm(name.trim())}
-          className={`w-full py-1.5 rounded text-[9px] font-bold ${canConfirm ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}
-        >
+        <button onClick={() => canConfirm && onConfirm(name.trim())}
+          className={`w-full py-1.5 rounded text-[9px] font-bold ${canConfirm ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}>
           확인
         </button>
       </div>
@@ -125,125 +141,136 @@ function GenderModal({ onConfirm }) {
   );
 }
 
-
 function MbtiBirthdayModal({ onConfirm }) {
   const [step, setStep] = useState(0);
   const [selectedMbti, setSelectedMbti] = useState(MBTI_DATA[0].code);
-  const [month, setMonth] = useState('');
-  const [day, setDay] = useState('');
-
+  const [month, setMonth] = useState(1);
+  const [day, setDay] = useState(1);
   const selectedData = MBTI_DATA.find(m => m.code === selectedMbti);
-  const canConfirmBirthday = month !== '' && day !== '';
-
   return (
     <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
-      <div className="w-full bg-slate-200 rounded p-3 max-h-[90%] overflow-y-auto">
-
+      <div className="w-full bg-slate-200 rounded p-3 max-h-[90%] flex flex-col overflow-hidden">
         {step === 0 && (
           <>
-            <div className="text-[9px] font-bold text-slate-800 mb-0.5">아이의 기질</div>
-            <div className="text-[8px] text-slate-600 mb-2">아이의 성향을 선택하세요.</div>
-            <div className="grid grid-cols-4 gap-1 mb-2">
+            <div className="text-[9px] font-bold text-slate-800 mb-0.5 flex-shrink-0">아이의 기질</div>
+            <div className="text-[8px] text-slate-600 mb-2 flex-shrink-0">아이의 성향을 선택하세요.</div>
+            <div className="grid grid-cols-4 gap-1 mb-2 flex-shrink-0">
               {MBTI_DATA.map(m => (
-                <button
-                  key={m.code}
-                  onClick={() => setSelectedMbti(m.code)}
-                  className={`py-1.5 rounded text-center border leading-tight ${selectedMbti === m.code ? 'bg-slate-600 text-white border-slate-600' : 'bg-slate-100 text-slate-500 border-slate-400'}`}
-                  style={{ fontSize: '7px' }}
-                >
+                <button key={m.code} onClick={() => setSelectedMbti(m.code)}
+                  className={`h-7 rounded text-center border leading-tight ${selectedMbti === m.code ? 'bg-slate-600 text-white border-slate-600' : 'bg-slate-100 text-slate-500 border-slate-400'}`}
+                  style={{ fontSize: 'clamp(5px, 1.8vw, 7px)' }}>
                   {m.name}
                 </button>
               ))}
             </div>
-            <div className="mb-2 px-2 py-1.5 bg-slate-100 border border-slate-400 rounded">
+            <div className="mb-2 px-2 py-1.5 bg-slate-100 border border-slate-400 rounded flex-shrink-0 overflow-y-auto" style={{ height: '72px' }}>
               <div className="text-[8px] font-bold text-slate-700 mb-0.5">{selectedData.name}</div>
               <div className="text-[7px] text-amber-700 mb-0.5">{selectedData.subtype}</div>
               <div className="text-[7px] text-slate-600 leading-relaxed">{selectedData.desc}</div>
             </div>
-            <button
-              onClick={() => selectedMbti && setStep(1)}
-              className={`w-full py-1.5 rounded text-[9px] font-bold ${selectedMbti ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}
-            >
-              다음
-            </button>
+            <button onClick={() => setStep(1)} className="w-full py-1.5 rounded text-[9px] font-bold flex-shrink-0 bg-slate-600 text-white">다음</button>
           </>
         )}
-
         {step === 1 && (
           <>
             <div className="text-[9px] font-bold text-slate-800 mb-0.5">아이의 생일</div>
             <div className="text-[8px] text-slate-600 mb-3">아이가 태어난 날을 선택하세요.</div>
             <div className="flex gap-2 mb-3">
               <div className="flex-1">
-                <div className="text-[7px] text-slate-500 mb-1">월</div>
-                <select
-                  value={month}
-                  onChange={e => setMonth(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-slate-400 rounded text-[9px] bg-white text-slate-700"
-                >
-                  <option value="">-- 월</option>
-                  {MONTHS.map(m => (
-                    <option key={m} value={m}>{m}월</option>
-                  ))}
+                <select value={month} onChange={e => setMonth(Number(e.target.value))}
+                  className="w-full px-2 py-2 border border-slate-400 rounded text-[12px] font-bold bg-white text-slate-700">
+                  {MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}
                 </select>
               </div>
               <div className="flex-1">
-                <div className="text-[7px] text-slate-500 mb-1">일</div>
-                <select
-                  value={day}
-                  onChange={e => setDay(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-slate-400 rounded text-[9px] bg-white text-slate-700"
-                >
-                  <option value="">-- 일</option>
-                  {DAYS.map(d => (
-                    <option key={d} value={d}>{d}일</option>
-                  ))}
+                <select value={day} onChange={e => setDay(Number(e.target.value))}
+                  className="w-full px-2 py-2 border border-slate-400 rounded text-[12px] font-bold bg-white text-slate-700">
+                  {DAYS.map(d => <option key={d} value={d}>{d}일</option>)}
                 </select>
               </div>
             </div>
             <button
-              onClick={() => canConfirmBirthday && onConfirm({ mbti: selectedMbti, mbtiName: selectedData.name, month: Number(month), day: Number(day) })}
-              className={`w-full py-1.5 rounded text-[9px] font-bold ${canConfirmBirthday ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}
-            >
+              onClick={() => onConfirm({ mbti: selectedMbti, mbtiName: selectedData.name, month: Number(month), day: Number(day) })}
+              className="w-full py-1.5 rounded text-[9px] font-bold bg-slate-600 text-white">
               각인하기
             </button>
           </>
         )}
-
       </div>
     </div>
   );
 }
 
-// ── 스크롤 피드 블록 렌더 ─────────────────────────────────────
+// ── 타이핑 블록 ─────────────────────────────────────────────
 
-function FeedBlock({ block }) {
-  if (block.type === 'chapter-header') {
-    return (
-      <div className="flex items-center gap-2 px-3 py-2 bg-slate-400">
-        <div className="flex-1 h-px bg-slate-500" />
-        <span className="text-[8px] font-bold text-slate-700 whitespace-nowrap">{block.title}</span>
-        <div className="flex-1 h-px bg-slate-500" />
+function TypingText({ content, fast, onDone, onSkip }) {
+  const [displayText, setDisplayText] = useState('');
+  const [done, setDone] = useState(false);
+  const intervalRef = useRef(null);
+  const fullText = content ?? '';
+
+  useEffect(() => {
+    setDisplayText('');
+    setDone(false);
+    let idx = 0;
+    const speed = fast ? 18 : 38;
+    intervalRef.current = setInterval(() => {
+      idx++;
+      setDisplayText(fullText.slice(0, idx));
+      if (idx >= fullText.length) {
+        clearInterval(intervalRef.current);
+        setDone(true);
+        onDone?.();
+      }
+    }, speed);
+    return () => clearInterval(intervalRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fullText, fast]);
+
+  const handleClick = () => {
+    if (!done) {
+      clearInterval(intervalRef.current);
+      setDisplayText(fullText);
+      setDone(true);
+      onDone?.();
+      onSkip?.();
+    }
+  };
+
+  return (
+    <div className="flex-1 px-4 py-4 overflow-y-auto cursor-pointer" onClick={handleClick}>
+      <p className="text-[9px] text-slate-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
+        {displayText}
+        {!done && <span className="animate-pulse text-slate-400">▌</span>}
+      </p>
+    </div>
+  );
+}
+
+// ── 로그 오버레이 ─────────────────────────────────────────────
+
+function LogOverlay({ visitedChapters, onClose }) {
+  return (
+    <div className="absolute inset-0 z-20 bg-slate-900/80 flex flex-col" onClick={onClose}>
+      <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-slate-600" onClick={e => e.stopPropagation()}>
+        <span className="text-[10px] font-bold text-slate-200">로그</span>
+        <button onClick={onClose} className="text-slate-400 text-[12px] leading-none">✕</button>
       </div>
-    );
-  }
-  if (block.type === 'image') {
-    return (
-      <div className="bg-slate-600 flex items-center justify-center text-slate-400 text-[8px]" style={{ height: 96 }}>
-        CG — {block.label}
+      <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3" onClick={e => e.stopPropagation()}>
+        {CHAPTER_SUMMARIES.map((ch, i) => {
+          const visited = visitedChapters.includes(i);
+          return (
+            <div key={i} className={`rounded p-2.5 ${visited ? 'bg-slate-700' : 'bg-slate-800 opacity-40'}`}>
+              <div className="text-[8px] font-bold text-amber-400 mb-0.5">{ch.title}</div>
+              <div className="text-[7px] text-slate-300 leading-relaxed">
+                {visited ? ch.summary : '아직 읽지 않은 챕터입니다.'}
+              </div>
+            </div>
+          );
+        })}
       </div>
-    );
-  }
-  if (block.type === 'text') {
-    return (
-      <div className="px-3 py-2 bg-slate-200">
-        <p className="text-[9px] text-slate-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
-          {block.content}
-        </p>
-      </div>
-    );
-  }
-  return null;
+    </div>
+  );
 }
 
 // ── 메인 컴포넌트 ─────────────────────────────────────────────
@@ -251,66 +278,153 @@ function FeedBlock({ block }) {
 export default function PrologueScreen() {
   const { navigate } = useGame();
 
-  const [revealIdx, setRevealIdx] = useState(0);
-  const [revealedBlocks, setRevealedBlocks] = useState([]);
+  // 챕터 인덱스 (0-based)
+  const [chapterIdx, setChapterIdx] = useState(0);
+  // 현재 챕터 내 beat 인덱스 (chapter-header 포함)
+  const [beatIdx, setBeatIdx] = useState(0);
+  // 현재 챕터에서 보여줄 블록들 (이미 지나간 것들)
+  const [revealedBeats, setRevealedBeats] = useState([]);
+  // 타이핑 완료 여부
+  const [typingDone, setTypingDone] = useState(true);
+  // 선택 모달
   const [activeChoice, setActiveChoice] = useState(null);
+  // 캐릭터 정보
   const [char, setChar] = useState({ name: null, gender: null, mbti: null, mbtiName: null, birthday: null });
-  const [skipStep, setSkipStep] = useState(null); // null | 'confirm' | 'name' | 'gender' | 'mbti-birthday'
+  // Skip 모달
+  const [skipStep, setSkipStep] = useState(null);
+  // 로그 오버레이
+  const [logOpen, setLogOpen] = useState(false);
+  // 방문한 챕터 목록
+  const [visitedChapters, setVisitedChapters] = useState([0]);
+  // x2 속도
+  const [fast, setFast] = useState(false);
+  // 챕터 전환 페이드
+  const [fading, setFading] = useState(false);
 
   const scrollRef = useRef(null);
-  const revealedCount = revealedBlocks.filter(b => b.type === 'text').length;
 
-  // 새 블록이 추가될 때 자동 스크롤
+  const currentChapter = CHAPTERS[chapterIdx] ?? [];
+
+  // 자동 스크롤
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }
-  }, [revealedBlocks.length]);
+  }, [revealedBeats.length]);
 
-  // chapter-header / image 는 자동 연속, text 에서 멈춤
-  const processFrom = (startIdx, currentBlocks) => {
-    let i = startIdx;
-    let blocks = currentBlocks;
+  // 챕터 시작 시 chapter-header + image를 자동으로 표시
+  const startChapter = useCallback((cIdx, bIdx = 0, revealed = []) => {
+    const chapter = CHAPTERS[cIdx] ?? [];
+    let i = bIdx;
+    let blocks = revealed;
 
-    while (i < BEATS.length) {
-      const beat = BEATS[i];
+    while (i < chapter.length) {
+      const beat = chapter[i];
+      if (beat.type === 'chapter-header' || beat.type === 'image') {
+        blocks = [...blocks, { ...beat, uid: `${cIdx}-${i}` }];
+        i++;
+      } else {
+        break;
+      }
+    }
 
-      if (beat.type === 'end') {
-        setRevealedBlocks(blocks);
+    setRevealedBeats(blocks);
+    setBeatIdx(i);
+
+    if (i < chapter.length) {
+      const next = chapter[i];
+      if (next.type === 'text') {
+        // 텍스트 블록은 탭 대기
+        // (아직 reveal 안 함)
+      } else if (next.type === 'choice') {
+        setBeatIdx(i + 1);
+        setRevealedBeats(blocks);
+        setActiveChoice(next.choiceType);
+      } else if (next.type === 'end') {
+        navigate('main-hub');
+      }
+    }
+  }, [navigate]);
+
+  // 마운트 시 첫 챕터 시작
+  useEffect(() => {
+    startChapter(0, 0, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 다음 beat 진행
+  const advanceBeat = useCallback(() => {
+    const chapter = CHAPTERS[chapterIdx] ?? [];
+    let i = beatIdx;
+
+    if (i >= chapter.length) {
+      // 챕터 끝 → 다음 챕터로
+      const nextCIdx = chapterIdx + 1;
+      if (nextCIdx >= CHAPTERS.length) {
         navigate('main-hub');
         return;
       }
-
-      if (beat.type === 'choice') {
-        setRevealIdx(i + 1);
-        setRevealedBlocks(blocks);
-        setActiveChoice(beat.choiceType);
-        return;
-      }
-
-      blocks = [...blocks, { ...beat, id: i }];
-
-      if (beat.type === 'text') {
-        setRevealIdx(i + 1);
-        setRevealedBlocks(blocks);
-        return;
-      }
-
-      // chapter-header, image → 자동 연속
-      i++;
+      setFading(true);
+      setTimeout(() => {
+        setChapterIdx(nextCIdx);
+        setVisitedChapters(prev => prev.includes(nextCIdx) ? prev : [...prev, nextCIdx]);
+        setRevealedBeats([]);
+        setBeatIdx(0);
+        setTypingDone(true);
+        setFading(false);
+        startChapter(nextCIdx, 0, []);
+      }, 300);
+      return;
     }
 
-    setRevealedBlocks(blocks);
-  };
+    const beat = chapter[i];
 
-  // 마운트 시 첫 내용 출력
-  useEffect(() => {
-    processFrom(0, []);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (beat.type === 'end') {
+      navigate('main-hub');
+      return;
+    }
+
+    if (beat.type === 'choice') {
+      setBeatIdx(i + 1);
+      setActiveChoice(beat.choiceType);
+      return;
+    }
+
+    if (beat.type === 'text') {
+      const newRevealed = [...revealedBeats, { ...beat, uid: `${chapterIdx}-${i}` }];
+      setRevealedBeats(newRevealed);
+      setBeatIdx(i + 1);
+      setTypingDone(false);
+      return;
+    }
+
+    // chapter-header, image (자동)
+    const newRevealed = [...revealedBeats, { ...beat, uid: `${chapterIdx}-${i}` }];
+    setRevealedBeats(newRevealed);
+    setBeatIdx(i + 1);
+  }, [chapterIdx, beatIdx, revealedBeats, navigate, startChapter]);
 
   const handleTap = () => {
-    if (activeChoice) return;
-    processFrom(revealIdx, revealedBlocks);
+    if (activeChoice || logOpen || skipStep) return;
+    if (!typingDone) return; // 타이핑 중 탭 → TypingText 내에서 처리
+    advanceBeat();
+  };
+
+  const handleTypingDone = () => setTypingDone(true);
+  const handleTypingSkip = () => setTypingDone(true);
+
+  // 이전 챕터로
+  const handleBack = () => {
+    if (chapterIdx === 0) return;
+    const prevCIdx = chapterIdx - 1;
+    setFading(true);
+    setTimeout(() => {
+      setChapterIdx(prevCIdx);
+      setRevealedBeats([]);
+      setBeatIdx(0);
+      setTypingDone(true);
+      setFading(false);
+      startChapter(prevCIdx, 0, []);
+    }, 300);
   };
 
   const completeChoice = (type, value) => {
@@ -320,7 +434,7 @@ export default function PrologueScreen() {
       setChar(c => ({ ...c, mbti: value.mbti, mbtiName: value.mbtiName, birthday: { month: value.month, day: value.day } }));
     }
     setActiveChoice(null);
-    processFrom(revealIdx, revealedBlocks);
+    advanceBeat();
   };
 
   const getNextSkipStep = (c) => {
@@ -338,37 +452,97 @@ export default function PrologueScreen() {
 
   const completeSkipChoice = (type, value) => {
     let updated = char;
-    if (type === 'name') {
-      updated = { ...char, name: value };
-    } else if (type === 'gender') {
-      updated = { ...char, gender: value };
-    } else if (type === 'mbti-birthday') {
+    if (type === 'name') updated = { ...char, name: value };
+    else if (type === 'gender') updated = { ...char, gender: value };
+    else if (type === 'mbti-birthday') {
       updated = { ...char, mbti: value.mbti, mbtiName: value.mbtiName, birthday: { month: value.month, day: value.day } };
     }
     setChar(updated);
     handleSkipConfirm(updated);
   };
 
-  return (
-    <div className="flex-1 flex flex-col relative overflow-hidden">
+  // 현재 챕터의 chapter-header 타이틀
+  const chapterTitle = currentChapter[0]?.title ?? '';
 
-      {/* 스크롤 피드 영역 — 탭하면 다음 내용 출력 */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto bg-slate-300 cursor-pointer select-none"
-        onClick={handleTap}
-      >
-        <div className="flex flex-col">
-          {revealedBlocks.map(block => (
-            <FeedBlock key={block.id} block={block} />
-          ))}
-        </div>
+  // 마지막으로 reveal된 text beat
+  const lastTextBeat = [...revealedBeats].reverse().find(b => b.type === 'text');
+
+  return (
+    <div className={`flex-1 flex flex-col relative overflow-hidden transition-opacity duration-300 ${fading ? 'opacity-0' : 'opacity-100'}`}>
+
+      {/* 타이틀 바 */}
+      <div className="relative flex items-center px-3 h-8 bg-slate-700 border-b border-slate-600 flex-shrink-0">
+        <button
+          onClick={handleBack}
+          disabled={chapterIdx === 0}
+          className={`text-[11px] font-bold pr-2 ${chapterIdx === 0 ? 'text-slate-600' : 'text-slate-300'}`}
+        >
+          ‹
+        </button>
+        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[8px] font-bold text-slate-300">
+          {chapterTitle}
+        </span>
+        <button
+          onClick={() => setLogOpen(true)}
+          className="ml-auto text-[7px] text-slate-300 font-bold"
+        >
+          로그
+        </button>
       </div>
 
-      {/* 탭 유도 힌트 — 스크롤 영역과 컨트롤 바 사이 고정 */}
-      {!activeChoice && (
+      {/* 스크롤 피드 영역 */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto bg-slate-300 select-none flex flex-col"
+        onClick={handleTap}
+      >
+        {/* 이미 지나간 블록들 (타이핑 완료 상태로 표시) */}
+        {revealedBeats.map((beat, i) => {
+          const isLastText = beat.type === 'text' && beat.uid === lastTextBeat?.uid;
+          if (beat.type === 'chapter-header') {
+            return (
+              <div key={beat.uid} className="flex items-center gap-2 px-3 py-2 bg-slate-400 flex-shrink-0">
+                <div className="flex-1 h-px bg-slate-500" />
+                <span className="text-[8px] font-bold text-slate-700 whitespace-nowrap">{beat.title}</span>
+                <div className="flex-1 h-px bg-slate-500" />
+              </div>
+            );
+          }
+          if (beat.type === 'image') {
+            return (
+              <div key={beat.uid} className="bg-slate-600 flex items-center justify-center text-slate-400 text-[8px] flex-shrink-0" style={{ height: 80 }}>
+                CG — {beat.label}
+              </div>
+            );
+          }
+          if (beat.type === 'text') {
+            if (isLastText) {
+              return (
+                <TypingText
+                  key={beat.uid}
+                  content={beat.content}
+                  fast={fast}
+                  onDone={handleTypingDone}
+                  onSkip={handleTypingSkip}
+                />
+              );
+            }
+            return (
+              <div key={beat.uid} className="px-4 py-3 bg-slate-200 flex-shrink-0">
+                <p className="text-[9px] text-slate-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
+                  {beat.content}
+                </p>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+
+      {/* 탭 유도 힌트 */}
+      {!activeChoice && typingDone && (
         <div
-          className="flex-shrink-0 text-center text-[7px] text-slate-500 bg-slate-300 py-1 cursor-pointer select-none"
+          className="flex-shrink-0 text-center text-[7px] text-slate-500 bg-slate-300 py-0.5 cursor-pointer select-none"
           onClick={handleTap}
         >
           ▼ 탭하여 계속
@@ -376,21 +550,24 @@ export default function PrologueScreen() {
       )}
 
       {/* 하단 컨트롤 바 */}
-      <div className="bg-slate-300 border-t border-slate-400 flex items-center justify-between px-3 py-1.5 flex-shrink-0">
+      <div className="bg-slate-700 border-t border-slate-600 flex items-center justify-between px-3 py-1.5 flex-shrink-0">
         <button onClick={e => { e.stopPropagation(); setSkipStep('confirm'); }}
-          className="px-2 py-0.5 bg-slate-400 rounded text-[7px] text-slate-700">
+          className="px-2 py-0.5 bg-slate-500 rounded text-[7px] text-slate-200">
           Skip
         </button>
-        <div className="text-[7px] text-slate-500">
-          {revealedCount} / {TOTAL_TEXT} 장면
-        </div>
+        <button
+          onClick={e => { e.stopPropagation(); setFast(f => !f); }}
+          className={`px-2 py-0.5 rounded text-[7px] font-bold ${fast ? 'bg-amber-400 text-slate-800' : 'bg-slate-500 text-slate-200'}`}
+        >
+          ×2
+        </button>
         <button onClick={e => e.stopPropagation()}
-          className="px-2 py-0.5 bg-slate-400 rounded text-[7px] text-slate-700">
+          className="px-2 py-0.5 bg-slate-500 rounded text-[7px] text-slate-200">
           메뉴
         </button>
       </div>
 
-      {/* 프롤로그 선택 모달 오버레이 */}
+      {/* 선택 모달 오버레이 */}
       {activeChoice === 'name' && (
         <NameModal onConfirm={val => completeChoice('name', val)} />
       )}
@@ -405,7 +582,7 @@ export default function PrologueScreen() {
       {skipStep === 'confirm' && (
         <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
           <div className="bg-slate-100 rounded p-3 w-full relative">
-            <button onClick={() => setSkipStep(null)} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
+            <button onClick={() => setSkipStep(null)} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
             <div className="text-[11px] font-bold text-center text-slate-800 mb-2">── 메인 스토리 요약 ──</div>
             <div className="text-[9px] text-slate-700 leading-relaxed space-y-1">
               <div>· 빛과 어둠의 싸움 속, 12번째 마왕이 다시 깨어나고 있다.</div>
@@ -414,24 +591,20 @@ export default function PrologueScreen() {
               <div>· 전대 용사는 10년간 아이를 키우며, 다가올 운명을 준비시키기로 결심했다.</div>
             </div>
             <div className="mt-3 flex justify-center">
-              <button
-                onClick={() => handleSkipConfirm(char)}
-                className="px-4 py-1 bg-slate-600 text-white text-[8px] rounded"
-              >
+              <button onClick={() => handleSkipConfirm(char)} className="px-4 py-1 bg-slate-600 text-white text-[8px] rounded">
                 건너뛰기 ▸
               </button>
             </div>
           </div>
         </div>
       )}
-      {skipStep === 'name' && (
-        <NameModal onConfirm={val => completeSkipChoice('name', val)} />
-      )}
-      {skipStep === 'gender' && (
-        <GenderModal onConfirm={val => completeSkipChoice('gender', val)} />
-      )}
-      {skipStep === 'mbti-birthday' && (
-        <MbtiBirthdayModal onConfirm={val => completeSkipChoice('mbti-birthday', val)} />
+      {skipStep === 'name' && <NameModal onConfirm={val => completeSkipChoice('name', val)} />}
+      {skipStep === 'gender' && <GenderModal onConfirm={val => completeSkipChoice('gender', val)} />}
+      {skipStep === 'mbti-birthday' && <MbtiBirthdayModal onConfirm={val => completeSkipChoice('mbti-birthday', val)} />}
+
+      {/* 로그 오버레이 */}
+      {logOpen && (
+        <LogOverlay visitedChapters={visitedChapters} onClose={() => setLogOpen(false)} />
       )}
 
     </div>

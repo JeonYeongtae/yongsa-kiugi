@@ -5,7 +5,7 @@ import { useGame } from '../context/GameContext';
 import { buildSlotResult, rollResult, RESULT_STYLE, GRADE_LABELS } from '../utils/scheduleUtils';
 
 export default function ScheduleExecScreen() {
-  const { navigate, scheduleExec, saveWeekResult } = useGame();
+  const { navigate, scheduleExec, saveWeekResult, nextWeek, scheduleMode } = useGame();
   const { year, month, currentWeek, allSlots } = scheduleExec;
   const weekSlots = allSlots?.[currentWeek - 1] ?? [null, null, null];
 
@@ -28,7 +28,16 @@ export default function ScheduleExecScreen() {
       setActive(a => a + 1);
     } else {
       saveWeekResult(results);
-      navigate('weekly-report');
+      if (currentWeek < 4) {
+        nextWeek();
+        if (scheduleMode === 'monthly') {
+          navigate('schedule-exec');
+        } else {
+          navigate('weekly-schedule');
+        }
+      } else {
+        navigate('monthly-report');
+      }
     }
   }
 
@@ -89,7 +98,11 @@ export default function ScheduleExecScreen() {
             onClick={handleNext}
             className="w-full py-2 bg-slate-600 text-white text-[9px] font-bold rounded mt-3"
           >
-            {isLast ? '주차 결과 보기 ▸' : '다음 활동으로 ▸'}
+            {isLast
+              ? currentWeek < 4
+                ? scheduleMode === 'monthly' ? `${currentWeek + 1}주차 진행 ▸` : '다음 주 배분 ▸'
+                : '1달 종합 보고 ▸'
+              : '다음 활동으로 ▸'}
           </button>
         </div>
       </div>

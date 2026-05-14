@@ -3,6 +3,8 @@
 ## 프로젝트 개요
 
 - **경로**: `game-ui/` (Vite + React + Tailwind CSS v3)
+- **GitHub**: https://github.com/JeonYeongtae/yongsa-kiugi
+- **배포**: Vercel — Root Directory: `game-ui`, Build: `vite build`, Output: `dist`
 - **라우팅**: React Router v7, `GameContext`의 `navigate()` 사용
 - **디바이스 프레임**: 데스크톱 `50vh × 100vh` 폰 목업 / 모바일 2× scale 전체화면
 - **아이콘**: 라이브러리 없음 — unicode 문자만 사용 (lucide 등 미설치)
@@ -66,13 +68,13 @@
 
 ### 모달 닫기
 
-- 모달 좌측 상단 `✕` 버튼으로 닫기
+- 모달 우측 상단 `✕` 버튼으로 닫기
 - "계속보기" / "닫기" 텍스트 버튼 사용 금지
 
 ```jsx
 // ✅ 올바른 모달 구조
 <div className="bg-slate-100 rounded p-3 relative">
-  <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+  <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
   {/* 내용 */}
   <div className="mt-3 flex justify-center">
     <button>주요 액션 ▸</button>  {/* CTA 1개만 */}

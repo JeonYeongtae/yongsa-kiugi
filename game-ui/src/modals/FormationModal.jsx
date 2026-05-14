@@ -176,7 +176,7 @@ function WeaponEquipWarning({ pendingWeapon, conflictSkills, equippedWeaponCat, 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
       <div className="bg-slate-100 rounded p-3 w-[200px] relative">
-        <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
         <div className="text-[10px] font-bold text-center mb-3">── 장비 교체 확인 ──</div>
         <div className="flex gap-2 mb-3">
           <div className="w-10 h-10 bg-slate-400 rounded flex items-center justify-center text-[16px] flex-shrink-0">
@@ -209,7 +209,7 @@ function WeaponEquipWarning({ pendingWeapon, conflictSkills, equippedWeaponCat, 
 function WeaponDetail({ weapon, isEquipped, onEquip, onBack, onClose }) {
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-      <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
+      <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
       <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
       <div className="text-[10px] font-bold text-center mb-3">── 무기 정보 ──</div>
       <div className="flex gap-2 mb-3">
@@ -253,7 +253,7 @@ function WeaponView({ equippedId, onEquip, onBack, onClose }) {
 
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-      <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
+      <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
       <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
       <div className="text-[10px] font-bold text-center mb-4">── 무기 목록 ──</div>
       <div className="flex gap-0.5 mb-3">
@@ -288,7 +288,7 @@ function WeaponView({ equippedId, onEquip, onBack, onClose }) {
 function SkillDetail({ skill, isActive, isEquipped, equippedCount, onEquip, onBack, onClose }) {
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-      <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
+      <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
       <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
       <div className="text-[10px] font-bold text-center mb-3">── 스킬 정보 ──</div>
       <div className="flex gap-2 mb-3">
@@ -356,7 +356,7 @@ function SkillView({ equippedWeaponCat, equippedSkillIds, onEquip, onBack, onClo
 
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-      <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
+      <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
       <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
       <div className="text-[10px] font-bold text-center mb-3">── 스킬 목록 ──</div>
       <div className="text-[7px] text-slate-500 text-center mb-3">
@@ -423,7 +423,7 @@ function CompanionDetail({ companion, isInParty, canAdd, onToggle, onBack, onClo
       {/* 일러스트 */}
       <div className="w-full bg-slate-300 flex items-end justify-center relative flex-shrink-0" style={{ height: '160px' }}>
         <span className="text-[8px] text-slate-400 pb-1.5">일러스트</span>
-        <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 bg-black/20 rounded flex items-center justify-center text-white text-[11px]">‹</button>
+        <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 bg-black/20 rounded flex items-center justify-center text-white text-[11px]">‹</button>
         <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 bg-black/20 rounded flex items-center justify-center text-white text-[11px]">✕</button>
         <span className="absolute bottom-2 right-2 text-[6px] px-1.5 py-0.5 rounded bg-slate-700/70 text-white font-bold">
           {companion.role}
@@ -503,7 +503,7 @@ function PartyView({ party, setParty, onBack, onClose }) {
 
   return (
     <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-      <button onClick={onBack}  className="absolute top-2 left-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
+      <button onClick={onBack}  className="absolute top-2 right-2  w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">‹</button>
       <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
       <div className="text-[10px] font-bold text-center mb-4">── 파티 편성 ──</div>
 
@@ -643,7 +643,7 @@ export default function FormationModal({ onClose }) {
 
     return (
       <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ height: '360px' }}>
-        <button onClick={onClose} className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
         <div className="text-[10px] font-bold text-center mb-3">── 편성 ──</div>
 
         <div className="flex-1 overflow-y-auto flex flex-col gap-4 pt-1">

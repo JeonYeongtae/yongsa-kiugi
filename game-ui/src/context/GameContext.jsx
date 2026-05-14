@@ -76,6 +76,7 @@ export function GameProvider({ children }) {
   const location = useLocation();
   const [modal, setModal] = useState(null);
   const [modalData, setModalData] = useState(null);
+  const [scheduleMode, setScheduleMode] = useState('monthly'); // 'monthly' | 'weekly'
   const [scheduleExec, setScheduleExec] = useState(MOCK_EXEC);
   // weeklyResults[i] = 해당 주차 슬롯 결과 배열 (buildSlotResult 반환값 × 3)
   const [weeklyResults, setWeeklyResults] = useState([]);
@@ -91,10 +92,19 @@ export function GameProvider({ children }) {
   const openModal = (m, data = null) => { setModal(m); setModalData(data); };
   const closeModal = () => { setModal(null); setModalData(null); };
 
-  // WeeklyScheduleScreen: "한 달 시작" 시 호출
+  // WeeklyScheduleScreen: "한 달 시작" 시 호출 (월간 모드 — 4주 전체 세팅)
   const startScheduleExec = ({ year, month, allSlots }) => {
     setScheduleExec({ year, month, currentWeek: 1, allSlots });
     setWeeklyResults([]);
+  };
+
+  // WeeklyScheduleScreen: "이번 주 시작" 시 호출 (주간 모드 — 현재 주차 슬롯만 업데이트)
+  const startWeekSchedule = ({ weekSlots }) => {
+    setScheduleExec(prev => {
+      const next = [...(prev.allSlots ?? Array.from({ length: 4 }, () => [null, null, null]))];
+      next[prev.currentWeek - 1] = weekSlots;
+      return { ...prev, allSlots: next };
+    });
   };
 
   // ScheduleExecScreen: 마지막 슬롯 완료 후 호출
@@ -118,8 +128,9 @@ export function GameProvider({ children }) {
   return (
     <GameContext.Provider value={{
       screen, modal, modalData, navigate, openModal, closeModal,
+      scheduleMode, setScheduleMode,
       scheduleExec, weeklyResults,
-      startScheduleExec, saveWeekResult, nextWeek,
+      startScheduleExec, startWeekSchedule, saveWeekResult, nextWeek,
       equippedWeapon, equippedSkills, equipWeapon,
     }}>
       {children}

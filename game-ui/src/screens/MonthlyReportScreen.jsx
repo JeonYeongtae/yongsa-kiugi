@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
 import { useGame } from '../context/GameContext';
@@ -25,15 +26,53 @@ function StatBar({ name, base, delta }) {
   );
 }
 
-const LOG_ICON = {
-  PERFECT: { sym: '✦', cls: 'text-amber-500' },
-  GOOD:    { sym: '▲', cls: 'text-green-600'  },
-  BAD:     { sym: '▼', cls: 'text-red-400'    },
-};
+function GradeModal({ grade, weeklyResults, onClose }) {
+  const GRADE_LABEL = { PERFECT: 'PERFECT', GOOD: 'GOOD', BAD: 'BAD', total: '총 활동' };
+  const items = [];
+
+  weeklyResults.forEach((weekRes, wi) => {
+    weekRes.forEach((r, si) => {
+      if (grade === 'total' || r.grade === grade) {
+        items.push({ week: WEEK_LABELS[wi], slotName: r.slotName ?? '자유 시간', grade: r.grade });
+      }
+    });
+  });
+
+  return (
+    <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
+      <div className="bg-slate-100 rounded p-3 w-4/5 relative" style={{ maxHeight: '70%', display: 'flex', flexDirection: 'column' }}>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
+        <div className="text-[9px] font-bold text-center text-slate-700 mb-2 mt-1">
+          ── {GRADE_LABEL[grade]} 목록 ──
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {items.length === 0 ? (
+            <div className="text-[8px] text-slate-400 text-center py-4">해당 결과 없음</div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              {items.map((item, i) => (
+                <div key={i} className="bg-slate-200 rounded px-2 py-1.5 flex items-center gap-2">
+                  <span className="text-[6px] text-slate-400 flex-shrink-0">{item.week}</span>
+                  <span className="flex-1 text-[7px] text-slate-600">{item.slotName}</span>
+                  {item.grade && (
+                    <span className={`text-[6px] font-bold flex-shrink-0 ${RESULT_STYLE[item.grade]?.color ?? 'text-slate-500'}`}>
+                      {item.grade}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function MonthlyReportScreen() {
   const { navigate, scheduleExec, weeklyResults } = useGame();
   const { year = 1, month = 1 } = scheduleExec ?? {};
+  const [gradeModal, setGradeModal] = useState(null);
 
   // 4주 전체 슬롯 결과 합산
   const allResults = weeklyResults.flat();
@@ -47,7 +86,7 @@ export default function MonthlyReportScreen() {
   return (
     <>
       <Header />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden relative">
 
         <div className="bg-slate-200 border-b border-slate-300 flex items-center justify-center py-1 shrink-0">
           <span className="text-[7px] font-bold text-slate-600 tracking-wide">
@@ -57,29 +96,29 @@ export default function MonthlyReportScreen() {
 
         <div className="flex-1 overflow-y-auto bg-slate-100 px-3 py-3 space-y-4">
 
-          {/* 이달의 성과 요약 */}
+          {/* 이달의 성과 요약 — 각 숫자 탭 시 모달 */}
           <section>
             <div className="text-[8px] font-bold text-slate-700 mb-1.5">이달의 성과</div>
             <div className="bg-slate-200 rounded p-2 flex justify-around text-center">
-              <div>
-                <div className="text-[10px] font-bold text-amber-500">{gradeCounts.PERFECT}</div>
+              <button onClick={() => setGradeModal('PERFECT')} className="flex flex-col items-center">
+                <div className="text-[10px] font-bold text-amber-500 underline decoration-dotted">{gradeCounts.PERFECT}</div>
                 <div className="text-[6px] text-slate-500 mt-0.5">PERFECT</div>
-              </div>
+              </button>
               <div className="w-px bg-slate-300" />
-              <div>
-                <div className="text-[10px] font-bold text-green-600">{gradeCounts.GOOD}</div>
+              <button onClick={() => setGradeModal('GOOD')} className="flex flex-col items-center">
+                <div className="text-[10px] font-bold text-green-600 underline decoration-dotted">{gradeCounts.GOOD}</div>
                 <div className="text-[6px] text-slate-500 mt-0.5">GOOD</div>
-              </div>
+              </button>
               <div className="w-px bg-slate-300" />
-              <div>
-                <div className="text-[10px] font-bold text-red-400">{gradeCounts.BAD}</div>
+              <button onClick={() => setGradeModal('BAD')} className="flex flex-col items-center">
+                <div className="text-[10px] font-bold text-red-400 underline decoration-dotted">{gradeCounts.BAD}</div>
                 <div className="text-[6px] text-slate-500 mt-0.5">BAD</div>
-              </div>
+              </button>
               <div className="w-px bg-slate-300" />
-              <div>
-                <div className="text-[10px] font-bold text-slate-700">{allResults.length}</div>
+              <button onClick={() => setGradeModal('total')} className="flex flex-col items-center">
+                <div className="text-[10px] font-bold text-slate-700 underline decoration-dotted">{allResults.length}</div>
                 <div className="text-[6px] text-slate-500 mt-0.5">총 활동</div>
-              </div>
+              </button>
             </div>
           </section>
 
@@ -99,37 +138,6 @@ export default function MonthlyReportScreen() {
               <span className="flex items-center gap-0.5 text-[6px] text-amber-600">
                 <span className="inline-block w-3 h-1.5 bg-amber-400 rounded-sm" />이달 증가
               </span>
-            </div>
-          </section>
-
-          {/* 주차별 활동 로그 */}
-          <section>
-            <div className="text-[8px] font-bold text-slate-700 mb-1.5">주차별 활동 로그</div>
-            <div className="space-y-2">
-              {weeklyResults.map((weekRes, wi) => (
-                <div key={wi} className="bg-slate-200 rounded overflow-hidden">
-                  <div className="bg-slate-300 px-2 py-1 text-[7px] font-bold text-slate-600">
-                    {WEEK_LABELS[wi]}
-                  </div>
-                  <div className="px-2 py-1 space-y-0.5">
-                    {weekRes.map((r, si) => {
-                      const icon = LOG_ICON[r.grade] ?? LOG_ICON.GOOD;
-                      const rs = RESULT_STYLE[r.grade];
-                      return (
-                        <div key={si} className="flex items-center gap-1">
-                          <span className={`${icon.cls} text-[7px] shrink-0`}>{icon.sym}</span>
-                          <span className="text-[7px] text-slate-700 truncate">
-                            {r.slotName ?? '자유 시간'}
-                          </span>
-                          <span className={`ml-auto text-[6px] font-bold ${rs.color} shrink-0`}>
-                            {r.grade}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
             </div>
           </section>
 
@@ -158,6 +166,15 @@ export default function MonthlyReportScreen() {
             다음 달로 ▸
           </button>
         </div>
+
+        {/* 이달의 성과 상세 모달 */}
+        {gradeModal && (
+          <GradeModal
+            grade={gradeModal}
+            weeklyResults={weeklyResults}
+            onClose={() => setGradeModal(null)}
+          />
+        )}
       </div>
       <Nav />
     </>
