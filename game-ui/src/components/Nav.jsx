@@ -1,7 +1,6 @@
 import { useGame } from '../context/GameContext';
 
 const NAV_ITEMS = [
-  { id: 'hub',          label: '허브',  screen: 'main-hub' },
   { id: 'inventory',    label: '인벤',  screen: 'inventory' },
   { id: 'formation',    label: '편성',  screen: 'formation' },
   { id: 'encyclopedia', label: '도감',  screen: 'encyclopedia' },

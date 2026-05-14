@@ -118,7 +118,7 @@ function TraitCard({ trait, onTap }) {
 }
 
 export default function StatsScreen() {
-  const { openModal } = useGame();
+  const { openModal, navigate } = useGame();
 
   const positiveCount = TRAITS.filter(t => t.grade.includes('pos')).length;
   const negativeCount = TRAITS.length - positiveCount;
@@ -126,6 +126,10 @@ export default function StatsScreen() {
   return (
     <>
       <Header />
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+        <button onClick={() => navigate('main-hub')} className="text-[13px] text-slate-500 font-bold pr-3">‹</button>
+        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">스탯</span>
+      </div>
       <div className="flex-1 overflow-y-auto flex flex-col bg-slate-100">
 
         {/* ── 프로필 (컴팩트) ── */}

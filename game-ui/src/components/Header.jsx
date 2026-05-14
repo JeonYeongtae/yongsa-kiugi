@@ -8,13 +8,13 @@ export default function Header({ showEnergy = false }) {
   return (
     <div style={{ height: '10%', flexShrink: 0 }}
       className="header-bar bg-slate-600 flex items-center justify-between px-2 border-b-2 border-slate-700 text-slate-100">
-      <div className="flex items-center gap-1 pt-1">
+      <button onClick={() => navigate('main-hub')} className="flex items-center gap-1 pt-1 text-left">
         <div className="w-6 h-6 bg-slate-400 rounded-sm" />
         <div style={{ fontSize: 7, lineHeight: 1.2 }}>
           <div className="font-bold text-[8px]">HERO</div>
           <div>14세 · 4년 16일</div>
         </div>
-      </div>
+      </button>
       <div className="flex items-center gap-1 pt-1">
         <div className="flex flex-col text-[7px] gap-0.5">
           <div className="flex items-center gap-0.5" style={{height:10}}>

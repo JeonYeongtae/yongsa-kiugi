@@ -28,6 +28,7 @@ const SCREEN_PATHS = {
   'ending':           '/ending',
   'encyclopedia':     '/encyclopedia',
   'formation':        '/formation',
+  'collection':       '/collection',
 };
 
 const PATH_TO_SCREEN = Object.fromEntries(

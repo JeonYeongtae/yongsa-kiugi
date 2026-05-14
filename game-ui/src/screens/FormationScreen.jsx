@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import Header from '../components/Header';
 import Nav from '../components/Nav';
+import { useGame } from '../context/GameContext';
 
 /* ═══════════════════════════════════ WEAPONS ═══════════════════════════════════ */
 
@@ -195,7 +197,7 @@ function WeaponEquipWarning({ pendingWeapon, conflictSkills, equippedWeaponCat, 
 function WeaponDetail({ weapon, isEquipped, onEquip, onBack }) {
   return (
     <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">무기 정보</span>
       </div>
@@ -236,7 +238,7 @@ function WeaponView({ equippedId, onEquip, onBack }) {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">무기 목록</span>
       </div>
@@ -249,7 +251,7 @@ function WeaponView({ equippedId, onEquip, onBack }) {
         ))}
       </div>
       <div className="flex-1 flex flex-col overflow-hidden p-3">
-        <div className="flex flex-wrap gap-1 mb-3 px-0.5 flex-shrink-0">
+        <div className="flex flex-wrap gap-0.5 mb-1.5 px-0.5 flex-shrink-0">
           {availableTiers.map(t => (
             <button key={t} onClick={() => setTierFilter(t)}
               className={`px-1.5 py-0.5 rounded-full text-[7px] transition-colors ${
@@ -296,7 +298,7 @@ function WeaponView({ equippedId, onEquip, onBack }) {
 function SkillDetail({ skill, isActive, isEquipped, equippedCount, onEquip, onBack }) {
   return (
     <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">스킬 정보</span>
       </div>
@@ -353,7 +355,7 @@ function SkillView({ equippedWeaponCat, equippedSkillIds, onEquip, onBack }) {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">스킬 목록</span>
       </div>
@@ -366,7 +368,7 @@ function SkillView({ equippedWeaponCat, equippedSkillIds, onEquip, onBack }) {
         ))}
       </div>
       <div className="flex-1 flex flex-col overflow-hidden p-3">
-        <div className="flex flex-wrap gap-1 mb-3 px-0.5 flex-shrink-0">
+        <div className="flex flex-wrap gap-0.5 mb-1.5 px-0.5 flex-shrink-0">
           {availableTypes.map(t => (
             <button key={t} onClick={() => setTypeFilter(t)}
               className={`px-1.5 py-0.5 rounded-full text-[7px] transition-colors ${
@@ -437,7 +439,7 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
     const takenByOther = allEquippedWeaponIds.includes(selected.id) && !isMine;
     return (
       <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
-        <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+        <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
           <button onClick={() => setSelected(null)} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
           <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">무기 정보</span>
         </div>
@@ -474,7 +476,7 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">
           {companion.name} · 장비 변경
@@ -525,7 +527,7 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
 function CompanionDetail({ companion, isInParty, canAdd, onToggle, onBack }) {
   return (
     <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">{companion.name}</span>
       </div>
@@ -588,7 +590,7 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">파티 편성</span>
       </div>
@@ -647,7 +649,7 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
           );
         })}
       </div>
-      <div className="mb-1 flex-shrink-0">
+      <div className="mb-0.5 flex-shrink-0">
         <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">동료 목록</span>
       </div>
       <div className="flex flex-wrap gap-1 mb-2 flex-shrink-0">
@@ -656,7 +658,7 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
             className={`px-1.5 py-0.5 rounded-full text-[7px] transition-colors ${
               weaponFilter === w ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-400'
             }`}>
-            {w === '전체' ? w : `${CAT_ICON[w]} ${w}`}
+            {w === '전체' ? w : CAT_ICON[w]}
           </button>
         ))}
       </div>
@@ -896,6 +898,7 @@ function PresetBottomSheet({ presets, onLoad, onSave, onDelete, onClose }) {
 /* ═══════════════════════════════════ SCREEN ════════════════════════════════════ */
 
 export default function FormationScreen() {
+  const { navigate } = useGame();
   const [view,               setView]               = useState('main');
   const [equippedWeaponId,   setEquippedWeaponId]   = useState(14);
   const [equippedSkillIds,   setEquippedSkillIds]   = useState([1, 2]);
@@ -1016,12 +1019,14 @@ export default function FormationScreen() {
 
   return (
     <>
+      <Header />
       <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
         {view === 'main' && (
-          <div className="relative flex items-center px-3 h-8 bg-slate-600 border-b border-slate-700 flex-shrink-0">
-            <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-100">편성</span>
+          <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+            <button onClick={() => navigate('main-hub')} className="text-[13px] text-slate-500 font-bold pr-3">‹</button>
+            <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">편성</span>
             <button onClick={() => setPresetSheet(true)}
-              className="ml-auto text-[8px] text-slate-300 font-bold">프리셋 ≡</button>
+              className="ml-auto text-[8px] text-slate-500 font-bold">프리셋 ≡</button>
           </div>
         )}
         {renderContent()}

@@ -78,7 +78,6 @@ export default function CollectionScreen() {
 
   const collections = [COMPANION_COLLECTION, EQUIP_COLLECTION, ENDING_COLLECTION];
   const current = collections[tab];
-  const collectedCount = current.filter(i => i.collected).length;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100">
@@ -92,9 +91,6 @@ export default function CollectionScreen() {
         </button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-100">
           컬렉션
-        </span>
-        <span className="ml-auto text-[7px] text-slate-300">
-          {collectedCount}/{current.length}
         </span>
       </div>
 

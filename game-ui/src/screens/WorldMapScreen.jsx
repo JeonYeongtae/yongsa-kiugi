@@ -72,6 +72,10 @@ export default function WorldMapScreen() {
   return (
     <>
       <Header showEnergy />
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+        <button onClick={() => navigate('main-hub')} className="text-[13px] text-slate-500 font-bold pr-3">‹</button>
+        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">세계 지도</span>
+      </div>
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* 대권역 지도 영역 */}

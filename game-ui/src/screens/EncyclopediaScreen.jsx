@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
+import { useGame } from '../context/GameContext';
 
 const GIFT_ITEMS = [
   { id: 'wildflower',  name: '야생화 다발',    desc: '들판에서 직접 꺾어온 소박한 꽃',      affinity: 5,  rarity: '일반' },
@@ -564,16 +565,15 @@ function CompanionCard({ char, onSelect }) {
   );
 }
 
-function ListView({ companions, onSelect }) {
-  const metCount = companions.filter(c => c.met).length;
+function ListView({ companions, onSelect, onBack }) {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* 타이틀 바 */}
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+        <button onClick={onBack} className="text-[13px] text-slate-500 font-bold pr-3">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">
           동료 도감
         </span>
-        <span className="ml-auto text-[7px] text-slate-500">{metCount}/{companions.length} 조우</span>
       </div>
       {/* 카드 그리드 */}
       <div className="flex-1 overflow-y-auto bg-slate-100 px-3 py-2">
@@ -598,7 +598,7 @@ function DetailView({ char, onBack, onGift }) {
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
       {/* 타이틀 바 */}
-      <div className="relative flex items-center px-3 h-8 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">
           {char.met ? char.name : '미지의 동료'}
@@ -697,6 +697,7 @@ function DetailView({ char, onBack, onGift }) {
 }
 
 export default function EncyclopediaScreen() {
+  const { navigate } = useGame();
   const [companions, setCompanions] = useState(COMPANIONS);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -727,7 +728,7 @@ export default function EncyclopediaScreen() {
               onBack={() => setSelectedId(null)}
               onGift={handleGift}
             />
-          : <ListView companions={companions} onSelect={(c) => setSelectedId(c.id)} />
+          : <ListView companions={companions} onSelect={(c) => setSelectedId(c.id)} onBack={() => navigate('main-hub')} />
         }
       </div>
       <Nav />

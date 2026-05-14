@@ -32,12 +32,16 @@ const TABS = ['장비', '배틀 아이템', '선물 아이템'];
 const TYPE_BG = { '근접': 'bg-slate-400', '원거리': 'bg-blue-300', '마법': 'bg-purple-300', '방어': 'bg-green-300' };
 
 export default function InventoryScreen() {
-  const { openModal, equippedWeapon } = useGame();
+  const { openModal, equippedWeapon, navigate } = useGame();
   const [tab, setTab] = useState(0);
 
   return (
     <>
       <Header />
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+        <button onClick={() => navigate('main-hub')} className="text-[13px] text-slate-500 font-bold pr-3">‹</button>
+        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">인벤토리</span>
+      </div>
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* 탭 바 */}
         <div className="bg-slate-200 flex border-b border-slate-300 flex-shrink-0">

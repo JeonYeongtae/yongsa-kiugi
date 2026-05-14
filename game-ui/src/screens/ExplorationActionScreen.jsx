@@ -1,4 +1,5 @@
 import { useGame } from '../context/GameContext';
+import Header from '../components/Header';
 
 const AREA_NAME = '엘프 마을';
 
@@ -13,16 +14,18 @@ export default function ExplorationActionScreen() {
   ];
 
   return (
+    <>
+    <Header />
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100">
       {/* 타이틀 바 */}
-      <div className="relative flex items-center px-3 h-9 bg-slate-600 border-b border-slate-700 flex-shrink-0">
+      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button
           onClick={() => navigate('world-map')}
-          className="text-[13px] text-slate-200 font-bold pr-3"
+          className="text-[13px] text-slate-500 font-bold pr-3"
         >
           ‹
         </button>
-        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-100">
+        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">
           {AREA_NAME}
         </span>
       </div>
@@ -59,5 +62,6 @@ export default function ExplorationActionScreen() {
         </div>
       </div>
     </div>
+    </>
   );
 }
