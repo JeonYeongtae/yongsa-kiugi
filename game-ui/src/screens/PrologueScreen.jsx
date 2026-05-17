@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useGame } from '../context/GameContext';
 
 // ── 스토리 비트 ────────────────────────────────────────────────
@@ -99,17 +99,17 @@ function NameModal({ onConfirm }) {
   const canConfirm = name.trim().length > 0;
   return (
     <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
-      <div className="w-full bg-slate-200 rounded p-3">
-        <div className="text-[9px] font-bold text-slate-800 mb-0.5">세계수의 기적</div>
-        <div className="text-[8px] text-slate-600 mb-3">아기의 이름을 지어주세요.</div>
+      <div className="w-full bg-slate-100 rounded-lg px-4 pt-4 pb-3 border border-slate-300">
+        <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">세계수의 기적</div>
+        <div className="text-[9px] font-bold text-slate-800 mb-2.5">아기의 이름을 지어주세요.</div>
         <input
           type="text" value={name}
           onChange={e => setName(e.target.value)}
           placeholder="이름을 입력하세요" maxLength={10}
-          className="w-full mb-3 px-2 py-1.5 border border-slate-400 rounded text-[9px] bg-white text-slate-700"
+          className="w-full mb-1.5 px-2 py-1 border border-slate-300 rounded text-[9px] bg-white text-slate-700 focus:outline-none"
         />
         <button onClick={() => canConfirm && onConfirm(name.trim())}
-          className={`w-full py-1.5 rounded text-[9px] font-bold ${canConfirm ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}>
+          className={`w-full py-0.5 rounded text-[9px] font-bold ${canConfirm ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-400'}`}>
           확인
         </button>
       </div>
@@ -121,19 +121,19 @@ function GenderModal({ onConfirm }) {
   const [selected, setSelected] = useState(null);
   return (
     <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
-      <div className="w-full bg-slate-200 rounded p-3">
-        <div className="text-[9px] font-bold text-slate-800 mb-0.5">세계수의 기적</div>
-        <div className="text-[8px] text-slate-600 mb-3">아기의 성별을 선택하세요.</div>
-        <div className="flex gap-2 mb-3">
+      <div className="w-full bg-slate-100 rounded-lg px-4 pt-4 pb-3 border border-slate-300">
+        <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">세계수의 기적</div>
+        <div className="text-[9px] font-bold text-slate-800 mb-2.5">아기의 성별을 선택하세요.</div>
+        <div className="flex gap-2 mb-1.5">
           {[{ val: 'male', label: '♂ 남' }, { val: 'female', label: '♀ 여' }].map(opt => (
             <button key={opt.val} onClick={() => setSelected(opt.val)}
-              className={`flex-1 py-2 rounded text-[9px] font-bold border ${selected === opt.val ? 'bg-slate-600 text-white border-slate-600' : 'bg-slate-100 text-slate-500 border-slate-400'}`}>
+              className={`flex-1 py-1.5 rounded text-[9px] font-bold border ${selected === opt.val ? 'bg-slate-600 text-white border-slate-600' : 'bg-white text-slate-500 border-slate-300'}`}>
               {opt.label}
             </button>
           ))}
         </div>
         <button onClick={() => selected && onConfirm(selected)}
-          className={`w-full py-1.5 rounded text-[9px] font-bold ${selected ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}>
+          className={`w-full py-0.5 rounded text-[9px] font-bold ${selected ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-400'}`}>
           확인
         </button>
       </div>
@@ -149,49 +149,49 @@ function MbtiBirthdayModal({ onConfirm }) {
   const selectedData = MBTI_DATA.find(m => m.code === selectedMbti);
   return (
     <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
-      <div className="w-full bg-slate-200 rounded p-3 max-h-[90%] flex flex-col overflow-hidden">
+      <div className="w-full bg-slate-100 rounded-lg px-4 pt-4 pb-3 border border-slate-300 max-h-[90%] flex flex-col overflow-hidden">
         {step === 0 && (
           <>
-            <div className="text-[9px] font-bold text-slate-800 mb-0.5 flex-shrink-0">아이의 기질</div>
-            <div className="text-[8px] text-slate-600 mb-2 flex-shrink-0">아이의 성향을 선택하세요.</div>
+            <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5 flex-shrink-0">세계수의 기적</div>
+            <div className="text-[9px] font-bold text-slate-800 mb-2.5 flex-shrink-0">아이의 기질을 선택하세요.</div>
             <div className="grid grid-cols-4 gap-1 mb-2 flex-shrink-0">
               {MBTI_DATA.map(m => (
                 <button key={m.code} onClick={() => setSelectedMbti(m.code)}
-                  className={`h-7 rounded text-center border leading-tight ${selectedMbti === m.code ? 'bg-slate-600 text-white border-slate-600' : 'bg-slate-100 text-slate-500 border-slate-400'}`}
-                  style={{ fontSize: 'clamp(5px, 1.8vw, 7px)' }}>
+                  className={`h-5 rounded text-center border leading-none whitespace-nowrap overflow-hidden ${selectedMbti === m.code ? 'bg-slate-600 text-white border-slate-600' : 'bg-white text-slate-500 border-slate-300'}`}
+                  style={{ fontSize: 'clamp(4px, 1.4vw, 6px)' }}>
                   {m.name}
                 </button>
               ))}
             </div>
-            <div className="mb-2 px-2 py-1.5 bg-slate-100 border border-slate-400 rounded flex-shrink-0 overflow-y-auto" style={{ height: '72px' }}>
+            <div className="mb-1.5 px-2 py-1.5 bg-white border border-slate-300 rounded flex-shrink-0 overflow-y-auto" style={{ height: '72px' }}>
               <div className="text-[8px] font-bold text-slate-700 mb-0.5">{selectedData.name}</div>
-              <div className="text-[7px] text-amber-700 mb-0.5">{selectedData.subtype}</div>
+              <div className="text-[7px] text-amber-600 mb-0.5">{selectedData.subtype}</div>
               <div className="text-[7px] text-slate-600 leading-relaxed">{selectedData.desc}</div>
             </div>
-            <button onClick={() => setStep(1)} className="w-full py-1.5 rounded text-[9px] font-bold flex-shrink-0 bg-slate-600 text-white">다음</button>
+            <button onClick={() => setStep(1)} className="w-full py-0.5 rounded text-[9px] font-bold flex-shrink-0 bg-slate-600 text-white">다음</button>
           </>
         )}
         {step === 1 && (
           <>
-            <div className="text-[9px] font-bold text-slate-800 mb-0.5">아이의 생일</div>
-            <div className="text-[8px] text-slate-600 mb-3">아이가 태어난 날을 선택하세요.</div>
+            <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">세계수의 기적</div>
+            <div className="text-[9px] font-bold text-slate-800 mb-2.5">아이의 생일을 선택하세요.</div>
             <div className="flex gap-2 mb-3">
               <div className="flex-1">
                 <select value={month} onChange={e => setMonth(Number(e.target.value))}
-                  className="w-full px-2 py-2 border border-slate-400 rounded text-[12px] font-bold bg-white text-slate-700">
+                  className="w-full px-2 py-1 border border-slate-300 rounded text-[9px] font-bold bg-white text-slate-700">
                   {MONTHS.map(m => <option key={m} value={m}>{m}월</option>)}
                 </select>
               </div>
               <div className="flex-1">
                 <select value={day} onChange={e => setDay(Number(e.target.value))}
-                  className="w-full px-2 py-2 border border-slate-400 rounded text-[12px] font-bold bg-white text-slate-700">
+                  className="w-full px-2 py-1 border border-slate-300 rounded text-[9px] font-bold bg-white text-slate-700">
                   {DAYS.map(d => <option key={d} value={d}>{d}일</option>)}
                 </select>
               </div>
             </div>
             <button
               onClick={() => onConfirm({ mbti: selectedMbti, mbtiName: selectedData.name, month: Number(month), day: Number(day) })}
-              className="w-full py-1.5 rounded text-[9px] font-bold bg-slate-600 text-white">
+              className="w-full py-0.5 rounded text-[9px] font-bold bg-slate-600 text-white">
               각인하기
             </button>
           </>
@@ -203,20 +203,31 @@ function MbtiBirthdayModal({ onConfirm }) {
 
 // ── 타이핑 블록 ─────────────────────────────────────────────
 
-function TypingText({ content, fast, onDone, onSkip }) {
+const TypingText = forwardRef(function TypingText({ content, fast, onDone, onSkip, scrollRef }, ref) {
   const [displayText, setDisplayText] = useState('');
   const [done, setDone] = useState(false);
   const intervalRef = useRef(null);
   const fullText = content ?? '';
 
+  useImperativeHandle(ref, () => ({
+    skip() {
+      clearInterval(intervalRef.current);
+      setDisplayText(fullText);
+      setDone(true);
+      onDone?.();
+      onSkip?.();
+    },
+  }), [fullText, onDone, onSkip]);
+
   useEffect(() => {
-    setDisplayText('');
-    setDone(false);
     let idx = 0;
     const speed = fast ? 18 : 38;
     intervalRef.current = setInterval(() => {
       idx++;
       setDisplayText(fullText.slice(0, idx));
+      if (scrollRef?.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
       if (idx >= fullText.length) {
         clearInterval(intervalRef.current);
         setDone(true);
@@ -227,32 +238,23 @@ function TypingText({ content, fast, onDone, onSkip }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullText, fast]);
 
-  const handleClick = () => {
-    if (!done) {
-      clearInterval(intervalRef.current);
-      setDisplayText(fullText);
-      setDone(true);
-      onDone?.();
-      onSkip?.();
-    }
-  };
-
   return (
-    <div className="flex-1 px-4 py-4 overflow-y-auto cursor-pointer" onClick={handleClick}>
+    <div className="px-4 py-3 flex-shrink-0 cursor-pointer">
       <p className="text-[9px] text-slate-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
         {displayText}
         {!done && <span className="animate-pulse text-slate-400">▌</span>}
+        {done && <span className="animate-pulse text-slate-500 ml-0.5">▼</span>}
       </p>
     </div>
   );
-}
+});
 
 // ── 로그 오버레이 ─────────────────────────────────────────────
 
 function LogOverlay({ visitedChapters, onClose }) {
   return (
     <div className="absolute inset-0 z-20 bg-slate-900/80 flex flex-col" onClick={onClose}>
-      <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-slate-600" onClick={e => e.stopPropagation()}>
+      <div className="flex-shrink-0 flex items-center justify-between px-3 h-8 bg-slate-700 border-b border-slate-600" onClick={e => e.stopPropagation()}>
         <span className="text-[10px] font-bold text-slate-200">로그</span>
         <button onClick={onClose} className="text-slate-400 text-[12px] leading-none">✕</button>
       </div>
@@ -281,9 +283,22 @@ export default function PrologueScreen() {
   // 챕터 인덱스 (0-based)
   const [chapterIdx, setChapterIdx] = useState(0);
   // 현재 챕터 내 beat 인덱스 (chapter-header 포함)
-  const [beatIdx, setBeatIdx] = useState(0);
+  const [beatIdx, setBeatIdx] = useState(() => {
+    const ch = CHAPTERS[0] ?? [];
+    let i = 0;
+    while (i < ch.length && (ch[i].type === 'chapter-header' || ch[i].type === 'image')) i++;
+    return i;
+  });
   // 현재 챕터에서 보여줄 블록들 (이미 지나간 것들)
-  const [revealedBeats, setRevealedBeats] = useState([]);
+  const [revealedBeats, setRevealedBeats] = useState(() => {
+    const ch = CHAPTERS[0] ?? [];
+    const blocks = [];
+    for (let i = 0; i < ch.length; i++) {
+      if (ch[i].type === 'chapter-header' || ch[i].type === 'image') blocks.push({ ...ch[i], uid: `0-${i}` });
+      else break;
+    }
+    return blocks;
+  });
   // 타이핑 완료 여부
   const [typingDone, setTypingDone] = useState(true);
   // 선택 모달
@@ -292,16 +307,17 @@ export default function PrologueScreen() {
   const [char, setChar] = useState({ name: null, gender: null, mbti: null, mbtiName: null, birthday: null });
   // Skip 모달
   const [skipStep, setSkipStep] = useState(null);
+  // Home 확인 모달
+  const [homeConfirm, setHomeConfirm] = useState(false);
   // 로그 오버레이
   const [logOpen, setLogOpen] = useState(false);
   // 방문한 챕터 목록
   const [visitedChapters, setVisitedChapters] = useState([0]);
   // x2 속도
   const [fast, setFast] = useState(false);
-  // 챕터 전환 페이드
-  const [fading, setFading] = useState(false);
 
   const scrollRef = useRef(null);
+  const typingRef = useRef(null);
 
   const currentChapter = CHAPTERS[chapterIdx] ?? [];
 
@@ -346,11 +362,6 @@ export default function PrologueScreen() {
     }
   }, [navigate]);
 
-  // 마운트 시 첫 챕터 시작
-  useEffect(() => {
-    startChapter(0, 0, []);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   // 다음 beat 진행
   const advanceBeat = useCallback(() => {
     const chapter = CHAPTERS[chapterIdx] ?? [];
@@ -363,16 +374,12 @@ export default function PrologueScreen() {
         navigate('main-hub');
         return;
       }
-      setFading(true);
-      setTimeout(() => {
-        setChapterIdx(nextCIdx);
-        setVisitedChapters(prev => prev.includes(nextCIdx) ? prev : [...prev, nextCIdx]);
-        setRevealedBeats([]);
-        setBeatIdx(0);
-        setTypingDone(true);
-        setFading(false);
-        startChapter(nextCIdx, 0, []);
-      }, 300);
+      setChapterIdx(nextCIdx);
+      setVisitedChapters(prev => prev.includes(nextCIdx) ? prev : [...prev, nextCIdx]);
+      setRevealedBeats([]);
+      setBeatIdx(0);
+      setTypingDone(true);
+      startChapter(nextCIdx, 0, []);
       return;
     }
 
@@ -405,7 +412,10 @@ export default function PrologueScreen() {
 
   const handleTap = () => {
     if (activeChoice || logOpen || skipStep) return;
-    if (!typingDone) return; // 타이핑 중 탭 → TypingText 내에서 처리
+    if (!typingDone) {
+      typingRef.current?.skip();
+      return;
+    }
     advanceBeat();
   };
 
@@ -416,15 +426,23 @@ export default function PrologueScreen() {
   const handleBack = () => {
     if (chapterIdx === 0) return;
     const prevCIdx = chapterIdx - 1;
-    setFading(true);
-    setTimeout(() => {
-      setChapterIdx(prevCIdx);
-      setRevealedBeats([]);
-      setBeatIdx(0);
-      setTypingDone(true);
-      setFading(false);
-      startChapter(prevCIdx, 0, []);
-    }, 300);
+    setChapterIdx(prevCIdx);
+    setRevealedBeats([]);
+    setBeatIdx(0);
+    setTypingDone(true);
+    startChapter(prevCIdx, 0, []);
+  };
+
+  // 다음 챕터로 (이미 방문한 챕터만)
+  const canGoNext = chapterIdx < CHAPTERS.length - 1 && visitedChapters.includes(chapterIdx + 1);
+  const handleNext = () => {
+    if (!canGoNext) return;
+    const nextCIdx = chapterIdx + 1;
+    setChapterIdx(nextCIdx);
+    setRevealedBeats([]);
+    setBeatIdx(0);
+    setTypingDone(true);
+    startChapter(nextCIdx, 0, []);
   };
 
   const completeChoice = (type, value) => {
@@ -468,7 +486,7 @@ export default function PrologueScreen() {
   const lastTextBeat = [...revealedBeats].reverse().find(b => b.type === 'text');
 
   return (
-    <div className={`flex-1 flex flex-col relative overflow-hidden transition-opacity duration-300 ${fading ? 'opacity-0' : 'opacity-100'}`}>
+    <div className="flex-1 flex flex-col relative overflow-hidden">
 
       {/* 타이틀 바 */}
       <div className="relative flex items-center px-3 h-8 bg-slate-700 border-b border-slate-600 flex-shrink-0">
@@ -483,10 +501,11 @@ export default function PrologueScreen() {
           {chapterTitle}
         </span>
         <button
-          onClick={() => setLogOpen(true)}
-          className="ml-auto text-[7px] text-slate-300 font-bold"
+          onClick={handleNext}
+          disabled={!canGoNext}
+          className={`ml-auto text-[11px] font-bold pl-2 ${!canGoNext ? 'text-slate-600' : 'text-slate-300'}`}
         >
-          로그
+          ›
         </button>
       </div>
 
@@ -500,13 +519,7 @@ export default function PrologueScreen() {
         {revealedBeats.map((beat, i) => {
           const isLastText = beat.type === 'text' && beat.uid === lastTextBeat?.uid;
           if (beat.type === 'chapter-header') {
-            return (
-              <div key={beat.uid} className="flex items-center gap-2 px-3 py-2 bg-slate-400 flex-shrink-0">
-                <div className="flex-1 h-px bg-slate-500" />
-                <span className="text-[8px] font-bold text-slate-700 whitespace-nowrap">{beat.title}</span>
-                <div className="flex-1 h-px bg-slate-500" />
-              </div>
-            );
+            return null;
           }
           if (beat.type === 'image') {
             return (
@@ -520,15 +533,17 @@ export default function PrologueScreen() {
               return (
                 <TypingText
                   key={beat.uid}
+                  ref={typingRef}
                   content={beat.content}
                   fast={fast}
                   onDone={handleTypingDone}
                   onSkip={handleTypingSkip}
+                  scrollRef={scrollRef}
                 />
               );
             }
             return (
-              <div key={beat.uid} className="px-4 py-3 bg-slate-200 flex-shrink-0">
+              <div key={beat.uid} className="px-4 py-3 flex-shrink-0">
                 <p className="text-[9px] text-slate-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
                   {beat.content}
                 </p>
@@ -539,31 +554,31 @@ export default function PrologueScreen() {
         })}
       </div>
 
-      {/* 탭 유도 힌트 */}
-      {!activeChoice && typingDone && (
-        <div
-          className="flex-shrink-0 text-center text-[7px] text-slate-500 bg-slate-300 py-0.5 cursor-pointer select-none"
-          onClick={handleTap}
+      {/* 플로팅 버튼 — 푸터 위 우측 */}
+      <div className="absolute bottom-8 right-2.5 flex flex-col gap-1 z-10">
+        <button
+          onClick={e => { e.stopPropagation(); setLogOpen(true); }}
+          className="w-6 h-6 rounded-full bg-slate-600 text-white text-[5px] font-bold flex items-center justify-center shadow"
         >
-          ▼ 탭하여 계속
-        </div>
-      )}
-
-      {/* 하단 컨트롤 바 */}
-      <div className="bg-slate-700 border-t border-slate-600 flex items-center justify-between px-3 py-1.5 flex-shrink-0">
-        <button onClick={e => { e.stopPropagation(); setSkipStep('confirm'); }}
-          className="px-2 py-0.5 bg-slate-500 rounded text-[7px] text-slate-200">
-          Skip
+          로그
         </button>
         <button
           onClick={e => { e.stopPropagation(); setFast(f => !f); }}
-          className={`px-2 py-0.5 rounded text-[7px] font-bold ${fast ? 'bg-amber-400 text-slate-800' : 'bg-slate-500 text-slate-200'}`}
+          className={`w-6 h-6 rounded-full text-[6px] font-bold flex items-center justify-center shadow ${fast ? 'bg-amber-400 text-slate-800' : 'bg-slate-600 text-white'}`}
         >
           ×2
         </button>
-        <button onClick={e => e.stopPropagation()}
+      </div>
+
+      {/* 하단 컨트롤 바 */}
+      <div className="bg-slate-700 border-t border-slate-600 flex items-center justify-between px-3 py-1.5 flex-shrink-0">
+        <button onClick={e => { e.stopPropagation(); setHomeConfirm(true); }}
           className="px-2 py-0.5 bg-slate-500 rounded text-[7px] text-slate-200">
-          메뉴
+          home
+        </button>
+        <button onClick={e => { e.stopPropagation(); setSkipStep('confirm'); }}
+          className="px-2 py-0.5 bg-slate-500 rounded text-[7px] text-slate-200">
+          Skip
         </button>
       </div>
 
@@ -582,9 +597,9 @@ export default function PrologueScreen() {
       {skipStep === 'confirm' && (
         <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
           <div className="bg-slate-100 rounded p-3 w-full relative">
-            <button onClick={() => setSkipStep(null)} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
-            <div className="text-[11px] font-bold text-center text-slate-800 mb-2">── 메인 스토리 요약 ──</div>
-            <div className="text-[9px] text-slate-700 leading-relaxed space-y-1">
+            <button onClick={() => setSkipStep(null)} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[10px] leading-none">✕</button>
+            <div className="text-[9px] font-bold text-center text-slate-800 mb-2">── 메인 스토리 요약 ──</div>
+            <div className="text-[7px] text-slate-700 leading-relaxed space-y-1">
               <div>· 빛과 어둠의 싸움 속, 12번째 마왕이 다시 깨어나고 있다.</div>
               <div>· 11번째 전투에서 마왕을 쓰러뜨린 전대 용사는 저주에 묶여 태초의 숲에 갇혔다.</div>
               <div>· 세계수가 보낸 금빛 나비를 따라간 숲 깊은 곳, 뿌리 둥지에서 갓난아기를 발견했다.</div>
@@ -601,6 +616,24 @@ export default function PrologueScreen() {
       {skipStep === 'name' && <NameModal onConfirm={val => completeSkipChoice('name', val)} />}
       {skipStep === 'gender' && <GenderModal onConfirm={val => completeSkipChoice('gender', val)} />}
       {skipStep === 'mbti-birthday' && <MbtiBirthdayModal onConfirm={val => completeSkipChoice('mbti-birthday', val)} />}
+
+      {/* Home 확인 모달 */}
+      {homeConfirm && (
+        <div className="absolute inset-0 bg-slate-900/75 flex items-center justify-center px-5 z-10">
+          <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-full">
+            <button onClick={() => setHomeConfirm(false)} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px] leading-none">✕</button>
+            <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">나가기</div>
+            <div className="text-[9px] font-bold text-slate-800 mb-2.5">정말 나가시겠어요?</div>
+            <div className="text-[7px] text-slate-600 leading-relaxed mb-1.5">
+              진행한 스토리 정보는 저장되지 않습니다.
+            </div>
+            <button
+              onClick={() => navigate('main-menu')}
+              className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold"
+            >나가기 ▸</button>
+          </div>
+        </div>
+      )}
 
       {/* 로그 오버레이 */}
       {logOpen && (

@@ -66,21 +66,31 @@
 | 탭 / 필터 전환 | 상단 탭 바 |
 | 정보 보기 | 카드 탭 → 모달 직접 오픈 (별도 "정보" 버튼 없음) |
 
-### 모달 닫기
+### 모달 디자인 시스템
 
-- 모달 우측 상단 `✕` 버튼으로 닫기
+- 모달 우측 상단 `✕` 버튼으로 닫기 (`absolute top-2 right-2 text-slate-400 text-[10px]`)
 - "계속보기" / "닫기" 텍스트 버튼 사용 금지
 
-```jsx
-// ✅ 올바른 모달 구조
-<div className="bg-slate-100 rounded p-3 relative">
-  <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
-  {/* 내용 */}
-  <div className="mt-3 flex justify-center">
-    <button>주요 액션 ▸</button>  {/* CTA 1개만 */}
-  </div>
-</div>
+**컨테이너**: `bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300`
+- 상단 패딩을 하단보다 크게 유지 (`pt-3 pb-2`) — 시각적으로 상단이 더 넉넉하게 보여야 함
+
+**헤더 구조** (항상 2줄):
 ```
+amber 소제목  text-[7px] font-bold text-amber-600 tracking-wider  mb-0.5
+본제목        text-[9px] font-bold text-slate-800                  mb-2.5
+```
+
+**간격 리듬**:
+| 구간 | 클래스 |
+|---|---|
+| amber 레이블 → 본제목 | `mb-0.5` (같은 헤더 묶음) |
+| 본제목 → 첫 콘텐츠 | `mb-2.5` (섹션 구분) |
+| 콘텐츠 → 액션 버튼 | `mb-1.5` (가장 좁게) |
+| 버튼 사이 간격 | 없음 — 버튼끼리 margin 없이 붙여 배치 |
+
+**버튼 두께**:
+- 모달 내 CTA: `py-0.5`
+- 화면 단위 full-width CTA: `py-1`
 
 ### 내러티브 화면 (비주얼 노벨 / 스토리)
 
@@ -126,25 +136,33 @@
 - 하단 버튼 바 제거
 
 #### `PrologueScreen`
-- 스크롤 피드 방식으로 전면 재구성
-- 탭 → 새 텍스트/이미지 블록이 아래에 추가
-- 챕터 전환 시 chapter-header + image 자동 출력
-- 챕터 끝에서 선택 모달 등장: 성별 → 호칭 → 스탯/성격/특성
+- 스크롤 피드 방식: 탭 → 새 텍스트/이미지 블록이 아래에 추가
+- 챕터 전환 시 chapter-header + image 자동 출력, **페이드 전환 효과 없음** (즉시 전환)
+- 스크롤 영역 **어디서나 탭** → 타이핑 애니메이션 즉시 완료 (`forwardRef` + `useImperativeHandle`로 skip 노출)
+- 챕터 끝에서 선택 모달 등장: 이름 → 성별 → 기질·생일
 - 스피커 레이블("▸ 나레이터") 없음
-- `▼ 탭하여 계속` 스크롤 영역 밖 고정
 - Log 버튼 없음
 
 #### `SkipModal`
-- 좌측 상단 `✕`로 닫기
+- 우측 상단 `✕`로 닫기
 - `건너뛰기 ▸` 단독 CTA
+- 모바일(360px) 대응: 타이틀 `text-[9px]`, 본문 `text-[7px]`
 
 #### `WeeklyScheduleScreen` + `SchedulePickModal`
-- 달력 그리드 방식 폐기 → 4주차 카드(2×2) × 슬롯 3개 세로 배치로 전면 재구성
-- 타이틀 바: 좌측 `‹` 뒤로가기(→ main-hub) · 중앙 제목 absolute 정렬 · 우측 배치 카운터
-- 빈 슬롯(`+`) 탭 → `SchedulePickModal` 오픈, 배치된 슬롯 우측 `✕`로 제거
-- 하단 `한 달 시작 ▸` full-width 단독 CTA (하단 버튼 바 제거)
-- `SchedulePickModal`: 교육/아르바이트 탭, 초급/중급/상급 등급 선택, 미리보기 영역 항상 표시
-- "한 달 시작" 클릭 시 `GameContext.startScheduleExec({ year, month, week, slots })` 호출 후 이동
+- 4주차 카드(2×2) × 슬롯 3개 세로 배치
+- 타이틀 바: `h-6` 고정, 좌측 `‹` 뒤로가기(→ main-hub) · 중앙 제목 absolute 정렬
+- 슬롯 고정 높이 `h-[34px]` — 빈 슬롯(`+`)과 배치된 슬롯 동일 크기
+- 배치된 슬롯: `flex flex-col justify-between` — 일정명 상단(mt-1), 뱃지 하단 고정
+- 하단 CTA 영역: border 없음, 상단 그라디언트 페이드(`h-10 from-transparent to-slate-200`), `py-1` 버튼
+- "한 달 시작" 클릭 시 `GameContext.startScheduleExec({ year, month, allSlots })` 호출 후 이동
+
+**SchedulePickModal** (`modals/SchedulePickModal.jsx`):
+- 교육 / 아르바이트 탭 전환
+- 스탯 필터: 한 줄 가로 스크롤 (`overflow-x-auto`, 각 버튼 `flex-shrink-0`)
+- 일정 목록: 아이템별 초·중·상 3행 전개, 아이템 간 구분선, 고정 높이 `h-[150px]`
+- 선택 키: `"itemId::gradeIdx"` 형태 (`lastIndexOf('::')` 로 파싱)
+- 미리보기 영역 없음, 등급 선택 버튼 없음
+- 모달 크기 고정 — 필터로 항목 줄어도 레이아웃 변하지 않음
 
 #### `ScheduleExecScreen`
 - 상단: `N년 M월 K주차 진행 중` 텍스트 표시
@@ -295,42 +313,7 @@
 
 ---
 
-### 스케줄 UI 구조 (WeeklyScheduleScreen — 구현 완료)
-
-#### 레이아웃
-
-```
-┌─────────────────────────────────────┐
-│  ‹  월간 스케줄 배분       N/12 배치됨 │  ← 타이틀 바
-│─────────────────────────────────────│
-│  1주차        2주차                  │
-│  ┌───────┐   ┌───────┐              │
-│  │ 슬롯1 │   │ 슬롯1 │              │
-│  ├───────┤   ├───────┤              │
-│  │ 슬롯2 │   │  +  │               │
-│  ├───────┤   ├───────┤              │
-│  │  +  │   │  +  │               │
-│  └───────┘   └───────┘              │
-│  3주차        4주차                  │
-│  ...          ...                   │
-│─────────────────────────────────────│
-│          한 달 시작 ▸               │  ← full-width CTA
-└─────────────────────────────────────┘
-```
-
-- 4주차 카드 2×2 그리드, 각 카드 내 슬롯 3개 세로 배치
-- 배치된 슬롯: 일정명 + 등급 배지(초급/중급/상급) + 주력 스탯 + 비용/수입, 우측 `✕` 제거
-- 빈 슬롯(`+`) 탭 → `SchedulePickModal` 오픈
-
-#### SchedulePickModal (`modals/SchedulePickModal.jsx`)
-
-- 교육 / 아르바이트 탭 전환 (탭 전환 시 선택 초기화)
-- 초급/중급/상급 등급 선택 → 비용·수입·스탯 수치 실시간 갱신
-- 미리보기 영역: 항상 표시, 미선택 시 흐린 안내 문구 / 선택 시 상세 정보 (높이 고정)
-- `배치 ▸`: 선택된 일정을 슬롯에 반영 후 모달 닫힘
-- 이미 배치된 슬롯 탭 → 동일 모달 재오픈 (교체 가능, 미구현)
-
-#### 달 시작 흐름
+### 달 시작 흐름
 
 ```
 WeeklyScheduleScreen (4주차 슬롯 배분)

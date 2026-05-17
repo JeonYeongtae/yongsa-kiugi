@@ -201,6 +201,12 @@ const ROLE_COLORS = {
 
 const WEAPON_ICON = { '근접': '⚔', '방어': '🛡', '마법': '✦', '원거': '◈', '서포': '♪' };
 
+const ROLE_TO_WEAPON = {
+  '마법사': '마법', '전사': '근접', '궁수': '원거', '힐러': '서포',
+  '도적': '근접', '음유시인': '서포', '소환사': '마법', '성기사': '방어',
+  '연금술사': '마법', '용병': '근접', '현자': '마법',
+};
+
 const COMPANIONS = [
   {
     id: 'liana',
@@ -445,9 +451,10 @@ function GiftModal({ char, onGift, onClose }) {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
-      <div className="bg-slate-100 rounded p-3 w-full max-w-[240px] relative flex flex-col" style={{ maxHeight: '80%' }}>
-        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none">✕</button>
-        <div className="text-[9px] font-bold text-center text-slate-700 mb-2">── {char.name}에게 선물 ──</div>
+      <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5 max-w-[240px] flex flex-col" style={{ maxHeight: '80%' }}>
+        <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px] leading-none">✕</button>
+        <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">선물</div>
+        <div className="text-[9px] font-bold text-slate-800 mb-2.5">{char.name}에게 선물하기</div>
 
         {given ? (
           /* 선물 완료 — 대화 */
@@ -489,17 +496,17 @@ function GiftModal({ char, onGift, onClose }) {
                 className={`bg-slate-200 rounded px-2 py-1.5 text-left flex items-center gap-2 active:scale-95 transition-transform ${RARITY_STYLE[item.rarity]}`}
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1 mb-0.5">
-                    <span className="text-[8px] font-bold text-slate-700">{item.name}</span>
-                    <span className={`text-[5px] px-1 py-0.5 rounded font-bold ${
-                      item.rarity === '특수' ? 'bg-amber-400 text-slate-800' :
-                      item.rarity === '희귀' ? 'bg-blue-400 text-white' :
-                      'bg-slate-400 text-white'
-                    }`}>{item.rarity}</span>
-                  </div>
+                  <div className="text-[8px] font-bold text-slate-700 leading-tight mb-0.5">{item.name}</div>
                   <div className="text-[6px] text-slate-500 leading-tight">{item.desc}</div>
                 </div>
-                <div className="text-[8px] font-bold text-amber-600 flex-shrink-0">+{item.affinity}</div>
+                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                  <span className={`text-[5px] px-1 py-0.5 rounded font-bold ${
+                    item.rarity === '특수' ? 'bg-amber-400 text-slate-800' :
+                    item.rarity === '희귀' ? 'bg-blue-400 text-white' :
+                    'bg-slate-400 text-white'
+                  }`}>{item.rarity}</span>
+                  <span className="text-[8px] font-bold text-amber-600">+{item.affinity}</span>
+                </div>
               </button>
             ))}
           </div>
@@ -539,18 +546,14 @@ function CompanionCard({ char, onSelect }) {
       {/* 프로필 이미지 + 배지 오버레이 */}
       <div className="w-full aspect-square bg-slate-500 rounded relative flex items-center justify-center">
         {!char.met && <span className="text-slate-300 font-bold" style={{ fontSize: 22 }}>?</span>}
-        <div className="absolute top-1 left-1 right-1 flex items-center justify-between">
-          <span className="text-[10px] leading-none">
-            {char.met ? (WEAPON_ICON[char.weapon] ?? char.role?.[0] ?? '?') : '?'}
-          </span>
-          {char.met && char.staying && (
-            <span className="text-[5px] font-bold px-1 py-0.5 rounded bg-green-500 text-white">여관</span>
-          )}
-        </div>
+        <span className="absolute top-0.5 left-0.5 text-[11px] leading-none">
+          {char.met ? (WEAPON_ICON[ROLE_TO_WEAPON[char.role]] ?? '?') : '?'}
+        </span>
       </div>
       {/* 이름 */}
-      <div className="font-bold text-[9px] text-slate-700">
-        {char.met ? char.name : '???'}
+      <div className="flex items-center justify-between">
+        <span className="font-bold text-[9px] text-slate-700">{char.met ? char.name : '???'}</span>
+        {char.met && char.staying && <span className="text-[11px] leading-none">🏠</span>}
       </div>
       {/* 호감도 */}
       {char.met ? (
@@ -608,29 +611,28 @@ function DetailView({ char, onBack, onGift }) {
       {/* 프로필 카드 */}
       <div className="bg-slate-200 px-3 pt-2 pb-2 flex-shrink-0">
         <div className="bg-slate-300 rounded p-2 flex gap-2">
-          <div className="w-14 h-16 bg-slate-500 rounded flex-shrink-0 flex items-center justify-center">
+          <div className="relative w-14 h-16 bg-slate-500 rounded flex-shrink-0 flex items-center justify-center">
             {!char.met && <span className="text-slate-300 font-bold" style={{ fontSize: 20 }}>?</span>}
+            {char.met && <span className="absolute top-0.5 left-0.5 text-[11px] leading-none">{WEAPON_ICON[ROLE_TO_WEAPON[char.role]] ?? '?'}</span>}
           </div>
           <div className="flex flex-col justify-between flex-1 min-w-0">
-            <div>
-              <div className="flex items-center gap-1 flex-wrap mb-0.5">
-                <span className="font-bold text-[10px] text-slate-700">{char.met ? char.name : '???'}</span>
-                {char.met && (
-                  <>
-                    <span className="text-[11px] leading-none">{WEAPON_ICON[char.weapon] ?? '?'}</span>
-                    {char.staying && (
-                      <span className="text-[5px] font-bold px-1 py-0.5 rounded bg-green-500 text-white">여관 체류</span>
-                    )}
-                  </>
-                )}
-              </div>
-              {char.met ? (
-                <AffinityHearts value={char.affinity} />
-              ) : (
-                <div className="text-[7px] text-slate-400">아직 만나지 못한 동료</div>
+            <div className="flex items-center justify-between mb-0.5">
+              <span className="font-bold text-[10px] text-slate-700">{char.met ? char.name : '???'}</span>
+              {char.met && char.staying && (
+                <span className="text-[11px] leading-none">🏠</span>
               )}
             </div>
-            {char.met && <AffinityBar value={char.affinity} className="mt-1" />}
+            {char.met ? (
+              <div className="flex flex-col gap-0.5">
+                <AffinityHearts value={char.affinity} />
+                <div className="flex items-center gap-1">
+                  <AffinityBar value={char.affinity} className="flex-1" />
+                  <span className="text-[6px] text-slate-500 flex-shrink-0">{Math.round(char.affinity * 30 / 100)}/30</span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-[7px] text-slate-400">아직 만나지 못한 동료</div>
+            )}
           </div>
         </div>
       </div>
@@ -653,14 +655,14 @@ function DetailView({ char, onBack, onGift }) {
           <div className="bg-slate-200 px-3 pb-2 flex-shrink-0">
             <button
               onClick={() => setGiftOpen(true)}
-              className="w-full bg-amber-400 text-slate-800 text-[8px] font-bold py-1.5 rounded active:scale-95 transition-transform"
+              className="w-full bg-amber-400 text-slate-800 text-[8px] font-bold py-1 rounded active:scale-95 transition-transform"
             >
               선물하기 ▸
             </button>
           </div>
 
-          <div className="bg-slate-200 border-b border-slate-300 px-3 py-1.5 flex-shrink-0">
-            <span className="text-[8px] font-bold text-slate-600">호감도 기록</span>
+          <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
+            <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[8px] font-bold text-slate-600">호감도 기록</span>
           </div>
 
           {/* 호감도 로그 영역 (선물·조우 필터링) */}

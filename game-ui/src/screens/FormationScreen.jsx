@@ -140,18 +140,18 @@ function ListCard({ icon, tier, tierStyle, name, right, badge, equipped, dimmed,
     <button onClick={onClick}
       className={`w-full flex items-stretch gap-1.5 rounded px-1.5 py-1 text-left transition-opacity ${equipped ? 'bg-amber-100 border border-amber-300' : 'bg-slate-200'} ${dimmed ? 'opacity-40' : ''}`}
       style={{ minHeight: '46px' }}>
-      <span className="text-[11px] w-4 text-center flex-shrink-0 self-center">{icon}</span>
+      <span className="relative flex-shrink-0 flex items-center justify-center w-4">
+        {badge && (
+          <span className="absolute top-0 text-[6px] border border-amber-400 text-amber-500 px-0.5 rounded font-bold leading-none">{badge}</span>
+        )}
+        <span className="text-[11px] text-center">{icon}</span>
+      </span>
       <span className="flex-1 min-w-0 relative flex items-center">
-        <span className={`absolute top-0 left-0 text-[7px] leading-none ${tierStyle}`}>{tier}</span>
+        <span className={`absolute top-1 left-0 text-[7px] leading-none ${tierStyle}`}>{tier}</span>
         <span className="text-[10px] font-bold text-slate-700 truncate leading-tight">{name}</span>
       </span>
       <span className="flex flex-col items-end justify-center gap-0.5 flex-shrink-0 self-center">
         {right}
-      </span>
-      <span className="w-7 flex-shrink-0 self-center flex items-center justify-center">
-        {badge && (
-          <span className="text-[6px] border border-amber-400 text-amber-500 px-1 py-0.5 rounded font-bold leading-none">장착</span>
-        )}
       </span>
       <span className="text-[9px] text-slate-400 flex-shrink-0 self-center">›</span>
     </button>
@@ -196,29 +196,25 @@ function WeaponEquipWarning({ pendingWeapon, conflictSkills, equippedWeaponCat, 
 
 function WeaponDetail({ weapon, isEquipped, onEquip, onBack }) {
   return (
-    <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
-        <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
-        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">무기 정보</span>
-      </div>
-      <div className="p-3 flex flex-col gap-3">
-        <div className="flex gap-3">
-          <div className="w-14 h-14 bg-slate-400 rounded flex items-center justify-center text-[24px] flex-shrink-0">
-            {CAT_ICON[weapon.cat]}
-          </div>
-          <div className="text-[8px] text-slate-700 flex flex-col justify-center gap-0.5">
-            <div className="font-bold text-[10px] leading-tight">{weapon.name}</div>
-            <div className="text-[8px] text-amber-500">{'★'.repeat(weapon.tier)}</div>
-            <div className="text-[8px] text-slate-500">{CAT_LABEL[weapon.cat]}</div>
-            <div className="text-green-700 text-[9px] font-bold">{statLabel(weapon)}</div>
-          </div>
+    <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5">
+      <button onClick={onBack} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+      <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">무기 정보</div>
+      <div className="text-[9px] font-bold text-slate-800 mb-2.5">{weapon.name}</div>
+      <div className="flex gap-3 mb-2.5">
+        <div className="w-12 h-12 bg-slate-400 rounded flex items-center justify-center text-[20px] flex-shrink-0">
+          {CAT_ICON[weapon.cat]}
         </div>
-        {isEquipped ? (
-          <div className="w-full py-1.5 bg-amber-200 text-amber-700 text-[9px] text-center rounded font-bold">현재 장착 중</div>
-        ) : (
-          <button onClick={onEquip} className="w-full py-1.5 bg-slate-600 text-white text-[9px] rounded font-bold">장착하기 ▸</button>
-        )}
+        <div className="flex flex-col justify-center gap-0.5">
+          <div className="text-[8px] text-amber-500">{'★'.repeat(weapon.tier)}</div>
+          <div className="text-[7px] text-slate-500">{CAT_LABEL[weapon.cat]}</div>
+          <div className="text-green-700 text-[8px] font-bold">{statLabel(weapon)}</div>
+        </div>
       </div>
+      {isEquipped ? (
+        <div className="w-full py-0.5 bg-amber-200 text-amber-700 text-[8px] text-center rounded font-bold">현재 장착 중</div>
+      ) : (
+        <button onClick={onEquip} className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">장착하기 ▸</button>
+      )}
     </div>
   );
 }
@@ -245,7 +241,7 @@ function WeaponView({ equippedId, onEquip, onBack }) {
       <div className="flex items-center px-2 h-7 bg-slate-50 border-b border-slate-200 gap-1.5 flex-shrink-0">
         {FILTERS.map(f => (
           <button key={f} onClick={() => handleCatFilter(f)}
-            className={`flex-1 h-5 rounded text-[7px] font-bold transition-colors ${catFilter === f ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
+            className={`flex-1 h-4 rounded text-[7px] font-bold transition-colors ${catFilter === f ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
             {f === '전체' ? f : CAT_ICON[f]}
           </button>
         ))}
@@ -271,7 +267,7 @@ function WeaponView({ equippedId, onEquip, onBack }) {
               tierStyle="text-amber-500"
               name={w.name}
               right={<span className="text-[8px] text-slate-500">{statLabel(w)}</span>}
-              badge={w.id === equippedId ? '장착' : null}
+              badge={w.id === equippedId ? '✦' : null}
               equipped={w.id === equippedId}
               dimmed={false}
               onClick={() => setSelected(w)}
@@ -297,47 +293,43 @@ function WeaponView({ equippedId, onEquip, onBack }) {
 
 function SkillDetail({ skill, isActive, isEquipped, equippedCount, onEquip, onBack }) {
   return (
-    <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
-        <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
-        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">스킬 정보</span>
-      </div>
-      <div className="p-3 flex flex-col gap-3">
-        <div className="flex gap-2">
-          <div className="w-12 h-12 bg-slate-400 rounded flex items-center justify-center text-[20px] flex-shrink-0">
-            {CAT_ICON[skill.cat]}
-          </div>
-          <div className="text-[8px] text-slate-700 flex flex-col justify-center gap-0.5">
-            <div className="font-bold text-[10px] leading-tight">{skill.name}</div>
-            <div className={`text-[8px] ${TIER_STYLE[skill.tier]}`}>{skill.tier}</div>
-            <div className="text-[8px] text-slate-500">{CAT_LABEL[skill.cat]}</div>
-            <div className="flex items-center gap-1">
-              <span className={`text-[7px] px-1 py-0.5 rounded ${TYPE_STYLE[skill.type]}`}>{skill.type}</span>
-              <span className="text-[7px] text-slate-400">{skill.target} · MP {skill.mp}</span>
-            </div>
+    <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5">
+      <button onClick={onBack} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+      <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">스킬 정보</div>
+      <div className="text-[9px] font-bold text-slate-800 mb-2.5">{skill.name}</div>
+      <div className="flex gap-2 mb-2.5">
+        <div className="w-10 h-10 bg-slate-400 rounded flex items-center justify-center text-[18px] flex-shrink-0">
+          {CAT_ICON[skill.cat]}
+        </div>
+        <div className="flex flex-col justify-center gap-0.5">
+          <div className={`text-[7px] ${TIER_STYLE[skill.tier]}`}>{skill.tier}</div>
+          <div className="text-[7px] text-slate-500">{CAT_LABEL[skill.cat]}</div>
+          <div className="flex items-center gap-1">
+            <span className={`text-[6px] px-1 py-0.5 rounded ${TYPE_STYLE[skill.type]}`}>{skill.type}</span>
+            <span className="text-[6px] text-slate-400">{skill.target} · MP {skill.mp}</span>
           </div>
         </div>
-        <div className="h-14 bg-slate-200 rounded p-2 text-[8px] text-slate-600 italic leading-relaxed overflow-y-auto">
-          {skill.desc}
-        </div>
-        {!isActive ? (
-          <div className="w-full py-1.5 bg-slate-200 text-slate-400 text-[9px] text-center rounded">
-            {CAT_ICON[skill.cat]} 해당 무기 미착용
-          </div>
-        ) : isEquipped ? (
-          <button onClick={onEquip} className="w-full py-1.5 bg-red-100 text-red-600 text-[9px] rounded font-bold">
-            해제하기 ✕
-          </button>
-        ) : equippedCount >= 2 ? (
-          <div className="w-full py-1.5 bg-slate-200 text-slate-400 text-[9px] text-center rounded">
-            슬롯이 가득 찼습니다
-          </div>
-        ) : (
-          <button onClick={onEquip} className="w-full py-1.5 bg-slate-600 text-white text-[9px] rounded font-bold">
-            장착하기 ▸
-          </button>
-        )}
       </div>
+      <div className="h-14 bg-slate-200 rounded p-2 text-[7px] text-slate-600 italic leading-relaxed overflow-y-auto mb-1.5">
+        {skill.desc}
+      </div>
+      {!isActive ? (
+        <div className="w-full py-0.5 bg-slate-200 text-slate-400 text-[8px] text-center rounded">
+          {CAT_ICON[skill.cat]} 해당 무기 미착용
+        </div>
+      ) : isEquipped ? (
+        <button onClick={onEquip} className="w-full py-0.5 bg-red-100 text-red-600 text-[8px] rounded font-bold">
+          해제하기 ✕
+        </button>
+      ) : equippedCount >= 2 ? (
+        <div className="w-full py-0.5 bg-slate-200 text-slate-400 text-[8px] text-center rounded">
+          슬롯이 가득 찼습니다
+        </div>
+      ) : (
+        <button onClick={onEquip} className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">
+          장착하기 ▸
+        </button>
+      )}
     </div>
   );
 }
@@ -362,7 +354,7 @@ function SkillView({ equippedWeaponCat, equippedSkillIds, onEquip, onBack }) {
       <div className="flex items-center px-2 h-7 bg-slate-50 border-b border-slate-200 gap-1.5 flex-shrink-0">
         {FILTERS.map(f => (
           <button key={f} onClick={() => handleCatFilter(f)}
-            className={`flex-1 h-5 rounded text-[7px] font-bold transition-colors ${catFilter === f ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
+            className={`flex-1 h-4 rounded text-[7px] font-bold transition-colors ${catFilter === f ? 'bg-slate-500 text-white' : 'bg-slate-200 text-slate-500'}`}>
             {f === '전체' ? f : CAT_ICON[f]}
           </button>
         ))}
@@ -512,7 +504,7 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
                   ? <span className="text-[7px] text-slate-400">장착됨</span>
                   : <span className="text-[8px] text-slate-500">{statLabel(w)}</span>
               }
-              badge={isMine ? '장착' : null}
+              badge={isMine ? '✦' : null}
               equipped={isMine}
               dimmed={takenByOther}
               onClick={() => setSelected(w)}
@@ -526,50 +518,43 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
 
 function CompanionDetail({ companion, isInParty, canAdd, onToggle, onBack }) {
   return (
-    <div className="bg-slate-100 rounded overflow-hidden flex flex-col w-4/5">
-      <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
-        <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
-        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">{companion.name}</span>
-      </div>
-      <div className="w-full h-24 bg-slate-300 flex items-end justify-center relative flex-shrink-0">
+    <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5">
+      <button onClick={onBack} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+      <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-2.5">동료 정보</div>
+      <div className="w-full h-20 bg-slate-300 rounded flex items-end justify-center relative mb-2.5">
         <span className="text-[8px] text-slate-400 pb-1.5">일러스트</span>
-        <span className="absolute bottom-2 right-2 text-[6px] px-1.5 py-0.5 rounded bg-slate-700/70 text-white font-bold">
-          {companion.role}
-        </span>
+        <span className="absolute top-1 left-1 text-[8px] text-slate-500">{CAT_ICON[companion.weapon]}</span>
       </div>
-      <div className="px-3 pt-2 pb-2 border-b border-slate-200">
-        <div className="flex items-baseline gap-1.5">
-          <span className="font-bold text-[11px] text-slate-800">{companion.name}</span>
-          <span className="text-[7px] text-slate-400">{companion.race}</span>
-        </div>
-        <div className="text-[7px] text-slate-500 mt-0.5 italic leading-relaxed">{companion.concept}</div>
+      <div className="flex items-baseline gap-1.5 mb-0.5">
+        <span className="font-bold text-[9px] text-slate-800">{companion.name}</span>
+        <span className="text-[7px] text-slate-400">{companion.race}</span>
       </div>
-      <div className="px-3 py-2 space-y-1.5">
-        <div className="flex items-center">
+      <div className="text-[7px] text-slate-500 italic leading-relaxed mb-2">
+        {companion.concept}
+      </div>
+      <div className="space-y-1 mb-1.5">
+        <div className="flex items-center gap-1">
           <span className="text-[7px] text-slate-400 w-10 flex-shrink-0">무기</span>
-          <span className="text-[8px] text-slate-400 mr-1">{CAT_ICON[companion.weapon]}</span>
-          <span className="text-[8px] font-bold text-slate-700">{companion.weaponName}</span>
+          <span className="text-[7px] font-bold text-slate-700">{companion.weaponName}</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <span className="text-[7px] text-slate-400 w-10 flex-shrink-0">수호신</span>
-          <span className="text-[8px] font-bold text-slate-700">{companion.guardian}</span>
+          <span className="text-[7px] font-bold text-slate-700">{companion.guardian}</span>
         </div>
       </div>
-      <div className="px-3 pb-3">
-        {isInParty ? (
-          <button onClick={onToggle} className="w-full py-1.5 bg-red-100 text-red-600 text-[9px] rounded font-bold">
-            파티에서 제외 ✕
-          </button>
-        ) : canAdd ? (
-          <button onClick={onToggle} className="w-full py-1.5 bg-slate-600 text-white text-[9px] rounded font-bold">
-            파티에 추가 ▸
-          </button>
-        ) : (
-          <div className="w-full py-1.5 bg-slate-200 text-slate-400 text-[9px] text-center rounded">
-            파티가 가득 찼습니다
-          </div>
-        )}
-      </div>
+      {isInParty ? (
+        <button onClick={onToggle} className="w-full py-0.5 bg-red-100 text-red-600 text-[8px] rounded font-bold">
+          파티에서 제외 ✕
+        </button>
+      ) : canAdd ? (
+        <button onClick={onToggle} className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">
+          파티에 추가 ▸
+        </button>
+      ) : (
+        <div className="w-full py-0.5 bg-slate-200 text-slate-400 text-[8px] text-center rounded">
+          파티가 가득 찼습니다
+        </div>
+      )}
     </div>
   );
 }
@@ -623,9 +608,9 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
           );
         })}
       </div>
-      <div className="grid grid-cols-4 gap-1.5 mb-2 flex-shrink-0">
+      <div className="grid grid-cols-4 gap-1.5 flex-shrink-0">
         <button onClick={onHeroWeaponTap}
-          className="flex flex-col items-center gap-0.5 bg-amber-50 border border-amber-200 rounded px-1 py-1.5 min-w-0">
+          className="flex flex-col items-center gap-0.5 bg-amber-50 border border-amber-200 rounded px-1 py-0.5 min-w-0">
           <span className="text-[6px] font-bold text-slate-700 truncate w-full text-center leading-tight">{heroWeapon?.name ?? '—'}</span>
           <span className="text-[6px] text-green-700">{statLabel(heroWeapon)}</span>
         </button>
@@ -637,13 +622,13 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
           );
           return weapon ? (
             <button key={comp.id} onClick={() => onCompanionWeaponTap(comp)}
-              className="flex flex-col items-center gap-0.5 bg-amber-50 border border-amber-200 rounded px-1 py-1.5 min-w-0">
+              className="flex flex-col items-center gap-0.5 bg-amber-50 border border-amber-200 rounded px-1 py-0.5 min-w-0">
               <span className="text-[6px] font-bold text-slate-700 truncate w-full text-center leading-tight">{weapon.name}</span>
               <span className="text-[6px] text-green-700">{statLabel(weapon)}</span>
             </button>
           ) : (
             <button key={comp.id} onClick={() => onCompanionWeaponTap(comp)}
-              className="bg-slate-200 rounded flex flex-col items-center justify-center py-1.5 min-w-0">
+              className="bg-slate-200 rounded flex flex-col items-center justify-center py-0.5 min-w-0">
               <span className="text-[6px] text-slate-400 text-center leading-tight px-0.5">장비<br/>장착</span>
             </button>
           );
@@ -670,21 +655,20 @@ function PartyView({ party, setParty, partyEquipment, onCompanionWeaponTap, hero
           return (
             <button key={c.id} onClick={() => setSelected(c)}
               className={`w-full flex items-center gap-1.5 rounded px-1.5 py-1 text-left ${inParty ? 'bg-amber-100 border border-amber-300' : 'bg-slate-200'}`}>
-              <span className="w-7 h-9 rounded bg-slate-300 flex-shrink-0" />
-              <span className="flex-1 min-w-0 flex flex-col justify-between" style={{ minHeight: '36px' }}>
-                <span className="text-[9px] font-bold text-slate-700 truncate">{c.name}</span>
-                <span className="text-[7px] text-slate-400">
+              <span className="relative w-7 h-9 rounded bg-slate-300 flex-shrink-0">
+                {inParty && (
+                  <span className="absolute top-0 left-0 text-[6px] border border-amber-400 text-amber-500 px-0.5 rounded font-bold leading-none">✦</span>
+                )}
+              </span>
+              <span className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
+                <span className="text-[7px] leading-none text-slate-400">
                   {cWeapon ? <span className="text-green-700">{cWeapon.name}</span> : c.race}
                 </span>
+                <span className="text-[9px] font-bold text-slate-700 truncate leading-tight">{c.name}</span>
               </span>
               <span className="flex flex-col items-end gap-0.5 flex-shrink-0">
                 <span className="text-[8px] text-slate-500">{CAT_ICON[c.weapon]}</span>
                 <span className="text-[6px] text-slate-400">{c.role}</span>
-              </span>
-              <span className="w-7 flex-shrink-0 flex items-center justify-center">
-                {inParty && (
-                  <span className="text-[6px] border border-amber-400 text-amber-500 px-1 py-0.5 rounded font-bold leading-none">편성</span>
-                )}
               </span>
               <span className="text-[9px] text-slate-400 flex-shrink-0">›</span>
             </button>
@@ -811,9 +795,10 @@ function PresetBottomSheet({ presets, onLoad, onSave, onDelete, onClose }) {
   return (
     <div className="absolute inset-0 z-30 flex flex-col justify-end" style={{ background: 'rgba(0,0,0,0.45)' }} onClick={onClose}>
       <div className="bg-slate-100 rounded-t-xl flex flex-col" onClick={e => e.stopPropagation()}>
-        <div className="relative flex items-center justify-center h-8 border-b border-slate-200">
-          <span className="text-[9px] font-bold text-slate-600">프리셋</span>
-          <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[12px]">✕</button>
+        <div className="relative px-4 pt-4 pb-2">
+          <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+          <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">편성 관리</div>
+          <div className="text-[9px] font-bold text-slate-800">프리셋</div>
         </div>
         <div className="flex flex-col divide-y divide-slate-200 px-3 py-1">
           {[0, 1, 2].map(i => {
@@ -852,21 +837,21 @@ function PresetBottomSheet({ presets, onLoad, onSave, onDelete, onClose }) {
                 </button>
 
                 {isOpen && (
-                  <div className="mt-2 flex flex-col gap-1.5">
+                  <div className="mt-2 flex flex-col gap-1">
                     {p ? (
                       <>
                         <button onClick={() => { setConfirmAction({ action: 'load', idx: i }); }}
-                          className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold">불러오기 ▸</button>
+                          className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">불러오기 ▸</button>
                         <div className="flex gap-1">
                           <button onClick={() => setConfirmAction({ action: 'save', idx: i })}
-                            className="flex-1 py-1 bg-amber-400 text-white text-[8px] rounded font-bold">덮어쓰기</button>
+                            className="flex-1 py-0.5 bg-amber-400 text-white text-[8px] rounded font-bold">덮어쓰기</button>
                           <button onClick={() => setConfirmAction({ action: 'delete', idx: i })}
-                            className="flex-1 py-1 bg-slate-200 text-slate-500 text-[8px] rounded">삭제</button>
+                            className="flex-1 py-0.5 bg-slate-200 text-slate-500 text-[8px] rounded">삭제</button>
                         </div>
                       </>
                     ) : (
                       <button onClick={() => setConfirmAction({ action: 'save', idx: i })}
-                        className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold">현재 편성 저장 ▸</button>
+                        className="w-full py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">현재 편성 저장 ▸</button>
                     )}
                   </div>
                 )}
@@ -878,16 +863,20 @@ function PresetBottomSheet({ presets, onLoad, onSave, onDelete, onClose }) {
       </div>
 
       {confirmAction && (
-        <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
-          <div className="w-4/5 bg-slate-100 rounded p-3 flex flex-col gap-2">
-            <div className="text-[8px] text-slate-600 text-center whitespace-pre-line leading-relaxed">
+        <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }} onClick={e => e.stopPropagation()}>
+          <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5">
+            <button onClick={() => setConfirmAction(null)} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+            <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">확인</div>
+            <div className="text-[9px] font-bold text-slate-800 mb-2.5">
+              {CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.label}
+            </div>
+            <div className="text-[7px] text-slate-600 whitespace-pre-line leading-relaxed mb-1.5">
               {CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.desc}
             </div>
             <button onClick={() => { handleAction(confirmAction.action, confirmAction.idx); setConfirmAction(null); }}
-              className={`w-full py-1.5 text-[9px] rounded font-bold ${CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.btnClass}`}>
+              className={`w-full py-0.5 text-[8px] rounded font-bold ${CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.btnClass}`}>
               {CONFIRM_MSG[confirmAction.action === 'save' && !presets[confirmAction.idx] ? 'saveNew' : confirmAction.action]?.label} ▸
             </button>
-            <button onClick={() => setConfirmAction(null)} className="w-full py-1 bg-slate-200 text-slate-500 text-[8px] rounded">취소</button>
           </div>
         </div>
       )}

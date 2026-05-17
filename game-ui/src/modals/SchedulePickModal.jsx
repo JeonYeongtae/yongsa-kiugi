@@ -25,37 +25,38 @@ const GRADE_LABELS = ['초급', '중급', '상급'];
 
 export default function SchedulePickModal({ onClose, onSelect }) {
   const [tab, setTab]           = useState('교육');
-  const [selectedId, setSelectedId] = useState(null);
-  const [grade, setGrade]       = useState(0);
+  const [selectedKey, setSelectedKey] = useState(null); // "itemId::gradeIdx"
   const [statFilter, setStatFilter] = useState('전체');
 
   const statFilters = tab === '교육' ? EDU_STAT_FILTERS : ARB_STAT_FILTERS;
   const items = SCHEDULES[tab];
 
-  // 스탯 필터 적용
   const filtered = statFilter === '전체'
     ? items
     : items.filter(item => item.mainStat === statFilter || item.bonusStat === statFilter);
 
-  const selected = filtered.find(i => i.id === selectedId) ?? items.find(i => i.id === selectedId);
-
   function handleTabChange(newTab) {
     setTab(newTab);
-    setSelectedId(null);
+    setSelectedKey(null);
     setStatFilter('전체');
   }
 
   function handleConfirm() {
-    if (!selected) return;
-    onSelect({ ...selected, grade, tab });
+    if (!selectedKey) return;
+    const sepIdx = selectedKey.lastIndexOf('::');
+    const itemId  = selectedKey.slice(0, sepIdx);
+    const gradeIdx = Number(selectedKey.slice(sepIdx + 2));
+    const item = items.find(i => i.id === itemId);
+    onSelect({ ...item, grade: gradeIdx, tab });
     onClose();
   }
 
   return (
-    <div className="bg-slate-100 rounded p-2.5 w-full max-w-[260px]">
-      <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px]">✕</button>
+    <div className="relative bg-slate-100 rounded-lg px-3 pt-4 pb-3 w-full max-w-[260px] border border-slate-300">
+      <button onClick={onClose} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
 
-      <div className="text-[9px] font-bold text-center text-slate-800 mb-2 mt-1">── 일정 선택 ──</div>
+      <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">월간 스케줄</div>
+      <div className="text-[9px] font-bold text-slate-800 mb-2.5">일정을 선택하세요.</div>
 
       {/* 교육/아르바이트 탭 */}
       <div className="flex gap-1 mb-2">
@@ -63,47 +64,54 @@ export default function SchedulePickModal({ onClose, onSelect }) {
           <button
             key={t}
             onClick={() => handleTabChange(t)}
-            className={`flex-1 py-0.5 rounded text-[7px] font-bold ${tab === t ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-600'}`}
+            className={`flex-1 py-0.5 rounded text-[7px] font-bold ${tab === t ? 'bg-slate-600 text-white' : 'bg-white text-slate-500 border border-slate-300'}`}
           >{t}</button>
         ))}
       </div>
 
-      {/* 스탯 필터 */}
-      <div className="flex flex-wrap gap-0.5 mb-2">
+      {/* 스탯 필터 — 한 줄 가로 스크롤 */}
+      <div className="flex gap-0.5 mb-2 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
         {statFilters.map(f => (
           <button
             key={f}
-            onClick={() => { setStatFilter(f); setSelectedId(null); }}
-            className={`px-1.5 py-0.5 rounded-full text-[6px] transition-colors ${
+            onClick={() => { setStatFilter(f); setSelectedKey(null); }}
+            className={`flex-shrink-0 px-1.5 py-0.5 rounded-full text-[6px] transition-colors ${
               statFilter === f ? 'bg-amber-400 text-white font-bold' : 'bg-slate-200 text-slate-500'
             }`}
-          >
-            {f}
-          </button>
+          >{f}</button>
         ))}
       </div>
 
-      {/* 일정 목록 — 초→중→상 순서, 종류 그룹 구분선 */}
-      <div className="space-y-0.5 mb-2 max-h-[110px] overflow-y-auto">
-        {filtered.map((item, idx) => (
+      {/* 일정 목록 — 종류별 구분선, 각 종류마다 초·중·상 나열 */}
+      <div className="mb-2 h-[150px] overflow-y-auto space-y-0.5">
+        {filtered.map((item, itemIdx) => (
           <div key={item.id}>
-            {idx > 0 && <div className="border-t border-slate-300 my-0.5" />}
-            <button
-              onClick={() => setSelectedId(item.id)}
-              className={`w-full text-left rounded p-1.5 flex justify-between items-center ${selectedId === item.id ? 'bg-amber-200 border border-amber-400' : 'bg-slate-300'}`}
-            >
-              <div>
-                <div className="text-[8px] font-bold text-slate-800">{item.name}</div>
-                <div className="text-[6px] text-slate-500">
-                  {tab === '교육'
-                    ? `${item.mainStat}↑ / ${item.bonusStat}↑`
-                    : `${item.mainStat}↑ / ${item.penalty}↓ · 사고${item.risk[grade]}%`}
-                </div>
-              </div>
-              <div className="text-[7px] font-bold text-slate-600 shrink-0 ml-1">
-                {tab === '교육' ? `${item.cost[grade]}G` : `+${item.income[grade]}G`}
-              </div>
-            </button>
+            {itemIdx > 0 && <div className="border-t border-slate-300 my-1" />}
+            {GRADE_LABELS.map((label, gradeIdx) => {
+              const key = `${item.id}::${gradeIdx}`;
+              const isSelected = selectedKey === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedKey(key)}
+                  className={`w-full text-left rounded px-1.5 py-1 flex justify-between items-center mb-0.5 last:mb-0 ${
+                    isSelected ? 'bg-amber-100 border border-amber-400' : 'bg-slate-200'
+                  }`}
+                >
+                  <div>
+                    <div className="text-[7px] font-bold text-slate-800">{item.name} · {label}</div>
+                    <div className="text-[6px] text-slate-500">
+                      {tab === '교육'
+                        ? `${item.mainStat}↑ / ${item.bonusStat}↑`
+                        : `${item.mainStat}↑ / ${item.penalty}↓ · 사고${item.risk[gradeIdx]}%`}
+                    </div>
+                  </div>
+                  <div className="text-[7px] font-bold text-slate-600 shrink-0 ml-1">
+                    {tab === '교육' ? `${item.cost[gradeIdx]}G` : `+${item.income[gradeIdx]}G`}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         ))}
         {filtered.length === 0 && (
@@ -111,36 +119,10 @@ export default function SchedulePickModal({ onClose, onSelect }) {
         )}
       </div>
 
-      {/* 등급 선택 */}
-      <div className="flex gap-0.5 mb-2">
-        {GRADE_LABELS.map((l, i) => (
-          <button
-            key={l}
-            onClick={() => setGrade(i)}
-            className={`flex-1 py-0.5 rounded text-[7px] ${grade === i ? 'bg-slate-600 text-white font-bold' : 'bg-slate-200 text-slate-500'}`}
-          >{l}</button>
-        ))}
-      </div>
-
-      {/* 선택 미리보기 */}
-      <div className="bg-slate-200 rounded p-1.5 mb-2 text-[7px]" style={{ minHeight: 30 }}>
-        {selected ? (
-          <span className="text-slate-700">
-            <span className="font-bold">{selected.name}</span> · {GRADE_LABELS[grade]}
-            <br />
-            {tab === '교육'
-              ? `비용 ${selected.cost[grade]}G · ${selected.mainStat}+${[2,4,7][grade]} / ${selected.bonusStat}+${[1,2,3][grade]}`
-              : `수입 +${selected.income[grade]}G · ${selected.mainStat}↑ / ${selected.penalty}↓`}
-          </span>
-        ) : (
-          <span className="text-slate-400">일정을 선택해 주세요<br />&nbsp;</span>
-        )}
-      </div>
-
       <button
         onClick={handleConfirm}
-        disabled={!selected}
-        className={`w-full py-1 rounded text-[8px] font-bold ${selected ? 'bg-slate-600 text-white' : 'bg-slate-300 text-slate-400'}`}
+        disabled={!selectedKey}
+        className={`w-full py-0.5 rounded text-[8px] font-bold ${selectedKey ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-400'}`}
       >배치 ▸</button>
     </div>
   );

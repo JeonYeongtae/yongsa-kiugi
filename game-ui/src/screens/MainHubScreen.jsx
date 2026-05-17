@@ -7,30 +7,27 @@ import { useGame } from '../context/GameContext';
 function ScheduleModeModal({ onClose, onSelect }) {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
-      <div className="bg-slate-100 rounded p-3 w-4/5 relative">
+      <div className="relative bg-slate-100 rounded-lg px-4 pt-3 pb-2 border border-slate-300 w-4/5">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-500 text-[12px] leading-none"
-        >
-          ✕
-        </button>
-        <div className="text-[9px] font-bold text-center text-slate-700 mb-3 mt-1">
-          ── 스케줄 시작 방식 ──
-        </div>
-        <div className="flex flex-col gap-2">
+          className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px] leading-none"
+        >✕</button>
+        <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">스케줄</div>
+        <div className="text-[9px] font-bold text-slate-800 mb-2.5">시작 방식을 선택하세요.</div>
+        <div className="flex flex-col gap-1">
           <button
             onClick={() => onSelect('monthly')}
-            className="w-full py-2.5 bg-slate-600 text-white text-[8px] font-bold rounded flex items-center justify-between px-3 active:scale-95 transition-transform"
+            className="w-full py-1 bg-slate-600 text-white text-[8px] font-bold rounded flex items-center justify-between px-3 active:scale-95 transition-transform"
           >
-            <span>월간 처리</span>
-            <span className="text-slate-300 font-normal">4주 일괄 배분 ▸</span>
+            <span className="whitespace-nowrap">월간 처리</span>
+            <span className="text-slate-300 font-normal whitespace-nowrap">4주 일괄 배분 ▸</span>
           </button>
           <button
             onClick={() => onSelect('weekly')}
-            className="w-full py-2.5 bg-slate-500 text-white text-[8px] font-bold rounded flex items-center justify-between px-3 active:scale-95 transition-transform"
+            className="w-full py-1 bg-slate-500 text-white text-[8px] font-bold rounded flex items-center justify-between px-3 active:scale-95 transition-transform"
           >
-            <span>주간 처리</span>
-            <span className="text-slate-300 font-normal">1주씩 순차 진행 ▸</span>
+            <span className="whitespace-nowrap">주간 처리</span>
+            <span className="text-slate-300 font-normal whitespace-nowrap">1주 순차 진행 ▸</span>
           </button>
         </div>
       </div>

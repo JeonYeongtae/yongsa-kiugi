@@ -21,10 +21,13 @@ const BATTLE_ITEMS = [
 ];
 
 const GIFT_ITEMS = [
-  { name: '야생화 다발',    icon: '🌸', count: 3,  desc: '호감도 +5 · 일반' },
-  { name: '수제 케이크',    icon: '🎂', count: 1,  desc: '호감도 +12 · 희귀' },
-  { name: '마법 결정',      icon: '💎', count: 2,  desc: '호감도 +15 · 희귀' },
-  { name: '은반지',         icon: '💍', count: 1,  desc: '호감도 +22 · 특수' },
+  { name: '야생화 다발',    icon: '🌸', count: 3, rarity: '일반', affinity: 5,  desc: '들판에서 직접 꺾어온 소박한 꽃' },
+  { name: '향초 허브차',    icon: '🍵', count: 2, rarity: '일반', affinity: 8,  desc: '따뜻한 향기가 나는 수제 허브 블렌드' },
+  { name: '수제 케이크',    icon: '🎂', count: 1, rarity: '희귀', affinity: 12, desc: '정성껏 구운 달콤한 케이크' },
+  { name: '마법 결정',      icon: '💎', count: 2, rarity: '희귀', affinity: 15, desc: '희귀한 마법 에너지를 담은 보석 파편' },
+  { name: '고대 마법서 사본', icon: '📜', count: 1, rarity: '희귀', affinity: 18, desc: '도서관에서 발굴한 희귀 주문서 필사본' },
+  { name: '은반지',         icon: '💍', count: 1, rarity: '특수', affinity: 22, desc: '장인이 세공한 정교한 은세공 반지' },
+  { name: '별자리 원석',    icon: '⭐', count: 1, rarity: '특수', affinity: 25, desc: '유성이 떨어진 자리에서 채취한 원석' },
 ];
 
 const TABS = ['장비', '배틀 아이템', '선물 아이템'];
@@ -119,12 +122,20 @@ export default function InventoryScreen() {
           <div className="flex-1 bg-slate-100 px-3 pt-2 flex flex-col gap-1.5 overflow-y-auto">
             {GIFT_ITEMS.map((item, i) => (
               <div key={i} className="bg-slate-200 rounded px-3 py-2 flex items-center gap-2">
-                <span className="text-[18px] w-8 text-center flex-shrink-0">{item.icon}</span>
+                <span className="text-[13px] w-6 text-center flex-shrink-0">{item.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[9px] font-bold text-slate-700">{item.name}</div>
+                  <div className="text-[9px] font-bold text-slate-700 leading-tight mb-0.5">{item.name}</div>
                   <div className="text-[7px] text-slate-500">{item.desc}</div>
                 </div>
-                <div className="text-[8px] font-bold text-slate-600 flex-shrink-0">×{item.count}</div>
+                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                  <span className={`text-[5px] px-1 py-0.5 rounded font-bold ${
+                    item.rarity === '특수' ? 'bg-amber-400 text-slate-800' :
+                    item.rarity === '희귀' ? 'bg-blue-400 text-white' :
+                    'bg-slate-400 text-white'
+                  }`}>{item.rarity}</span>
+                  <span className="text-[7px] font-bold text-amber-600">+{item.affinity}</span>
+                  <span className="text-[8px] font-bold text-slate-600">×{item.count}</span>
+                </div>
               </div>
             ))}
             {GIFT_ITEMS.length === 0 && (

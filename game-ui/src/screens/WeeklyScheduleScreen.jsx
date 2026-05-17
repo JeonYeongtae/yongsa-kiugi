@@ -58,18 +58,17 @@ export default function WeeklyScheduleScreen() {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* 타이틀 바 */}
-        <div className="relative flex items-center px-2 py-1 bg-slate-200 border-b border-slate-300">
+        <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
           <button onClick={() => navigate('main-hub')} className="text-[10px] text-slate-500 w-5 h-5 flex items-center justify-center">‹</button>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span className="text-[8px] font-bold text-slate-700">
               {isWeekly ? `${currentWeek}주차 스케줄 배분` : '월간 스케줄 배분'}
             </span>
           </div>
-          <div className="ml-auto text-[7px] text-slate-500">{totalPlaced}/{maxSlots} 배치됨</div>
         </div>
 
         {/* 주차 카드 그리드 */}
-        <div className={`flex-1 overflow-y-auto bg-slate-200 p-1.5 content-start ${isWeekly ? 'flex flex-col gap-1.5' : 'grid grid-cols-2 gap-1.5'}`}>
+        <div className={`flex-1 overflow-y-auto bg-slate-200 p-1.5 pb-10 content-start ${isWeekly ? 'flex flex-col gap-1.5' : 'grid grid-cols-2 gap-1.5'}`}>
           {Array.from({ length: weekCount }, (_, wi) => {
             const weekLabel = isWeekly ? `${currentWeek}주차` : WEEKS[wi];
             return (
@@ -79,13 +78,13 @@ export default function WeeklyScheduleScreen() {
                 const item = slots[wi][si];
                 if (item) {
                   return (
-                    <div key={si} className="bg-slate-100 rounded p-1 relative">
+                    <div key={si} className="bg-slate-100 rounded p-1 relative h-[34px] flex flex-col justify-between overflow-hidden">
                       <button
                         onClick={() => removeSlot(wi, si)}
-                        className="absolute top-0.5 right-0.5 text-slate-400 text-[9px] leading-none"
+                        className="absolute top-1 right-1 text-slate-400 text-[7px] leading-none"
                       >✕</button>
-                      <div className="text-[7px] font-bold text-slate-800 pr-2 leading-tight">{item.name}</div>
-                      <div className="flex items-center gap-0.5 mt-0.5">
+                      <div className="text-[7px] font-bold text-slate-800 pr-2 leading-tight truncate mt-1">{item.name}</div>
+                      <div className="flex items-center gap-0.5">
                         <span className={`text-[6px] px-0.5 rounded ${GRADE_COLORS[['초급','중급','상급'][item.grade]]}`}>
                           {['초급','중급','상급'][item.grade]}
                         </span>
@@ -104,8 +103,7 @@ export default function WeeklyScheduleScreen() {
                   <button
                     key={si}
                     onClick={() => openPicker(wi, si)}
-                    className="bg-slate-200 rounded flex items-center justify-center border border-dashed border-slate-400"
-                    style={{ minHeight: 32 }}
+                    className="bg-slate-200 rounded flex items-center justify-center border border-dashed border-slate-400 h-[34px]"
                   >
                     <span className="text-slate-400 text-[10px]">+</span>
                   </button>
@@ -117,14 +115,15 @@ export default function WeeklyScheduleScreen() {
         </div>
 
         {/* CTA */}
-        <div className="px-3 py-2 bg-slate-200 border-t border-slate-300">
+        <div className="relative px-3 pb-2 pt-1 bg-slate-200">
+          <div className="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-transparent to-slate-200 pointer-events-none" />
           {isWeekly ? (
             <button
               onClick={() => {
                 startWeekSchedule({ weekSlots: slots[0].map(s => s ?? null) });
                 navigate('schedule-exec');
               }}
-              className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold"
+              className="w-full py-1 bg-slate-600 text-white text-[8px] rounded font-bold"
             >{currentWeek}주차 시작 ▸</button>
           ) : (
             <button
@@ -132,7 +131,7 @@ export default function WeeklyScheduleScreen() {
                 startScheduleExec({ year: 1, month: 1, allSlots: slots.map(w => w.map(s => s ?? null)) });
                 navigate('schedule-exec');
               }}
-              className="w-full py-1.5 bg-slate-600 text-white text-[8px] rounded font-bold"
+              className="w-full py-1 bg-slate-600 text-white text-[8px] rounded font-bold"
             >한 달 시작 ▸</button>
           )}
         </div>

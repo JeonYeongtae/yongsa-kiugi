@@ -33,21 +33,21 @@ const TRAITS = [
     name: '치밀한 계산',
     grade: 'rare-pos',
     gradeLabel: '희귀',
-    src: 'MBTI',
+    src: '기질',
     effect: '교육 스케줄 최종 스탯 수치 +5%',
   },
   {
     name: '통찰',
     grade: 'rare-pos',
     gradeLabel: '희귀',
-    src: 'MBTI',
+    src: '기질',
     effect: '마법 명중률 +5%',
   },
   {
     name: '냉담',
     grade: 'common-neg',
     gradeLabel: '일반',
-    src: 'MBTI',
+    src: '기질',
     effect: '아군에게 받는 버프 -10%',
   },
   // 플레이 중 획득
@@ -118,10 +118,7 @@ function TraitCard({ trait, onTap }) {
 }
 
 export default function StatsScreen() {
-  const { openModal, navigate } = useGame();
-
-  const positiveCount = TRAITS.filter(t => t.grade.includes('pos')).length;
-  const negativeCount = TRAITS.length - positiveCount;
+  const { navigate } = useGame();
 
   return (
     <>
@@ -167,15 +164,12 @@ export default function StatsScreen() {
 
         {/* ── 특성 ── */}
         <div className="bg-slate-300 px-3 pt-3 pb-3">
-          <div className="flex items-baseline justify-between mb-2">
+          <div className="mb-2">
             <span className="text-[10px] font-bold text-slate-700">보유 특성</span>
-            <span className="text-[7px] text-slate-500">
-              버프 {positiveCount} · 너프 {negativeCount}
-            </span>
           </div>
           <div className="space-y-1">
             {TRAITS.map(t => (
-              <TraitCard key={t.name} trait={t} onTap={() => openModal('mbti')} />
+              <TraitCard key={t.name} trait={t} onTap={() => {}} />
             ))}
           </div>
         </div>
