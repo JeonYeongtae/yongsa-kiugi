@@ -29,6 +29,8 @@ import EndingScreen from './screens/EndingScreen';
 import EncyclopediaScreen from './screens/EncyclopediaScreen';
 import FormationScreen from './screens/FormationScreen';
 import ExplorationActionScreen from './screens/ExplorationActionScreen';
+import ElfVillageIntroScreen from './screens/ElfVillageIntroScreen';
+import ExplorationEventScreen from './screens/ExplorationEventScreen';
 import CollectionScreen from './screens/CollectionScreen';
 
 const SCREEN_MAP = {
@@ -47,6 +49,8 @@ const SCREEN_MAP = {
   encyclopedia: EncyclopediaScreen,
   formation: FormationScreen,
   'exploration-action': ExplorationActionScreen,
+  'elf-village-intro':  ElfVillageIntroScreen,
+  'exploration-event':  ExplorationEventScreen,
   collection: CollectionScreen,
 };
 

@@ -4,8 +4,13 @@ import Nav from '../components/Nav';
 import { useGame } from '../context/GameContext';
 
 const REGIONS = [
+  { id: 'forest', name: '사냥터', emoji: '⚔', areas: [
+    { name: '초기 사냥터', unlock: 1, active: true,  town: false },
+    { name: '중기 사냥터', unlock: 2, active: false, town: false },
+    { name: '후기 사냥터', unlock: 3, active: false, town: false },
+  ]},
   { id: 'elf',    name: '엘프의 숲',   emoji: '🌲', areas: [
-    { name: '엘프 마을',  unlock: 1, active: true,  town: true },
+    { name: '엘프 마을',  unlock: 1, active: true,  town: true,  id: 'elf-village', introEvent: 'elf-village-intro' },
     { name: '정령의 샘',  unlock: 2, active: true,  town: false },
     { name: '고대 유적',  unlock: 3, active: false, town: false },
   ]},
@@ -15,9 +20,9 @@ const REGIONS = [
     { name: '지하 불법 투기장',  unlock: 3, active: false, town: false },
   ]},
   { id: 'dwarf',  name: '드워프 광산', emoji: '⛏', areas: [
-    { name: '길드',               unlock: 1, active: false, town: false },
+    { name: '길드',                   unlock: 1, active: false, town: false },
     { name: '용암이 끓는 지하 대협곡', unlock: 2, active: false, town: false },
-    { name: '대금광',             unlock: 3, active: false, town: false },
+    { name: '대금광',                 unlock: 3, active: false, town: false },
   ]},
   { id: 'beast',  name: '수인 부락',   emoji: '🐾', areas: [
     { name: '열대 우림',          unlock: 1, active: false, town: false },
@@ -25,45 +30,39 @@ const REGIONS = [
     { name: '작열하는 대사막',    unlock: 3, active: false, town: false },
   ]},
   { id: 'demon',  name: '마족 영지',   emoji: '🌑', areas: [
-    { name: '백은 설원',          unlock: 1, active: false, town: false },
-    { name: '잿빛 경계지역',      unlock: 2, active: false, town: false },
-    { name: '심연 회랑',          unlock: 3, active: false, town: false },
+    { name: '백은 설원',      unlock: 1, active: false, town: false },
+    { name: '잿빛 경계지역', unlock: 2, active: false, town: false },
+    { name: '심연 회랑',      unlock: 3, active: false, town: false },
   ]},
 ];
 
-const COMMON_AREAS = [
-  { name: '태초의 숲', active: true, special: true },
-  { name: '초기 사냥터', active: true },
-  { name: '중기 사냥터', active: false },
-  { name: '후기 사냥터', active: false },
-];
-
-// 삼각형 배치: 위 중앙 1개, 아래 좌·우 2개
-const NODE_POSITIONS = [
+// 3노드: 삼각형
+const NODE_POSITIONS_3 = [
   { top: '15%', left: '50%', transform: 'translate(-50%, 0)' },
   { top: '55%', left: '22%', transform: 'translate(-50%, 0)' },
   { top: '55%', left: '78%', transform: 'translate(-50%, 0)' },
 ];
 
+// 4노드: 2×2 격자
+const NODE_POSITIONS_4 = [
+  { top: '15%', left: '28%', transform: 'translate(-50%, 0)' },
+  { top: '15%', left: '72%', transform: 'translate(-50%, 0)' },
+  { top: '58%', left: '28%', transform: 'translate(-50%, 0)' },
+  { top: '58%', left: '72%', transform: 'translate(-50%, 0)' },
+];
+
 export default function WorldMapScreen() {
-  const { navigate } = useGame();
+  const { navigate, hasVisitedArea, markAreaVisited } = useGame();
   const [regionIdx, setRegionIdx] = useState(0);
 
   const region = REGIONS[regionIdx];
+  const nodePositions = region.areas.length === 4 ? NODE_POSITIONS_4 : NODE_POSITIONS_3;
 
   const handleNodeTap = (area) => {
     if (!area.active) return;
-    if (area.town) {
-      navigate('town');
-    } else {
-      navigate('exploration-action');
-    }
-  };
-
-  const handleCommonTap = (area) => {
-    if (!area.active) return;
-    if (area.special) {
-      navigate('town');
+    if (area.introEvent && area.id && !hasVisitedArea(area.id)) {
+      markAreaVisited(area.id);
+      navigate(area.introEvent);
     } else {
       navigate('exploration-action');
     }
@@ -82,33 +81,29 @@ export default function WorldMapScreen() {
         <div className="flex-1 bg-slate-300 relative overflow-hidden">
 
           {/* 현재 대권역 배지 */}
-          <div className="absolute top-2 right-2 z-10 bg-slate-700/80 text-white text-[7px] font-bold px-2 py-0.5 rounded-full">
+          <div className="absolute top-2 left-2 z-10 bg-slate-700/80 text-white text-[7px] font-bold px-2 py-0.5 rounded-full">
             {region.emoji} {region.name}
           </div>
 
           {/* 좌측 화살표 */}
-          {regionIdx > 0 && (
-            <button
-              onClick={() => setRegionIdx(i => i - 1)}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-600/70 text-white rounded-full flex items-center justify-center text-[12px] font-bold"
-            >
-              ‹
-            </button>
-          )}
+          <button
+            onClick={() => setRegionIdx(i => (i - 1 + REGIONS.length) % REGIONS.length)}
+            className="absolute left-1 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-[22px] font-bold text-slate-600"
+          >
+            ‹
+          </button>
 
           {/* 우측 화살표 */}
-          {regionIdx < REGIONS.length - 1 && (
-            <button
-              onClick={() => setRegionIdx(i => i + 1)}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-600/70 text-white rounded-full flex items-center justify-center text-[12px] font-bold"
-            >
-              ›
-            </button>
-          )}
+          <button
+            onClick={() => setRegionIdx(i => (i + 1) % REGIONS.length)}
+            className="absolute right-1 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-[22px] font-bold text-slate-600"
+          >
+            ›
+          </button>
 
-          {/* 지역 노드 삼각형 배치 */}
+          {/* 지역 노드 */}
           {region.areas.map((area, i) => {
-            const pos = NODE_POSITIONS[i];
+            const pos = nodePositions[i];
             return (
               <button
                 key={area.name}
@@ -117,7 +112,7 @@ export default function WorldMapScreen() {
                 style={{ top: pos.top, left: pos.left, transform: pos.transform }}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${area.active ? 'bg-slate-600' : 'bg-slate-400'}`}>
-                  {area.active ? (area.unlock) : '🔒'}
+                  {area.active ? area.unlock : '🔒'}
                 </div>
                 <span className="text-[6px] text-slate-700 font-bold bg-slate-100/80 px-1 rounded whitespace-nowrap">
                   {area.name}
@@ -138,24 +133,6 @@ export default function WorldMapScreen() {
           </div>
         </div>
 
-        {/* 하단 공용 지역 바 */}
-        <div className="bg-slate-200 border-t border-slate-300 flex items-center gap-1.5 px-2 py-1.5 flex-shrink-0">
-          {COMMON_AREAS.map((area) => (
-            <button
-              key={area.name}
-              onClick={() => handleCommonTap(area)}
-              className={`flex-1 py-1 rounded text-[6px] font-bold text-center transition-colors ${
-                area.active
-                  ? area.special
-                    ? 'bg-amber-400 text-slate-800'
-                    : 'bg-slate-500 text-white'
-                  : 'bg-slate-300 text-slate-400 opacity-60'
-              }`}
-            >
-              {area.active ? area.name : `🔒 ${area.name}`}
-            </button>
-          ))}
-        </div>
       </div>
       <Nav />
     </>

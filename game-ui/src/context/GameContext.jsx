@@ -16,8 +16,11 @@ const SCREEN_PATHS = {
   'inventory':        '/inventory',
   'skills':           '/skills',
   'monthly-event':    '/event/monthly',
-  'world-map':        '/map',
-  'town':             '/town',
+  'world-map':          '/map',
+  'town':               '/town',
+  'exploration-action': '/exploration',
+  'elf-village-intro':  '/exploration/elf-intro',
+  'exploration-event':  '/exploration/event',
   'event-choice':     '/event/choice',
   'battle-main':      '/battle',
   'skill-submenu':    '/battle/skills',
@@ -83,6 +86,8 @@ export function GameProvider({ children }) {
   const [weeklyResults, setWeeklyResults] = useState([]);
   const [equippedWeapon, setEquippedWeapon] = useState(INITIAL_WEAPON);
   const [equippedSkills, setEquippedSkills] = useState(['강화 Lv.3', '회전 베기 Lv.2', '방어 막기 Lv.1']);
+  const [visitedAreas, setVisitedAreas] = useState({});
+  const [currentExplorationEvent, setCurrentExplorationEvent] = useState('recruit');
 
   const screen = PATH_TO_SCREEN[location.pathname] ?? 'splash';
 
@@ -118,6 +123,9 @@ export function GameProvider({ children }) {
     setScheduleExec(prev => ({ ...prev, currentWeek: prev.currentWeek + 1 }));
   };
 
+  const hasVisitedArea = (areaId) => !!visitedAreas[areaId];
+  const markAreaVisited = (areaId) => setVisitedAreas(prev => ({ ...prev, [areaId]: true }));
+
   // 장비 교체: 장비군이 다르면 장착 스킬 전체 해제
   const equipWeapon = (weapon) => {
     if (equippedWeapon && equippedWeapon.type !== weapon.type) {
@@ -133,6 +141,8 @@ export function GameProvider({ children }) {
       scheduleExec, weeklyResults,
       startScheduleExec, startWeekSchedule, saveWeekResult, nextWeek,
       equippedWeapon, equippedSkills, equipWeapon,
+      visitedAreas, hasVisitedArea, markAreaVisited,
+      currentExplorationEvent, setCurrentExplorationEvent,
     }}>
       {children}
     </GameContext.Provider>
