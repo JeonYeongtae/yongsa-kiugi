@@ -90,7 +90,7 @@ export default function WeeklyScheduleScreen() {
                         </span>
                         <span className="text-[6px] text-slate-500">{item.mainStat}↑</span>
                         {item.tab === '교육' && (
-                          <span className="text-[6px] text-slate-400">{item.cost[item.grade]}G</span>
+                          <span className="text-[6px] text-red-500">-{item.cost[item.grade]}G</span>
                         )}
                         {item.tab === '아르바이트' && (
                           <span className="text-[6px] text-green-600">+{item.income[item.grade]}G</span>

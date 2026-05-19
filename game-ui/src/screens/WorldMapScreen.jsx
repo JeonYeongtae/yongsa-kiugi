@@ -5,14 +5,14 @@ import { useGame } from '../context/GameContext';
 
 const REGIONS = [
   { id: 'forest', name: '사냥터', emoji: '⚔', areas: [
-    { name: '초기 사냥터', unlock: 1, active: true,  town: false },
-    { name: '중기 사냥터', unlock: 2, active: false, town: false },
-    { name: '후기 사냥터', unlock: 3, active: false, town: false },
+    { name: '초기 사냥터', unlock: 1, active: true,  town: false, desc: '왕성 외곽에 자리 잡은 평원 사냥터. 마물의 수가 적고 위험도가 낮아 초보 용사들이 주로 찾는 곳이다.' },
+    { name: '중기 사냥터', unlock: 2, active: false, town: false, desc: '' },
+    { name: '후기 사냥터', unlock: 3, active: false, town: false, desc: '' },
   ]},
   { id: 'elf',    name: '엘프의 숲',   emoji: '🌲', areas: [
-    { name: '엘프 마을',  unlock: 1, active: true,  town: true,  id: 'elf-village', introEvent: 'elf-village-intro' },
-    { name: '정령의 샘',  unlock: 2, active: true,  town: false },
-    { name: '고대 유적',  unlock: 3, active: false, town: false },
+    { name: '엘프 마을',  unlock: 1, active: true,  town: true,  id: 'elf-village', introEvent: 'elf-village-intro', desc: '오랜 나무들 사이로 자리잡은 엘프 마을에 도착했다. 숲 특유의 고요함 속에서 엘프들이 저마다의 일상을 보내고 있다.' },
+    { name: '정령의 샘',  unlock: 2, active: true,  town: false, desc: '' },
+    { name: '고대 유적',  unlock: 3, active: false, town: false, desc: '' },
   ]},
   { id: 'castle', name: '왕성',         emoji: '🏰', areas: [
     { name: '번화하는 왕성',     unlock: 1, active: false, town: false },
@@ -52,7 +52,7 @@ const NODE_POSITIONS_4 = [
 ];
 
 export default function WorldMapScreen() {
-  const { navigate, hasVisitedArea, markAreaVisited } = useGame();
+  const { navigate, hasVisitedArea, markAreaVisited, setCurrentArea } = useGame();
   const [regionIdx, setRegionIdx] = useState(0);
 
   const region = REGIONS[regionIdx];
@@ -60,7 +60,10 @@ export default function WorldMapScreen() {
 
   const handleNodeTap = (area) => {
     if (!area.active) return;
-    if (area.introEvent && area.id && !hasVisitedArea(area.id)) {
+    setCurrentArea(area);
+    if (!area.town) {
+      navigate('battle-main');
+    } else if (area.introEvent && area.id && !hasVisitedArea(area.id)) {
       markAreaVisited(area.id);
       navigate(area.introEvent);
     } else {

@@ -88,6 +88,7 @@ export function GameProvider({ children }) {
   const [equippedSkills, setEquippedSkills] = useState(['강화 Lv.3', '회전 베기 Lv.2', '방어 막기 Lv.1']);
   const [visitedAreas, setVisitedAreas] = useState({});
   const [currentExplorationEvent, setCurrentExplorationEvent] = useState('recruit');
+  const [currentArea, setCurrentArea] = useState(null);
 
   const screen = PATH_TO_SCREEN[location.pathname] ?? 'splash';
 
@@ -143,6 +144,7 @@ export function GameProvider({ children }) {
       equippedWeapon, equippedSkills, equipWeapon,
       visitedAreas, hasVisitedArea, markAreaVisited,
       currentExplorationEvent, setCurrentExplorationEvent,
+      currentArea, setCurrentArea,
     }}>
       {children}
     </GameContext.Provider>

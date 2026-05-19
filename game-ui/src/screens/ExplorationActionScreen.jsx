@@ -2,16 +2,15 @@ import { useGame } from '../context/GameContext';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
 
-// 목 조건 — 추후 GameContext 연동
 const HAS_PASS_ITEM = false;
 const BOSS_READY    = false;
 const SPECIAL_EVENT = false;
 
-const AREA_NAME = '엘프 마을';
-const AREA_DESC = '오랜 나무들 사이로 자리잡은 엘프 마을에 도착했다. 숲 특유의 고요함 속에서 엘프들이 저마다의 일상을 보내고 있다.';
-
 export default function ExplorationActionScreen() {
-  const { navigate, setCurrentExplorationEvent } = useGame();
+  const { navigate, setCurrentExplorationEvent, currentArea } = useGame();
+
+  const AREA_NAME = currentArea?.name ?? '탐험 지역';
+  const AREA_DESC = currentArea?.desc ?? '이 지역을 탐험한다.';
 
   const handleAction = (type) => {
     setCurrentExplorationEvent(type);

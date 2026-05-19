@@ -106,8 +106,8 @@ export default function SchedulePickModal({ onClose, onSelect }) {
                         : `${item.mainStat}↑ / ${item.penalty}↓ · 사고${item.risk[gradeIdx]}%`}
                     </div>
                   </div>
-                  <div className="text-[7px] font-bold text-slate-600 shrink-0 ml-1">
-                    {tab === '교육' ? `${item.cost[gradeIdx]}G` : `+${item.income[gradeIdx]}G`}
+                  <div className={`text-[7px] font-bold shrink-0 ml-1 ${tab === '교육' ? 'text-red-500' : 'text-green-600'}`}>
+                    {tab === '교육' ? `-${item.cost[gradeIdx]}G` : `+${item.income[gradeIdx]}G`}
                   </div>
                 </button>
               );

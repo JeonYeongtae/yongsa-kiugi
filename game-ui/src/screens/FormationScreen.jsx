@@ -6,45 +6,45 @@ import { useGame } from '../context/GameContext';
 /* ═══════════════════════════════════ WEAPONS ═══════════════════════════════════ */
 
 const WEAPONS = [
-  { id:  1, name: '수련용 목재 둔기',       cat: '근접', tier: 1, atk:  4 },
-  { id:  2, name: '로슨 워드',              cat: '근접', tier: 1, atk:  5 },
-  { id:  3, name: '조잡한 사냥용 단궁',     cat: '원거', tier: 1, atk:  4 },
-  { id:  4, name: '로슨 트리 크로스보우',   cat: '원거', tier: 1, atk:  5 },
-  { id:  5, name: '훈련용 창',              cat: '근접', tier: 1, atk:  4 },
-  { id:  6, name: '비상 단검',              cat: '근접', tier: 1, atk:  3 },
-  { id:  7, name: '목재 아형 방패',         cat: '방어', tier: 1, def:  4 },
-  { id:  8, name: '마법사의 지팡이',        cat: '마법', tier: 1, matk: 6 },
-  { id:  9, name: '오래된 기초 마법 책',    cat: '마법', tier: 1, matk: 5 },
-  { id: 10, name: '구리 하트',              cat: '마법', tier: 1, matk: 4 },
-  { id: 11, name: '비상 등불',              cat: '서포', tier: 1, sup:  3 },
-  { id: 12, name: '소아 방인',              cat: '서포', tier: 1, sup:  3 },
-  { id: 13, name: '나무 피파',              cat: '서포', tier: 1, sup:  3 },
-  { id: 14, name: '철제 외날검',            cat: '근접', tier: 2, atk: 10 },
-  { id: 15, name: '용변의 롱소드',          cat: '근접', tier: 2, atk: 12 },
-  { id: 16, name: '철제 장궁',              cat: '원거', tier: 2, atk: 10 },
-  { id: 17, name: '헤비 크로스보우',        cat: '원거', tier: 2, atk: 11 },
-  { id: 18, name: '철이 창',                cat: '근접', tier: 2, atk:  9 },
-  { id: 19, name: '강철 단검',              cat: '근접', tier: 2, atk:  8 },
-  { id: 20, name: '철제 카이트 쉴드',       cat: '방어', tier: 2, def:  9 },
-  { id: 21, name: '마력이 깃든 지팡이',     cat: '마법', tier: 2, matk: 11 },
-  { id: 22, name: '일반 마뇨사',            cat: '마법', tier: 2, matk: 10 },
-  { id: 23, name: '상위 하트',              cat: '마법', tier: 2, matk:  9 },
-  { id: 24, name: '청동의 등불',            cat: '서포', tier: 2, sup:   8 },
-  { id: 25, name: '의식용 종',              cat: '서포', tier: 2, sup:   8 },
-  { id: 26, name: '전도사의 리라',          cat: '서포', tier: 2, sup:   8 },
-  { id: 27, name: '기사단 전용 둔검',       cat: '근접', tier: 3, atk: 18 },
-  { id: 28, name: '기사단 전용 롱소드',     cat: '근접', tier: 3, atk: 20 },
-  { id: 29, name: '기사단 전용 활',         cat: '원거', tier: 3, atk: 17 },
-  { id: 30, name: '기사단 전용 석궁',       cat: '원거', tier: 3, atk: 18 },
-  { id: 31, name: '기사단 전용 창',         cat: '근접', tier: 3, atk: 16 },
-  { id: 32, name: '기사단 전용 단검',       cat: '근접', tier: 3, atk: 15 },
-  { id: 33, name: '기사단 전용 방패',       cat: '방어', tier: 3, def: 16 },
-  { id: 34, name: '마심이 담긴 지팡이',     cat: '마법', tier: 3, matk: 19 },
-  { id: 35, name: '마력의 축복을 받은 책',  cat: '마법', tier: 3, matk: 17 },
-  { id: 36, name: '크리스털 포켓트',        cat: '마법', tier: 3, matk: 18 },
-  { id: 37, name: '전성한 등불',            cat: '서포', tier: 3, sup:  15 },
-  { id: 38, name: '축복 받은 의식종',       cat: '서포', tier: 3, sup:  15 },
-  { id: 39, name: '전주가 깃든 피파',       cat: '서포', tier: 3, sup:  15 },
+  { id:  1, name: '수련용 목재 둔기',       cat: '근접', weaponType: '둔기',   tier: 1, atk:  4, trait: '물리 근접', subTrait: '광역 타격' },
+  { id:  2, name: '로슨 워드',              cat: '근접', weaponType: '검',     tier: 1, atk:  5, trait: '물리 근접', subTrait: '베기' },
+  { id:  3, name: '조잡한 사냥용 단궁',     cat: '원거', weaponType: '활',     tier: 1, atk:  4, trait: '원거 물리', subTrait: '정밀 사격' },
+  { id:  4, name: '로슨 트리 크로스보우',   cat: '원거', weaponType: '석궁',   tier: 1, atk:  5, trait: '원거 물리', subTrait: '관통력' },
+  { id:  5, name: '훈련용 창',              cat: '근접', weaponType: '창',     tier: 1, atk:  4, trait: '물리 근접', subTrait: '관통' },
+  { id:  6, name: '비상 단검',              cat: '근접', weaponType: '단검',   tier: 1, atk:  3, trait: '물리 근접', subTrait: '신속' },
+  { id:  7, name: '목재 아형 방패',         cat: '방어', weaponType: '방패',   tier: 1, def:  4, trait: '물리 방어', subTrait: '마법 방어' },
+  { id:  8, name: '마법사의 지팡이',        cat: '마법', weaponType: '지팡이', tier: 1, matk: 6, trait: '마법 공격', subTrait: '단일 집중' },
+  { id:  9, name: '오래된 기초 마법 책',    cat: '마법', weaponType: '책',     tier: 1, matk: 5, trait: '마법 공격', subTrait: '광역 마법' },
+  { id: 10, name: '구리 하트',              cat: '마법', weaponType: '마정석', tier: 1, matk: 4, trait: '마법 공격', subTrait: 'MP 효율' },
+  { id: 11, name: '비상 등불',              cat: '서포', weaponType: '등불',   tier: 1, sup:  3, trait: '지원·회복', subTrait: '힐 강화' },
+  { id: 12, name: '소아 방인',              cat: '서포', weaponType: '종',     tier: 1, sup:  3, trait: '지원·강화', subTrait: '버프' },
+  { id: 13, name: '나무 피파',              cat: '서포', weaponType: '피파',   tier: 1, sup:  3, trait: '지원·약화', subTrait: '디버프' },
+  { id: 14, name: '철제 외날검',            cat: '근접', weaponType: '검',     tier: 2, atk: 10, trait: '물리 근접', subTrait: '베기' },
+  { id: 15, name: '용변의 롱소드',          cat: '근접', weaponType: '검',     tier: 2, atk: 12, trait: '물리 근접', subTrait: '베기' },
+  { id: 16, name: '철제 장궁',              cat: '원거', weaponType: '활',     tier: 2, atk: 10, trait: '원거 물리', subTrait: '정밀 사격' },
+  { id: 17, name: '헤비 크로스보우',        cat: '원거', weaponType: '석궁',   tier: 2, atk: 11, trait: '원거 물리', subTrait: '관통력' },
+  { id: 18, name: '철이 창',                cat: '근접', weaponType: '창',     tier: 2, atk:  9, trait: '물리 근접', subTrait: '관통' },
+  { id: 19, name: '강철 단검',              cat: '근접', weaponType: '단검',   tier: 2, atk:  8, trait: '물리 근접', subTrait: '신속' },
+  { id: 20, name: '철제 카이트 쉴드',       cat: '방어', weaponType: '방패',   tier: 2, def:  9, trait: '물리 방어', subTrait: '마법 방어' },
+  { id: 21, name: '마력이 깃든 지팡이',     cat: '마법', weaponType: '지팡이', tier: 2, matk: 11, trait: '마법 공격', subTrait: '단일 집중' },
+  { id: 22, name: '일반 마뇨사',            cat: '마법', weaponType: '마정석', tier: 2, matk: 10, trait: '마법 공격', subTrait: 'MP 효율' },
+  { id: 23, name: '상위 하트',              cat: '마법', weaponType: '마정석', tier: 2, matk:  9, trait: '마법 공격', subTrait: 'MP 효율' },
+  { id: 24, name: '청동의 등불',            cat: '서포', weaponType: '등불',   tier: 2, sup:   8, trait: '지원·회복', subTrait: '힐 강화' },
+  { id: 25, name: '의식용 종',              cat: '서포', weaponType: '종',     tier: 2, sup:   8, trait: '지원·강화', subTrait: '버프' },
+  { id: 26, name: '전도사의 리라',          cat: '서포', weaponType: '피파',   tier: 2, sup:   8, trait: '지원·약화', subTrait: '디버프' },
+  { id: 27, name: '기사단 전용 둔검',       cat: '근접', weaponType: '검',     tier: 3, atk: 18, trait: '물리 근접', subTrait: '베기' },
+  { id: 28, name: '기사단 전용 롱소드',     cat: '근접', weaponType: '검',     tier: 3, atk: 20, trait: '물리 근접', subTrait: '베기' },
+  { id: 29, name: '기사단 전용 활',         cat: '원거', weaponType: '활',     tier: 3, atk: 17, trait: '원거 물리', subTrait: '정밀 사격' },
+  { id: 30, name: '기사단 전용 석궁',       cat: '원거', weaponType: '석궁',   tier: 3, atk: 18, trait: '원거 물리', subTrait: '관통력' },
+  { id: 31, name: '기사단 전용 창',         cat: '근접', weaponType: '창',     tier: 3, atk: 16, trait: '물리 근접', subTrait: '관통' },
+  { id: 32, name: '기사단 전용 단검',       cat: '근접', weaponType: '단검',   tier: 3, atk: 15, trait: '물리 근접', subTrait: '신속' },
+  { id: 33, name: '기사단 전용 방패',       cat: '방어', weaponType: '방패',   tier: 3, def: 16, trait: '물리 방어', subTrait: '마법 방어' },
+  { id: 34, name: '마심이 담긴 지팡이',     cat: '마법', weaponType: '지팡이', tier: 3, matk: 19, trait: '마법 공격', subTrait: '단일 집중' },
+  { id: 35, name: '마력의 축복을 받은 책',  cat: '마법', weaponType: '책',     tier: 3, matk: 17, trait: '마법 공격', subTrait: '광역 마법' },
+  { id: 36, name: '크리스털 포켓트',        cat: '마법', weaponType: '마정석', tier: 3, matk: 18, trait: '마법 공격', subTrait: 'MP 효율' },
+  { id: 37, name: '전성한 등불',            cat: '서포', weaponType: '등불',   tier: 3, sup:  15, trait: '지원·회복', subTrait: '힐 강화' },
+  { id: 38, name: '축복 받은 의식종',       cat: '서포', weaponType: '종',     tier: 3, sup:  15, trait: '지원·강화', subTrait: '버프' },
+  { id: 39, name: '전주가 깃든 피파',       cat: '서포', weaponType: '피파',   tier: 3, sup:  15, trait: '지원·약화', subTrait: '디버프' },
 ];
 
 /* ═══════════════════════════════════ SKILLS ════════════════════════════════════ */
@@ -101,6 +101,15 @@ const CAT_LABEL = { '근접': '근접 · 물리', '원거': '원거 · 물리', 
 const FILTERS   = ['전체', '근접', '원거', '방어', '마법', '서포'];
 
 const TIER_STYLE = { '기본': 'text-slate-400', '중급': 'text-blue-400', '고급': 'text-amber-400' };
+const TRAIT_STYLE = {
+  '물리 근접': 'bg-red-100 text-red-600',
+  '원거 물리': 'bg-orange-100 text-orange-600',
+  '마법 공격': 'bg-purple-100 text-purple-600',
+  '물리 방어': 'bg-blue-100 text-blue-600',
+  '지원·회복': 'bg-green-100 text-green-600',
+  '지원·강화': 'bg-sky-100 text-sky-600',
+  '지원·약화': 'bg-rose-100 text-rose-600',
+};
 const TYPE_STYLE = {
   '공격':  'bg-red-100 text-red-600',
   '버프':  'bg-blue-100 text-blue-600',
@@ -200,15 +209,19 @@ function WeaponDetail({ weapon, isEquipped, onEquip, onBack }) {
       <button onClick={onBack} className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
       <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">무기 정보</div>
       <div className="text-[9px] font-bold text-slate-800 mb-2.5">{weapon.name}</div>
-      <div className="flex gap-3 mb-2.5">
+      <div className="flex gap-3 mb-2">
         <div className="w-12 h-12 bg-slate-400 rounded flex items-center justify-center text-[20px] flex-shrink-0">
           {CAT_ICON[weapon.cat]}
         </div>
         <div className="flex flex-col justify-center gap-0.5">
           <div className="text-[8px] text-amber-500">{'★'.repeat(weapon.tier)}</div>
-          <div className="text-[7px] text-slate-500">{CAT_LABEL[weapon.cat]}</div>
+          <div className="text-[7px] text-slate-500">{weapon.weaponType} · {CAT_LABEL[weapon.cat]}</div>
           <div className="text-green-700 text-[8px] font-bold">{statLabel(weapon)}</div>
         </div>
+      </div>
+      <div className="flex items-center gap-1 mb-2.5">
+        <span className={`text-[6px] px-1.5 py-0.5 rounded font-bold ${TRAIT_STYLE[weapon.trait] ?? 'bg-slate-200 text-slate-500'}`}>{weapon.trait}</span>
+        <span className="text-[6px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-500">보조 · {weapon.subTrait}</span>
       </div>
       {isEquipped ? (
         <div className="w-full py-0.5 bg-amber-200 text-amber-700 text-[8px] text-center rounded font-bold">현재 장착 중</div>
@@ -223,20 +236,36 @@ const TIER_LABEL = { 1: '★', 2: '★★', 3: '★★★' };
 
 function WeaponView({ equippedId, onEquip, onBack }) {
   const [catFilter,  setCatFilter]  = useState('전체');
+  const [typeFilter, setTypeFilter] = useState('전체');
   const [tierFilter, setTierFilter] = useState('전체');
   const [selected,   setSelected]   = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [draftType,  setDraftType]  = useState('전체');
+  const [draftTier,  setDraftTier]  = useState('전체');
 
-  const handleCatFilter = (f) => { setCatFilter(f); setTierFilter('전체'); };
+  const handleCatFilter = (f) => { setCatFilter(f); setTypeFilter('전체'); setTierFilter('전체'); };
 
-  const catWeapons      = catFilter === '전체' ? WEAPONS : WEAPONS.filter(w => w.cat === catFilter);
-  const availableTiers  = ['전체', ...new Set(catWeapons.map(w => w.tier))].sort((a, b) => a === '전체' ? -1 : a - b);
-  const filtered        = catWeapons.filter(w => tierFilter === '전체' || w.tier === tierFilter);
+  const catWeapons     = catFilter === '전체' ? WEAPONS : WEAPONS.filter(w => w.cat === catFilter);
+  const availableTypes = catFilter !== '전체' ? ['전체', ...new Set(catWeapons.map(w => w.weaponType))] : ['전체'];
+  const allTiers       = ['전체', ...new Set(catWeapons.map(w => w.tier))].sort((a, b) => a === '전체' ? -1 : a - b);
+  const typeWeapons    = typeFilter === '전체' ? catWeapons : catWeapons.filter(w => w.weaponType === typeFilter);
+  const filtered       = typeWeapons.filter(w => tierFilter === '전체' || w.tier === tierFilter);
+
+  const activeCount = (typeFilter !== '전체' ? 1 : 0) + (tierFilter !== '전체' ? 1 : 0);
+
+  const openFilter  = () => { setDraftType(typeFilter); setDraftTier(tierFilter); setFilterOpen(true); };
+  const applyFilter = () => { setTypeFilter(draftType); setTierFilter(draftTier); setFilterOpen(false); };
+  const resetFilter = () => { setTypeFilter('전체'); setTierFilter('전체'); setDraftType('전체'); setDraftTier('전체'); setFilterOpen(false); };
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-slate-100 relative">
       <div className="relative flex items-center px-3 h-6 bg-slate-200 border-b border-slate-300 flex-shrink-0">
         <button onClick={onBack} className="text-[11px] text-slate-500 font-bold pr-2">‹</button>
         <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-[9px] font-bold text-slate-600">무기 목록</span>
+        <button onClick={openFilter}
+          className={`ml-auto text-[8px] font-bold ${activeCount > 0 ? 'text-amber-500' : 'text-slate-500'}`}>
+          필터{activeCount > 0 ? ` (${activeCount})` : ' ≡'}
+        </button>
       </div>
       <div className="flex items-center px-2 h-7 bg-slate-50 border-b border-slate-200 gap-1.5 flex-shrink-0">
         {FILTERS.map(f => (
@@ -246,35 +275,79 @@ function WeaponView({ equippedId, onEquip, onBack }) {
           </button>
         ))}
       </div>
-      <div className="flex-1 flex flex-col overflow-hidden p-3">
-        <div className="flex flex-wrap gap-0.5 mb-1.5 px-0.5 flex-shrink-0">
-          {availableTiers.map(t => (
-            <button key={t} onClick={() => setTierFilter(t)}
-              className={`px-1.5 py-0.5 rounded-full text-[7px] transition-colors ${
-                tierFilter === t
-                  ? 'bg-amber-400 text-white font-bold'
-                  : 'bg-slate-200 text-slate-400'
-              }`}>
-              {t === '전체' ? '전체' : TIER_LABEL[t]}
-            </button>
-          ))}
-        </div>
-        <div className="flex-1 overflow-y-auto space-y-1">
-          {filtered.map(w => (
-            <ListCard key={w.id}
-              icon={CAT_ICON[w.cat]}
-              tier={'★'.repeat(w.tier)}
-              tierStyle="text-amber-500"
-              name={w.name}
-              right={<span className="text-[8px] text-slate-500">{statLabel(w)}</span>}
-              badge={w.id === equippedId ? '✦' : null}
-              equipped={w.id === equippedId}
-              dimmed={false}
-              onClick={() => setSelected(w)}
-            />
-          ))}
-        </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-1">
+        {filtered.map(w => (
+          <ListCard key={w.id}
+            icon={CAT_ICON[w.cat]}
+            tier={'★'.repeat(w.tier)}
+            tierStyle="text-amber-500"
+            name={w.name}
+            right={
+              <>
+                <span className="text-[6px] text-slate-400 text-right">{w.weaponType}</span>
+                <span className="text-[8px] text-slate-500">{statLabel(w)}</span>
+              </>
+            }
+            badge={w.id === equippedId ? '✦' : null}
+            equipped={w.id === equippedId}
+            dimmed={false}
+            onClick={() => setSelected(w)}
+          />
+        ))}
       </div>
+
+      {filterOpen && (
+        <div className="absolute inset-0 z-20 flex flex-col justify-end"
+          style={{ background: 'rgba(0,0,0,0.45)' }}
+          onClick={() => setFilterOpen(false)}>
+          <div className="bg-slate-100 rounded-t-xl" onClick={e => e.stopPropagation()}>
+            <div className="relative px-4 pt-4 pb-2">
+              <button onClick={() => setFilterOpen(false)}
+                className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-slate-400 text-[10px]">✕</button>
+              <div className="text-[7px] font-bold text-amber-600 tracking-wider mb-0.5">무기 목록</div>
+              <div className="text-[9px] font-bold text-slate-800">필터</div>
+            </div>
+
+            {availableTypes.length > 2 && (
+              <div className="px-4 pb-3">
+                <div className="text-[7px] font-bold text-slate-500 mb-1.5">무기군</div>
+                <div className="flex flex-wrap gap-1">
+                  {availableTypes.map(t => (
+                    <button key={t} onClick={() => setDraftType(t)}
+                      className={`px-2 py-0.5 rounded-full text-[7px] transition-colors ${
+                        draftType === t ? 'bg-amber-500 text-white font-bold' : 'bg-slate-200 text-slate-500'
+                      }`}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="px-4 pb-3">
+              <div className="text-[7px] font-bold text-slate-500 mb-1.5">등급</div>
+              <div className="flex flex-wrap gap-1">
+                {allTiers.map(t => (
+                  <button key={t} onClick={() => setDraftTier(t)}
+                    className={`px-2 py-0.5 rounded-full text-[7px] transition-colors ${
+                      draftTier === t ? 'bg-amber-400 text-white font-bold' : 'bg-slate-200 text-slate-500'
+                    }`}>
+                    {t === '전체' ? '전체' : TIER_LABEL[t]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="px-4 pb-4 flex gap-2">
+              <button onClick={resetFilter}
+                className="flex-1 py-0.5 bg-slate-200 text-slate-500 text-[8px] rounded">초기화</button>
+              <button onClick={applyFilter}
+                className="flex-1 py-0.5 bg-slate-600 text-white text-[8px] rounded font-bold">적용 ▸</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {selected && (
         <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.65)' }}>
           <WeaponDetail
@@ -443,8 +516,12 @@ function CompanionWeaponView({ companion, equippedId, allEquippedWeaponIds, onEq
             <div className="text-[8px] text-slate-700 flex flex-col justify-center gap-0.5">
               <div className="font-bold text-[10px] leading-tight">{selected.name}</div>
               <div className="text-[8px] text-amber-500">{'★'.repeat(selected.tier)}</div>
-              <div className="text-[8px] text-slate-500">{CAT_LABEL[selected.cat]}</div>
+              <div className="text-[8px] text-slate-500">{selected.weaponType} · {CAT_LABEL[selected.cat]}</div>
               <div className="text-green-700 text-[9px] font-bold">{statLabel(selected)}</div>
+              <div className="flex items-center gap-1 mt-0.5">
+                <span className={`text-[6px] px-1 py-0.5 rounded font-bold ${TRAIT_STYLE[selected.trait] ?? 'bg-slate-200 text-slate-500'}`}>{selected.trait}</span>
+                <span className="text-[6px] px-1 py-0.5 rounded bg-slate-200 text-slate-500">{selected.subTrait}</span>
+              </div>
             </div>
           </div>
           <div className="flex-1" />
